@@ -1,9 +1,14 @@
-import React from "react";
+import { RouterProvider } from "react-router-dom";
+
+import { ThemeProvider } from "./Context/ThemeContext";
+import { route } from "./routes/routes";
 
 export default function App() {
   return (
-    <div>
-      <h1 className="text-lg text-gray-950 font-bold">Home page</h1>
-    </div>
+    <>
+      <ThemeProvider>
+        <RouterProvider router={route} />
+      </ThemeProvider>
+    </>
   );
 }
