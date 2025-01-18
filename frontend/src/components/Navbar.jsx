@@ -56,6 +56,33 @@ const Navbar = () => {
             </div>
 
             {/* Dark Mode Toggle Button */}
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/login"
+              className={`text-sm font-medium transition ${
+                darkMode
+                  ? "text-blue-400 hover:text-white underline"
+                  : "text-blue-600 hover:text-blue-800 underline"
+              }`}
+            >
+              Sign In
+            </Link>
+            <span className={`${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+              or
+            </span>
+            <Link
+              to="/sign-up"
+              className={`text-sm font-medium transition ${
+                darkMode
+                  ? "text-blue-400 hover:text-white underline"
+                  : "text-blue-600 hover:text-blue-800 underline"
+              }`}
+            >
+              Sign Up
+            </Link>
+
             <button
               onClick={() => setDarkMode(!darkMode)}
               className={`p-2 rounded-full transition-colors duration-200 ${

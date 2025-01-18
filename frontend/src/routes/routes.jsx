@@ -1,9 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomeLayout from "../Layout/HomeLayout";
 import { Suspense, lazy } from "react";
-import Price from "../pages/Price";
 
-// Lazy imports for the pages
 const HomePage = lazy(() => import("../pages/HomePage"));
 const Services = lazy(() => import("../pages/Services"));
 const About = lazy(() => import("../pages/About"));
@@ -11,6 +9,7 @@ const Contact = lazy(() => import("../pages/Contact"));
 const Registration = lazy(() => import("../pages/Registion"));
 const Login = lazy(() => import("../pages/Login"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
+const Price = lazy(() => import("../pages/Price"));
 
 export const route = createBrowserRouter([
   {
@@ -58,7 +57,7 @@ export const route = createBrowserRouter([
         ),
       },
       {
-        path: "/register",
+        path: "/sign-up",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <Registration />
