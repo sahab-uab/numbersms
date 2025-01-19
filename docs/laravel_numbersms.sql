@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2025 at 05:13 PM
+-- Generation Time: Jan 19, 2025 at 07:27 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,7 +39,8 @@ CREATE TABLE `cache` (
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
 ('liwVNljGLfNASffa', 'a:1:{s:11:\"valid_until\";i:1737281722;}', 1737301882),
-('QCOJEfib3ywMbm60', 'a:1:{s:11:\"valid_until\";i:1737283227;}', 1737303386);
+('QCOJEfib3ywMbm60', 'a:1:{s:11:\"valid_until\";i:1737283227;}', 1737303386),
+('TWigAanmtpXUt4ur', 'a:1:{s:11:\"valid_until\";i:1737308025;}', 1737328183);
 
 -- --------------------------------------------------------
 
@@ -126,7 +127,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '0001_01_01_000002_create_jobs_table', 1),
 (4, '2025_01_18_163438_create_personal_access_tokens_table', 1),
 (5, '2025_01_19_084135_create_otps_table', 1),
-(8, '2025_01_19_094734_create_password_otps_table', 2);
+(8, '2025_01_19_094734_create_password_otps_table', 2),
+(9, '2025_01_19_174714_create_transactions_table', 3);
 
 -- --------------------------------------------------------
 
@@ -141,6 +143,13 @@ CREATE TABLE `otps` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `otps`
+--
+
+INSERT INTO `otps` (`id`, `user_id`, `otp`, `created_at`, `updated_at`) VALUES
+(6, 9, '955285', '2025-01-19 11:59:24', '2025-01-19 11:59:24');
 
 -- --------------------------------------------------------
 
@@ -205,6 +214,33 @@ CREATE TABLE `sessions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  `getway` varchar(255) NOT NULL,
+  `amount` double NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `user_id`, `username`, `getway`, `amount`, `status`, `created_at`, `updated_at`) VALUES
+(1, 8, 'admin', 'Share', 0.5, 1, '2025-01-19 12:00:30', '2025-01-19 12:00:30'),
+(2, 9, 'admin', 'Share', 0.5, 1, '2025-01-19 12:00:30', '2025-01-19 12:00:30'),
+(3, 8, 'admin', 'Share', 0.5, 1, '2025-01-19 12:02:51', '2025-01-19 12:02:51'),
+(4, 9, 'admin', 'Share', 0.5, 1, '2025-01-19 12:02:51', '2025-01-19 12:02:51');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -227,7 +263,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `coin`, `email_verified_at`, `email_verify`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'sahabuab@gmail.com', '$2y$12$17pgRjwd2hVviKx8qwWD..hB4//dT7ssuuxkldav3tZYPt6RE4WB.', 0, NULL, 1, 'user', NULL, '2025-01-19 03:34:32', '2025-01-19 04:39:57');
+(8, 'admin', 'sahabuab@gmail.com', '$2y$12$mxRjXLzDaFyJsosP3lKYtuHgWzynUM2.aDDRjng5GWqXYSTIzIPC.', 9.5, NULL, 1, 'user', NULL, '2025-01-19 11:08:24', '2025-01-19 12:02:51'),
+(9, 'admin', 'demo@gmail.com', '$2y$12$t4QoJtDAhipsWQTUm2oU/.RcJsbJEQ/7Sq06xua9bc6cLKHLX.41O', 1, NULL, 0, 'user', NULL, '2025-01-19 11:59:24', '2025-01-19 12:02:51');
 
 --
 -- Indexes for dumped tables
@@ -306,6 +343,12 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -332,13 +375,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `otps`
 --
 ALTER TABLE `otps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `password_otps`
@@ -353,10 +396,16 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
