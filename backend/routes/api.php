@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\User\CoinShareController;
+use App\Http\Controllers\Api\User\TransictionController;
 use Illuminate\Support\Facades\Route;
 
 // guest
@@ -20,4 +22,10 @@ Route::group([
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::post('/upadte-profile', [AuthController::class, 'updateProfile']);
     Route::post('/chanage-password', [AuthController::class, 'chanagePassword']);
+
+    // for user
+    Route::prefix('/app')->group(function () {
+        Route::get('/transaction', [TransictionController::class, 'index']);
+        Route::post('/share-token', [CoinShareController::class, 'shareToken']);
+    });
 });
