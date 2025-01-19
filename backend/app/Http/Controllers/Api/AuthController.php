@@ -36,25 +36,34 @@ class AuthController extends Controller
             }
 
             // save data after validation
-            User::create([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password)
             ]);
 
-            // login after register user
-            $token = auth()->attempt([
-                'email' => $request->email,
-                'password' => $request->password
+            // send otp code
+            $verificationCode = rand(100000, 999999);
+            Otp::create([
+                'user_id' => $user->id,
+                'otp' => $verificationCode
             ]);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'User logged in',
-                'data' => auth()->user(),
-                'token' => $token,
-                'expires_in' => auth()->factory()->getTTL() * 60
-            ]);
+            $sendMail = Mail::to($user->email)->send(new Mailer('Email Verification', 'Your verification code is: ' . $verificationCode));
+
+            if ($sendMail) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Account created successfully. An email verification code has been sent.',
+                    'data' => $user
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Somthing else wrong try again!',
+                    'data' => []
+                ]);
+            }
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
@@ -74,6 +83,25 @@ class AuthController extends Controller
         ]);
 
         try {
+            // check user email verify ot not
+            $user = User::where('email', $request->email)->first();
+
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid Email address',
+                    'data' => []
+                ]);
+            }
+
+            if (!$user->email_verify) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Please verify your email',
+                    'data' => []
+                ]);
+            }
+
             // auth Facade
             $token = auth()->attempt([
                 'email' => $request->email,
@@ -87,14 +115,15 @@ class AuthController extends Controller
                     'data' => []
                 ]);
             }
-
+            $cookie = cookie('token', $token, auth()->factory()->getTTL() * 60);
             return response()->json([
                 'status' => true,
                 'message' => 'User logged in',
                 'data' => auth()->user(),
                 'token' => $token,
                 'expires_in' => auth()->factory()->getTTL() * 60
-            ]);
+            ])->cookie($cookie);
+
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
@@ -172,32 +201,61 @@ class AuthController extends Controller
     public function verifyEmail(Request $request)
     {
         $request->validate([
-            'otp' => 'required|min:6'
+            'otp' => 'required|min:6',
+            'email' => 'required|email',
+            'password' => 'required|min:6|max:50'
         ]);
 
         try {
+            $exituser = User::where('email', $request->email)->first();
+
+            if (!$exituser) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid email address',
+                    'data' => []
+                ]);
+            }
+
             $otp = Otp::where('otp', $request->otp)
-                ->where('user_id', auth()->user()->id)
+                ->where('user_id', $exituser->id)
                 ->first();
 
             if ($otp) {
-                if ($otp->created_at < Carbon::now()->subMinutes(5)) {
+                if ($otp->created_at < Carbon::now()->subMinutes(10)) {
                     return response()->json([
                         'status' => false,
                         'message' => 'Verification code timeout',
                         'data' => []
                     ]);
                 } else {
-                    $user = auth()->user();
+                    $user = User::find($otp->user_id);
                     $user->email_verify = true;
                     $user->save();
 
                     $otp->delete();
+
+                    $token = auth()->attempt([
+                        'email' => $request->email,
+                        'password' => $request->password
+                    ]);
+
+                    if (!$token) {
+                        return response()->json([
+                            'status' => false,
+                            'message' => 'Invalid login details',
+                            'data' => []
+                        ]);
+                    }
+
+                    $cookie = cookie('token', $token, auth()->factory()->getTTL() * 60);
                     return response()->json([
                         'status' => true,
-                        'message' => 'Email verification success',
-                        'data' => []
-                    ]);
+                        'message' => 'User logged in',
+                        'data' => auth()->user(),
+                        'token' => $token,
+                        'expires_in' => auth()->factory()->getTTL() * 60
+                    ])->cookie($cookie);
                 }
             } else {
                 return response()->json([
@@ -345,17 +403,30 @@ class AuthController extends Controller
     }
 
     // send otp
-    public function sendotp()
+    public function sendotp(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+
         try {
             $verificationCode = rand(100000, 999999);
 
+            $user = User::where('email', $request->email)->first();
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid email address',
+                    'data' => []
+                ]);
+            }
+
             Otp::create([
-                'user_id' => auth()->user()->id,
+                'user_id' => $user->id,
                 'otp' => $verificationCode
             ]);
 
-            $sendMail = Mail::to(auth()->user()->email)->send(new Mailer('Email Verification', 'Your verification code is: ' . $verificationCode));
+            $sendMail = Mail::to($request->email)->send(new Mailer('Email Verification', 'Your verification code is: ' . $verificationCode));
 
             if ($sendMail) {
                 return response()->json([
