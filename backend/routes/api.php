@@ -19,4 +19,5 @@ Route::group([
     Route::post('/upadte-profile', [AuthController::class, 'updateProfile']);
     Route::post('/sendotp', [AuthController::class, 'sendotp']);
     Route::post('/verifyemail', [AuthController::class, 'verifyEmail']);
+    Route::post('/chanage-password', [AuthController::class, 'chanagePassword']);
 });

@@ -261,6 +261,41 @@ class AuthController extends Controller
         }
     }
 
+    // chanage password
+    public function chanagePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|min:6|max:50',
+            'password' => 'required|min:6|max:50|confirmed'
+        ]);
+
+        try {
+            if (!Hash::check($request->old_password, auth()->user()->password)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Password does not match.',
+                    'data' => []
+                ]);
+            }
+
+            $user = auth()->user();
+            $user->password = bcrypt($request->password);
+            $user->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Password change success',
+                'data' => []
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th,
+                'data' => []
+            ]);
+        }
+    }
+
     // forget password send mail
     public function forgetPassword(Request $request)
     {
