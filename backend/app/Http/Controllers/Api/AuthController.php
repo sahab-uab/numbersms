@@ -261,7 +261,7 @@ class AuthController extends Controller
         }
     }
 
-    // chanage password
+    // chanage password when user loggden
     public function chanagePassword(Request $request)
     {
         $request->validate([
