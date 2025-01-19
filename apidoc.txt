@@ -1,0 +1,66 @@
+// base url
+const base_url = 'http://127.0.0.1:8000/api'
+
+// for all guest users
+// register user
+const url_register = POST - base_url+'/register'
+const register_from_data{
+    name: 'required',
+    email: 'required',
+    password: 'required',
+    password_confirmation: 'required'
+}
+// login  user
+const url_login = POST - base_url+'/login'
+const login_from_data{
+    name: 'required',
+    email: 'required'
+}
+
+// profile
+const url =GET- base_url+'/profile'
+const header {
+    Authorize: Bearer ***********
+}
+
+// refresh token
+const url =GET - base_url+'/refresh-token'
+const header {
+    Authorize: Bearer ***********
+}
+
+// refresh token
+const url = GET - base_url+'/logout'
+const header {
+    Authorize: Bearer ***********
+}
+
+// send otp code
+const url = GET - base_url+'/sendotp'
+const header {
+    Authorize: Bearer ***********
+}
+
+// email verify
+const url = GET - base_url+'/verifyemail'
+const header {
+    Authorize: Bearer ***********
+}
+const login_from_data{
+    otp: 'required',
+}
+
+// reqular respose
+const response{
+ status: true|false,
+ message: 'Response message',
+ data: [has]|[]   
+}
+// login and refresh token respose
+const response{
+ status: true|false,
+ message: 'Response message',
+ data: [has]|[] ,
+ token: *******,
+ token_expires:  
+}
