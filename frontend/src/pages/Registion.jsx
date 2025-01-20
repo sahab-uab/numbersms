@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../Context/ThemeContext";
+import axiosInstance from "../api/axios";
 
 const Registration = () => {
   const { darkMode } = useTheme();
@@ -10,6 +11,11 @@ const Registration = () => {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  console.log(formData);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,9 +24,47 @@ const Registration = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      const response = await axiosInstance.post("/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        password_confirmation: formData.confirmPassword,
+      });
+
+      if (response.data.status) {
+        setSuccess(response.data.message || "Registration successful!");
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setTimeout(() => {
+          window.location.href = "/signin";
+        }, 2000);
+      } else {
+        setError(
+          response.data.message || "Registration failed. Please try again."
+        );
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "An error occurred. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -29,7 +73,6 @@ const Registration = () => {
         darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
-      {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -40,25 +83,6 @@ const Registration = () => {
             : "bg-gradient-to-r from-indigo-600 to-blue-600"
         }`}
       >
-        {/* Background Animation */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          className="absolute inset-0 w-full h-full opacity-10 overflow-hidden"
-          style={{
-            background:
-              "radial-gradient(circle at center, white 0%, transparent 70%)",
-          }}
-        />
-
-        {/* Content */}
         <div className="relative z-10 max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h1
             initial={{ y: -50 }}
@@ -81,7 +105,6 @@ const Registration = () => {
         </div>
       </motion.div>
 
-      {/* Registration Form Section */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div
           className={`max-w-md sm:max-w-lg lg:max-w-xl mx-auto rounded-lg p-6 sm:p-8 lg:p-10 shadow-lg ${
@@ -91,8 +114,17 @@ const Registration = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-6">
             Create Your Account
           </h2>
+          {error && (
+            <p className="text-red-500 text-center mb-4" aria-live="assertive">
+              {error}
+            </p>
+          )}
+          {success && (
+            <p className="text-green-500 text-center mb-4" aria-live="polite">
+              {success}
+            </p>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Full Name */}
             <div>
               <label
                 htmlFor="name"
@@ -117,8 +149,6 @@ const Registration = () => {
                 required
               />
             </div>
-
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -143,8 +173,6 @@ const Registration = () => {
                 required
               />
             </div>
-
-            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -169,8 +197,6 @@ const Registration = () => {
                 required
               />
             </div>
-
-            {/* Confirm Password */}
             <div>
               <label
                 htmlFor="confirmPassword"
@@ -195,8 +221,6 @@ const Registration = () => {
                 required
               />
             </div>
-
-            {/* Submit Button */}
             <button
               type="submit"
               className={`w-full py-3 font-medium rounded-lg transition ${
@@ -204,29 +228,11 @@ const Registration = () => {
                   ? "bg-blue-500 hover:bg-blue-600 text-white"
                   : "bg-blue-600 hover:bg-blue-700 text-white"
               }`}
+              disabled={loading}
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </button>
           </form>
-
-          {/* Redirect to Sign In */}
-          <p
-            className={`mt-6 text-center text-sm ${
-              darkMode ? "text-gray-400" : "text-gray-600"
-            }`}
-          >
-            Already have an account?{" "}
-            <a
-              href="/signin"
-              className={`font-medium ${
-                darkMode
-                  ? "text-blue-400 hover:text-white"
-                  : "text-blue-600 hover:text-blue-800"
-              }`}
-            >
-              Sign In
-            </a>
-          </p>
         </div>
       </div>
     </div>
