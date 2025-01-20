@@ -10,20 +10,28 @@ class TransictionController extends Controller
 {
     public function index()
     {
-        $data = Transaction::where('user_id', auth()->user()->id)->get();
+        try {
+            $data = Transaction::where('user_id', auth()->user()->id)->get();
 
-        if (!$data) {
+            if (!$data) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'No transaction data found!',
+                    'data' => []
+                ]);
+            }
+
             return response()->json([
                 'status' => true,
-                'message' => 'No transaction data found!',
+                'message' => 'all transaction data',
+                'data' => $data
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => true,
+                'message' => $th,
                 'data' => []
             ]);
         }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'all transaction data',
-            'data' => $data
-        ]);
     }
 }
