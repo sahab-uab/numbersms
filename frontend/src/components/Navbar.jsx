@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed top-0 left-0 w-full px-6 py-4 z-50 transition-colors duration-300 shadow-md ${
-        darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"
+        darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800 z-[9996]"
       }`}
     >
       <div className="container mx-auto">

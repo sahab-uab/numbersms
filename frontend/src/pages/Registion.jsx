@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../Context/ThemeContext";
 import axiosInstance from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
   const { darkMode } = useTheme();
@@ -14,14 +15,24 @@ const Registration = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [otp, setOtp] = useState("");
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otpError, setOtpError] = useState("");
 
-  console.log(formData);
+  const [data, setData] = useState();
+
+  console.log(data);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const navgiation = useNavigate();
+  const handleOtpChange = (e) => {
+    setOtp(e.target.value);
   };
 
   const handleSubmit = async (e) => {
@@ -45,16 +56,8 @@ const Registration = () => {
       });
 
       if (response.data.status) {
-        setSuccess(response.data.message || "Registration successful!");
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
-        setTimeout(() => {
-          window.location.href = "/signin";
-        }, 2000);
+        setSuccess("Registration successful! Please verify your email.");
+        setShowOtpModal(true); // Show OTP modal
       } else {
         setError(
           response.data.message || "Registration failed. Please try again."
@@ -64,6 +67,27 @@ const Registration = () => {
       setError(err.response?.data?.message || "An error occurred. Try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleOtpVerification = async () => {
+    try {
+      setOtpError("");
+      const response = await axiosInstance.post("/verifyemail", {
+        email: formData.email,
+        password: formData.password,
+        otp,
+      });
+
+      setData(response);
+      if (response.data.status) {
+        setSuccess("Verification successful! Redirecting to login...");
+        navgiation("/user/dashboard");
+      } else {
+        setOtpError("Invalid OTP. Please try again.");
+      }
+    } catch (err) {
+      setOtpError(err.response?.data?.message || "OTP verification failed.");
     }
   };
 
@@ -235,6 +259,48 @@ const Registration = () => {
           </form>
         </div>
       </div>
+
+      {/* OTP Modal */}
+      {showOtpModal && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ${
+            darkMode ? "text-white" : "text-gray-900"
+          }`}
+        >
+          <div
+            className={`bg-white rounded-lg p-6 shadow-lg max-w-md ${
+              darkMode ? "bg-gray-800" : ""
+            }`}
+          >
+            <h3 className="text-xl font-bold mb-4">OTP Verification</h3>
+            <p className="mb-4">
+              Please enter the OTP sent to your email for verification.
+            </p>
+            {otpError && <p className="text-red-500 mb-4">{otpError}</p>}
+            <input
+              type="text"
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              className="w-full px-4 py-2 rounded-lg border mb-4"
+            />
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setShowOtpModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleOtpVerification}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md"
+              >
+                Verify OTP
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

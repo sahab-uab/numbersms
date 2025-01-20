@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomeLayout from "../Layout/HomeLayout";
 import { Suspense, lazy } from "react";
+import UserLayout from "../Layout/UserLayout";
+import UserDashboard from "../pages/user/UserDashboard";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const Services = lazy(() => import("../pages/Services"));
@@ -81,5 +83,19 @@ export const route = createBrowserRouter([
         <NotFoundPage />
       </Suspense>
     ),
+  },
+  {
+    path: "/user",
+    element: <UserLayout />,
+    children: [
+      {
+        path: "/user/dashboard",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserDashboard />
+          </Suspense>
+        ),
+      },
+    ],
   },
 ]);
