@@ -3,6 +3,9 @@ import HomeLayout from "../Layout/HomeLayout";
 import { Suspense, lazy } from "react";
 import UserLayout from "../Layout/UserLayout";
 import UserDashboard from "../pages/user/UserDashboard";
+import UserCreditCard from "../pages/user/UserCreditCard";
+import UserVerifaction from "../pages/user/UserVerifaction";
+import UserSettings from "../pages/user/UserSettings";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const Services = lazy(() => import("../pages/Services"));
@@ -93,6 +96,30 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <UserDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/credit",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserCreditCard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/verification",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserVerifaction />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/settings",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserSettings />
           </Suspense>
         ),
       },
