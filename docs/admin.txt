@@ -1,0 +1,15 @@
+-------- add ceadit after paypal|stripe success --------
+02 => POST -> base_url/admin/addblance
+const header {
+    Authorize: Bearer ***********
+}
+# => from_data{
+    amount: 'required'
+    user_id: 'required'
+}
+
+-------- get all transaction data --------
+01 => GET -> base_url/admin/transaction
+const header {
+    Authorize: Bearer ***********
+}

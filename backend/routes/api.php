@@ -3,7 +3,11 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\User\CoinShareController;
 use App\Http\Controllers\Api\User\SupportController;
+use App\Http\Controllers\Api\User\CreaditController;
 use App\Http\Controllers\Api\User\TransictionController;
+
+use App\Http\Controllers\Api\Admin\CreaditController as admin_CreaditConnntroller;
+use App\Http\Controllers\Api\User\TransictionController as admin_TransictionController;
 use Illuminate\Support\Facades\Route;
 
 // guest
@@ -26,11 +30,18 @@ Route::group([
 
     // for user
     Route::prefix('/app')->group(function () {
+        Route::post('/addblance', [CreaditController::class, 'index']);
         Route::get('/transaction', [TransictionController::class, 'index']);
-        
+
         Route::post('/share-token', [CoinShareController::class, 'shareToken']);
 
         Route::post('/create-support', [SupportController::class, 'index']);
         Route::get('/allsupport', [SupportController::class, 'getSupport']);
+    });
+
+    // for admin
+    Route::prefix('/admin')->group(function () {
+        Route::post('/addblance', [admin_CreaditConnntroller::class, 'index']);
+        Route::get('/transaction', [admin_TransictionController::class, 'index']);
     });
 });
