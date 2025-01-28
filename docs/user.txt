@@ -1,12 +1,12 @@
 ================= all of auth user =============
 -------- get all transaction data by user --------
-01 => GET -> base_url/transaction
+01 => GET -> base_url/app/transaction
 const header {
     Authorize: Bearer ***********
 }
 
 -------- share token P2P --------
-02 => POST -> base_url/share-token
+02 => POST -> base_url/app/share-token
 const header {
     Authorize: Bearer ***********
 }
