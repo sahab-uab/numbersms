@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2025 at 07:27 PM
+-- Generation Time: Jan 29, 2025 at 05:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -128,7 +128,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (4, '2025_01_18_163438_create_personal_access_tokens_table', 1),
 (5, '2025_01_19_084135_create_otps_table', 1),
 (8, '2025_01_19_094734_create_password_otps_table', 2),
-(9, '2025_01_19_174714_create_transactions_table', 3);
+(9, '2025_01_19_174714_create_transactions_table', 3),
+(10, '2025_01_19_183512_create_supports_table', 4);
 
 -- --------------------------------------------------------
 
@@ -211,6 +212,31 @@ CREATE TABLE `sessions` (
   `last_activity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('h20rL0YLy75QcwnssVDjJqXMAMuUGo9QCtAG5l49', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoidWxKNXYxUTgyRWNwS3BQcTQ4cW9EMVBKZnpZQVh3YkczandiYjJ3NCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hcGkvYWRtaW4vYWRkYmxhbmNlIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1738087478);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `supports`
+--
+
+CREATE TABLE `supports` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `couses` varchar(255) NOT NULL,
+  `suject` varchar(255) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `screenshot` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -236,7 +262,14 @@ INSERT INTO `transactions` (`id`, `user_id`, `username`, `getway`, `amount`, `st
 (1, 8, 'admin', 'Share', 0.5, 1, '2025-01-19 12:00:30', '2025-01-19 12:00:30'),
 (2, 9, 'admin', 'Share', 0.5, 1, '2025-01-19 12:00:30', '2025-01-19 12:00:30'),
 (3, 8, 'admin', 'Share', 0.5, 1, '2025-01-19 12:02:51', '2025-01-19 12:02:51'),
-(4, 9, 'admin', 'Share', 0.5, 1, '2025-01-19 12:02:51', '2025-01-19 12:02:51');
+(4, 9, 'admin', 'Share', 0.5, 1, '2025-01-19 12:02:51', '2025-01-19 12:02:51'),
+(5, 8, 'admin', 'paypal', 2.5, 1, '2025-01-28 11:31:05', '2025-01-28 11:31:05'),
+(6, 8, 'admin', 'paypal', 0.5, 1, '2025-01-28 11:31:35', '2025-01-28 11:31:35'),
+(7, 8, 'admin', 'paypal', 2.5, 1, '2025-01-28 11:31:51', '2025-01-28 11:31:51'),
+(8, 8, 'admin', 'Admin', 2.5, 1, '2025-01-28 11:42:28', '2025-01-28 11:42:28'),
+(9, 8, 'admin', 'Admin', 5, 1, '2025-01-28 11:42:44', '2025-01-28 11:42:44'),
+(10, 8, 'admin', 'Admin', 0.5, 1, '2025-01-28 11:43:16', '2025-01-28 11:43:16'),
+(11, 8, 'admin', 'Admin', 1, 1, '2025-01-28 11:44:24', '2025-01-28 11:44:24');
 
 -- --------------------------------------------------------
 
@@ -263,7 +296,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `coin`, `email_verified_at`, `email_verify`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
-(8, 'admin', 'sahabuab@gmail.com', '$2y$12$mxRjXLzDaFyJsosP3lKYtuHgWzynUM2.aDDRjng5GWqXYSTIzIPC.', 9.5, NULL, 1, 'user', NULL, '2025-01-19 11:08:24', '2025-01-19 12:02:51'),
+(8, 'admin', 'sahabuab@gmail.com', '$2y$12$mxRjXLzDaFyJsosP3lKYtuHgWzynUM2.aDDRjng5GWqXYSTIzIPC.', 34, NULL, 1, 'user', NULL, '2025-01-19 11:08:24', '2025-01-28 11:44:24'),
 (9, 'admin', 'demo@gmail.com', '$2y$12$t4QoJtDAhipsWQTUm2oU/.RcJsbJEQ/7Sq06xua9bc6cLKHLX.41O', 1, NULL, 0, 'user', NULL, '2025-01-19 11:59:24', '2025-01-19 12:02:51');
 
 --
@@ -343,6 +376,12 @@ ALTER TABLE `sessions`
   ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
+-- Indexes for table `supports`
+--
+ALTER TABLE `supports`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transactions`
 --
 ALTER TABLE `transactions`
@@ -375,7 +414,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `otps`
@@ -396,10 +435,16 @@ ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `supports`
+--
+ALTER TABLE `supports`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`

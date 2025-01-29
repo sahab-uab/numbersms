@@ -14,8 +14,8 @@
 --------- login user ----------
 02 => POST -> base_url/login
 # => from_data{
-    name: 'required',
-    email: 'required'
+    email: 'required',
+    password: 'required'
 }
 
 --------- forget password opt send ----------
