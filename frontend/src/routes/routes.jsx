@@ -6,6 +6,12 @@ import UserDashboard from "../pages/user/UserDashboard";
 import UserCreditCard from "../pages/user/UserCreditCard";
 import UserVerifaction from "../pages/user/UserVerifaction";
 import UserSettings from "../pages/user/UserSettings";
+import AdminLayout from "../Layout/AdminLayout";
+import AdminDashboard from "../pages/Admin/AdminDashboard";
+import AdminUser from "../pages/Admin/AdminUser";
+import AdminSettings from "../pages/Admin/AdminSettings";
+import AdminAddCaditToUser from "../pages/Admin/AdminAddCaditToUser";
+import AdminAllTransation from "../pages/Admin/AdminAllTransation";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const Services = lazy(() => import("../pages/Services"));
@@ -120,6 +126,52 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <UserSettings />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        path: "/admin/dashboard",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminDashboard />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/user/add/cadit",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminAddCaditToUser />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/transations",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminAllTransation />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/user",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminUser />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/settings",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminSettings />
           </Suspense>
         ),
       },

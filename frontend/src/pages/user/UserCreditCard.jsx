@@ -1,190 +1,208 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../Context/AuthContext";
-import axiosInstance from "../../api/axios";
-import { useTable, usePagination } from "react-table";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  buyCredit,
+  clearMessages,
+  fetchTransactions,
+} from "../../slices/creditSlice";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe("your-stripe-public-key"); // Replace with your Stripe public key
 
 const UserCreditCard = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const { transactions, loading, error, successMessage } = useSelector(
+    (state) => state.credit
+  );
 
-  const { auth } = useAuth();
+  const [modal, setModal] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [getway, setGetway] = useState("PayPal");
+  const [status, setStatus] = useState(true);
+  const [showPayPal, setShowPayPal] = useState(false);
+  const [showStripe, setShowStripe] = useState(false);
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      setLoading(true);
-      setError("");
+    dispatch(fetchTransactions());
+  }, [dispatch]);
 
-      try {
-        const response = await axiosInstance.get("/app/transaction", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        setTransactions(response.data.data || []); // Update based on your API response structure
-      } catch (err) {
-        setError("Failed to fetch transactions. Please try again.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (auth.token) {
-      fetchTransactions();
+  useEffect(() => {
+    if (successMessage || error) {
+      setTimeout(() => dispatch(clearMessages()), 3000);
     }
-  }, [auth.token]);
+  }, [successMessage, error, dispatch]);
 
-  // Define table columns
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "ID",
-        accessor: "id", // Corresponds to transaction ID
-      },
-      {
-        Header: "Name",
-        accessor: "name", // Corresponds to the name field
-      },
-      {
-        Header: "Credit",
-        accessor: "amount", // Corresponds to credit amount
-      },
-      {
-        Header: "Date",
-        accessor: "date", // Corresponds to the date field
-      },
-    ],
-    []
-  );
+  const handleBuyCredit = async (e) => {
+    e.preventDefault();
 
-  // Create table instance
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    page, // Current page rows
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    state: { pageIndex },
-  } = useTable(
-    {
-      columns,
-      data: transactions,
-      initialState: { pageIndex: 0, pageSize: 5 }, // Page size is 5 rows
-    },
-    usePagination
-  );
+    if (getway === "PayPal") {
+      setShowPayPal(true);
+      setShowStripe(false);
+    } else if (getway === "Stripe") {
+      setShowStripe(true);
+      setShowPayPal(false);
+      handleStripePayment();
+    } else {
+      dispatch(buyCredit({ amount, getway, status }));
+      setModal(false);
+      setAmount("");
+    }
+  };
+
+  // Stripe Payment
+  const handleStripePayment = async () => {
+    const stripe = await stripePromise;
+    const response = await fetch("/api/stripe/create-checkout-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount }),
+    });
+
+    const session = await response.json();
+    if (session.url) {
+      window.location.href = session.url; // Redirect to Stripe checkout
+    }
+  };
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-100 min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold text-gray-800">Credit Management</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">Credit Management</h1>
         <div className="flex gap-3">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+          <button
+            onClick={() => setModal(true)}
+            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
+          >
             Buy Credit
           </button>
-          <button className="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition">
+          <button className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition">
             Share Credit
           </button>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-lg shadow-md">
+      {/* Success/Error Messages */}
+      {successMessage && (
+        <p className="text-green-600 text-center font-medium">
+          {successMessage}
+        </p>
+      )}
+      {error && <p className="text-red-600 text-center font-medium">{error}</p>}
+
+      {/* Transactions Table */}
+      <div className="bg-white p-4 rounded-lg shadow-lg">
         {loading ? (
-          <p className="text-center text-gray-600">Loading...</p>
-        ) : error ? (
-          <p className="text-center text-red-600">{error}</p>
+          <p className="text-center text-gray-600 font-semibold">Loading...</p>
         ) : transactions.length > 0 ? (
-          <>
-            <table {...getTableProps()} className="min-w-full bg-white border">
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200">
               <thead>
-                {headerGroups.map((headerGroup) => (
+                <tr className="bg-gray-200 text-gray-700">
+                  <th className="px-4 py-2 text-left font-semibold">ID</th>
+                  <th className="px-4 py-2 text-left font-semibold">Name</th>
+                  <th className="px-4 py-2 text-left font-semibold">Credit</th>
+                  <th className="px-4 py-2 text-left font-semibold">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((transaction) => (
                   <tr
-                    key={headerGroup.id}
-                    {...headerGroup.getHeaderGroupProps()}
-                    className="bg-gray-200 text-gray-700"
+                    key={transaction.id}
+                    className="border-b hover:bg-gray-100 transition"
                   >
-                    {headerGroup.headers.map((column) => (
-                      <th
-                        key={column.id}
-                        {...column.getHeaderProps()}
-                        className="px-4 py-2 text-left"
-                      >
-                        {column.render("Header")}
-                      </th>
-                    ))}
+                    <td className="px-4 py-2">{transaction.id}</td>
+                    <td className="px-4 py-2">{transaction.name}</td>
+                    <td className="px-4 py-2 font-semibold text-blue-600">
+                      ${transaction.amount}
+                    </td>
+                    <td className="px-4 py-2">{transaction.date}</td>
                   </tr>
                 ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {page.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr
-                      key={row.id}
-                      {...row.getRowProps()}
-                      className="border-b hover:bg-gray-100 transition"
-                    >
-                      {row.cells.map((cell) => (
-                        <td
-                          key={cell.id}
-                          {...cell.getCellProps()}
-                          className="px-4 py-2"
-                        >
-                          {cell.render("Cell")}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
               </tbody>
             </table>
-
-            {/* Pagination */}
-            <div className="flex justify-between items-center mt-4">
-              <span className="text-gray-600">
-                Page {pageIndex + 1} of {pageOptions.length}
-              </span>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => previousPage()}
-                  disabled={!canPreviousPage}
-                  className={`px-4 py-2 rounded-lg border ${
-                    !canPreviousPage
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() => nextPage()}
-                  disabled={!canNextPage}
-                  className={`px-4 py-2 rounded-lg border ${
-                    !canNextPage
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                  }`}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </>
+          </div>
         ) : (
-          <p className="text-center text-gray-600">No transactions found.</p>
+          <p className="text-center text-gray-600 font-semibold">
+            No transactions found.
+          </p>
         )}
       </div>
+
+      {/* Buy Credit Modal */}
+      {modal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Buy Credit
+            </h2>
+
+            <form onSubmit={handleBuyCredit}>
+              <label className="block text-gray-700 font-medium">
+                Amount:
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                />
+              </label>
+
+              <label className="block text-gray-700 font-medium mt-4">
+                Payment Gateway:
+                <select
+                  value={getway}
+                  onChange={(e) => setGetway(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                >
+                  <option value="PayPal">PayPal</option>
+                  <option value="Stripe">Stripe</option>
+                  <option value="Bank">Bank Transfer</option>
+                </select>
+              </label>
+
+              <div className="flex justify-between mt-6">
+                <button
+                  type="button"
+                  onClick={() => setModal(false)}
+                  className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
+                >
+                  Confirm Purchase
+                </button>
+              </div>
+            </form>
+
+            {/* PayPal Button */}
+            {showPayPal && (
+              <PayPalScriptProvider
+                options={{ "client-id": "your-paypal-client-id" }}
+              >
+                <PayPalButtons
+                  createOrder={(data, actions) => {
+                    return actions.order.create({
+                      purchase_units: [{ amount: { value: amount } }],
+                    });
+                  }}
+                  onApprove={(data, actions) => {
+                    return actions.order.capture().then(() => {
+                      dispatch(buyCredit({ amount, getway, status }));
+                      setModal(false);
+                    });
+                  }}
+                />
+              </PayPalScriptProvider>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
