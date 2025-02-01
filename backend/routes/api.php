@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\User\CoinShareController;
 use App\Http\Controllers\Api\User\SupportController;
 use App\Http\Controllers\Api\User\CreaditController;
@@ -30,7 +31,6 @@ Route::group([
 
     // for user
     Route::prefix('/app')->group(function () {
-        Route::post('/addblance', [CreaditController::class, 'index']);
         Route::get('/transaction', [TransictionController::class, 'index']);
 
         Route::post('/share-token', [CoinShareController::class, 'shareToken']);
@@ -44,4 +44,9 @@ Route::group([
         Route::post('/addblance', [admin_CreaditConnntroller::class, 'index']);
         Route::get('/transaction', [admin_TransictionController::class, 'index']);
     });
+
+    // payment
+    Route::post('/payment', [PaymentController::class, 'createPayment']);
+    Route::get('/payment-success', [PaymentController::class, 'success'])->name('pay_success');
+    Route::get('/payment-failed', [PaymentController::class, 'faild'])->name('pay_faild');
 });
