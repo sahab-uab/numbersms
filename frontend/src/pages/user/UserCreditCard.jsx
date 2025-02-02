@@ -5,10 +5,8 @@ import {
   clearMessages,
   fetchTransactions,
 } from "../../slices/creditSlice";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { loadStripe } from "@stripe/stripe-js";
 
-const stripePromise = loadStripe("your-stripe-public-key"); // Replace with your Stripe public key
+import axiosInstance from "../../api/axios";
 
 const UserCreditCard = () => {
   const dispatch = useDispatch();
@@ -16,12 +14,14 @@ const UserCreditCard = () => {
     (state) => state.credit
   );
 
+  const { token } = useSelector((state) => state.auth);
+
   const [modal, setModal] = useState(false);
   const [amount, setAmount] = useState("");
-  const [getway, setGetway] = useState("PayPal");
-  const [status, setStatus] = useState(true);
-  const [showPayPal, setShowPayPal] = useState(false);
-  const [showStripe, setShowStripe] = useState(false);
+  const [gateway, setGateway] = useState("paypal");
+
+  const [paymentLink, setPaymentLink] = useState(""); // To store the payment link
+  const [loadingPayment, setLoadingPayment] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -33,35 +33,40 @@ const UserCreditCard = () => {
     }
   }, [successMessage, error, dispatch]);
 
+  // Handle Buy Credit
   const handleBuyCredit = async (e) => {
     e.preventDefault();
+    setLoadingPayment(true);
 
-    if (getway === "PayPal") {
-      setShowPayPal(true);
-      setShowStripe(false);
-    } else if (getway === "Stripe") {
-      setShowStripe(true);
-      setShowPayPal(false);
-      handleStripePayment();
-    } else {
-      dispatch(buyCredit({ amount, getway, status }));
-      setModal(false);
-      setAmount("");
-    }
-  };
+    try {
+      const response = await axiosInstance.post(
+        "/payment",
+        { amount: amount, gateway: gateway },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  // Stripe Payment
-  const handleStripePayment = async () => {
-    const stripe = await stripePromise;
-    const response = await fetch("/api/stripe/create-checkout-session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount }),
-    });
+      const res = response.data;
+      console.log(res);
 
-    const session = await response.json();
-    if (session.url) {
-      window.location.href = session.url; // Redirect to Stripe checkout
+      if (response.data.status === true) {
+        setPaymentLink(response.data.payment_link);
+        if (gateway === "stripe") {
+          window.location.href = response.data.payment_link;
+        } else if (gateway === "paypal") {
+          window.location.href = response.data.payment_link;
+        }
+      } else {
+        alert("Error: " + response.data.message);
+      }
+    } catch (err) {
+      console.error("Payment failed", err);
+      alert("Payment failed. Please try again.");
+    } finally {
+      setLoadingPayment(false);
     }
   };
 
@@ -71,13 +76,20 @@ const UserCreditCard = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Credit Management</h1>
         <div className="flex gap-3">
+          {/* Buy Credit Button */}
           <button
             onClick={() => setModal(true)}
             className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
           >
             Buy Credit
           </button>
-          <button className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition">
+          {/* Share Credit Button */}
+          <button
+            onClick={() =>
+              alert("Share Credit functionality is not implemented yet")
+            }
+            className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
+          >
             Share Credit
           </button>
         </div>
@@ -153,12 +165,12 @@ const UserCreditCard = () => {
               <label className="block text-gray-700 font-medium mt-4">
                 Payment Gateway:
                 <select
-                  value={getway}
-                  onChange={(e) => setGetway(e.target.value)}
+                  value={gateway}
+                  onChange={(e) => setGateway(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
                 >
-                  <option value="PayPal">PayPal</option>
-                  <option value="Stripe">Stripe</option>
+                  <option value="paypal">PayPal</option>
+                  <option value="stripe">Stripe</option>
                   <option value="Bank">Bank Transfer</option>
                 </select>
               </label>
@@ -175,31 +187,10 @@ const UserCreditCard = () => {
                   type="submit"
                   className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
                 >
-                  Confirm Purchase
+                  {loadingPayment ? "Processing..." : "Confirm Purchase"}
                 </button>
               </div>
             </form>
-
-            {/* PayPal Button */}
-            {showPayPal && (
-              <PayPalScriptProvider
-                options={{ "client-id": "your-paypal-client-id" }}
-              >
-                <PayPalButtons
-                  createOrder={(data, actions) => {
-                    return actions.order.create({
-                      purchase_units: [{ amount: { value: amount } }],
-                    });
-                  }}
-                  onApprove={(data, actions) => {
-                    return actions.order.capture().then(() => {
-                      dispatch(buyCredit({ amount, getway, status }));
-                      setModal(false);
-                    });
-                  }}
-                />
-              </PayPalScriptProvider>
-            )}
           </div>
         </div>
       )}

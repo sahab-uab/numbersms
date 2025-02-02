@@ -83,7 +83,7 @@ class AuthController extends Controller
         ]);
 
         try {
-            // check user email verify ot not
+         
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {

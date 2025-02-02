@@ -4,7 +4,7 @@ const initialState = {
   token: null,
   user: null,
   isAuthenticated: false,
-  email: "", // Store email temporarily for OTP verification
+  email: "",
   otpVerified: false,
 };
 

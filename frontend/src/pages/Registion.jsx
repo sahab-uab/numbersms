@@ -9,7 +9,7 @@ import { otpVerifySuccess, registerSuccess } from "../slices/authSlices";
 const Registration = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { email } = useSelector((state) => state.auth); // Get stored email
+  const { email } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -68,7 +68,6 @@ const Registration = () => {
     }
   };
 
-  // Handle OTP Verification
   const handleOtpVerification = async () => {
     try {
       setMessage({ type: "", text: "" });
@@ -76,7 +75,10 @@ const Registration = () => {
       const response = await axiosInstance.post("/verifyemail", {
         email,
         otp,
+        password: formData.password,
       });
+
+      console.log(response.data);
 
       if (response.data.status) {
         dispatch(
@@ -103,7 +105,7 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 mt-20">
       {/* Registration Header */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -147,7 +149,6 @@ const Registration = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Full Name"
-              required
               className="w-full px-4 py-2 border rounded-lg"
             />
             <input
@@ -156,7 +157,6 @@ const Registration = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              required
               className="w-full px-4 py-2 border rounded-lg"
             />
             <input
@@ -165,7 +165,6 @@ const Registration = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              required
               className="w-full px-4 py-2 border rounded-lg"
             />
             <input
@@ -174,7 +173,6 @@ const Registration = () => {
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"
-              required
               className="w-full px-4 py-2 border rounded-lg"
             />
 

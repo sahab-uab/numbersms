@@ -9,7 +9,7 @@ import { loginSuccess } from "../slices/authSlices";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.auth); // Get auth state
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,19 +37,21 @@ const Login = () => {
         password: formData.password,
       });
 
-      const { token, data } = response.data;
+      const { token, data, status, message } = response.data;
 
-      console.log(data.role);
-      console.log(response.data);
+      if (status === false) {
+        setError(message);
+      } else if (status === true) {
+        dispatch(loginSuccess({ token, user: data }));
+
+        if (data.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard");
+        }
+      }
 
       // Dispatch login action
-      dispatch(loginSuccess({ token, user: data }));
-
-      if (data.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials.");
     } finally {
@@ -58,7 +60,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 mt-20">
       <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="max-w-md mx-auto rounded-lg p-6 shadow-lg bg-white">
           <h2 className="text-2xl font-bold text-center mb-6">

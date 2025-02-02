@@ -22,7 +22,7 @@ return [
     'allowed_methods' => ['*'],
 
     // Restrict the allowed origins (e.g., your frontend URL)
-    'allowed_origins' => ['http://localhost:5174'|| 'http://localhost:5176'], // Update with your frontend URL
+    'allowed_origins' => ['http://localhost:5173'|| 'http://localhost:5176'], // Update with your frontend URL
 
     // Allow any patterns for origins if needed (optional)
     'allowed_origins_patterns' => [],
