@@ -21,7 +21,6 @@ const UserLayout = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="container mx-auto flex gap-5">
         <aside className="w-64 bg-white shadow-md rounded-lg h-screen">
           <div className="mt-6 p-4">

@@ -12,6 +12,8 @@ import AdminUser from "../pages/Admin/AdminUser";
 import AdminSettings from "../pages/Admin/AdminSettings";
 import AdminAddCaditToUser from "../pages/Admin/AdminAddCaditToUser";
 import AdminAllTransation from "../pages/Admin/AdminAllTransation";
+import PrivateRoute from "../utils/PrivateRoute";
+import AdminAllUser from "../pages/Admin/AdminAllUser";
 
 const HomePage = lazy(() => import("../pages/HomePage"));
 const Services = lazy(() => import("../pages/Services"));
@@ -70,17 +72,21 @@ export const route = createBrowserRouter([
       {
         path: "/sign-up",
         element: (
-          <Suspense fallback={<div>Loading...</div>}>
-            <Registration />
-          </Suspense>
+          <PrivateRoute>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Registration />
+            </Suspense>
+          </PrivateRoute>
         ),
       },
       {
         path: "/login",
         element: (
-          <Suspense fallback={<div>Loading...</div>}>
-            <Login />
-          </Suspense>
+          <PrivateRoute>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Login />
+            </Suspense>
+          </PrivateRoute>
         ),
       },
     ],
@@ -172,6 +178,14 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <AdminSettings />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/users",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminAllUser />
           </Suspense>
         ),
       },

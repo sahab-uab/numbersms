@@ -78,13 +78,13 @@ const Registration = () => {
         password: formData.password,
       });
 
-      console.log(response.data);
+      console.log(response.data.data);
 
       if (response.data.status) {
         dispatch(
           otpVerifySuccess({
             token: response.data.token,
-            user: response.data.user,
+            user: response.data.data,
           })
         );
         setMessage({

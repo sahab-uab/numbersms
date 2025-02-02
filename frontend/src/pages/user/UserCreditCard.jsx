@@ -14,14 +14,18 @@ const UserCreditCard = () => {
     (state) => state.credit
   );
 
-  const { token } = useSelector((state) => state.auth);
+  console.log(transactions);
+
+  const { token, user } = useSelector((state) => state.auth);
 
   const [modal, setModal] = useState(false);
+  const [shareModal, setShareModal] = useState(false); // For Share Credit Modal
   const [amount, setAmount] = useState("");
   const [gateway, setGateway] = useState("paypal");
-
+  const [email, setEmail] = useState(""); // For email in share credit
   const [paymentLink, setPaymentLink] = useState(""); // To store the payment link
   const [loadingPayment, setLoadingPayment] = useState(false);
+  const [loadingShare, setLoadingShare] = useState(false); // For share credit loading
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -41,7 +45,7 @@ const UserCreditCard = () => {
     try {
       const response = await axiosInstance.post(
         "/payment",
-        { amount: amount, gateway: gateway },
+        { amount: amount, gateway: gateway, user_id: user?.id },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,11 +57,12 @@ const UserCreditCard = () => {
       console.log(res);
 
       if (response.data.status === true) {
-        setPaymentLink(response.data.payment_link);
-        if (gateway === "stripe") {
-          window.location.href = response.data.payment_link;
-        } else if (gateway === "paypal") {
-          window.location.href = response.data.payment_link;
+        setPaymentLink(response?.data?.payment_link);
+
+        if (gateway === "stripe" || gateway === "paypal") {
+          const link = response?.data?.payment_link;
+          const paymentWindow = window.open(link, "_blank");
+          paymentWindow.focus();
         }
       } else {
         alert("Error: " + response.data.message);
@@ -67,6 +72,40 @@ const UserCreditCard = () => {
       alert("Payment failed. Please try again.");
     } finally {
       setLoadingPayment(false);
+    }
+  };
+
+  // Handle Share Credit
+  const handleShareCredit = async (e) => {
+    e.preventDefault();
+    setLoadingShare(true);
+
+    try {
+      // Make an API call to share the credit
+      const response = await axiosInstance.post(
+        "/app/share-token",
+        { amount: amount, email: email },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const res = response.data;
+      console.log(res);
+
+      if (response.data.status === true) {
+        alert("Credit shared successfully.");
+        setShareModal(false); // Close modal on success
+      } else {
+        alert("Error: " + response.data.message);
+      }
+    } catch (err) {
+      console.error("Failed to share credit", err);
+      alert("Failed to share credit. Please try again.");
+    } finally {
+      setLoadingShare(false);
     }
   };
 
@@ -85,9 +124,7 @@ const UserCreditCard = () => {
           </button>
           {/* Share Credit Button */}
           <button
-            onClick={() =>
-              alert("Share Credit functionality is not implemented yet")
-            }
+            onClick={() => setShareModal(true)} // Open Share Credit modal
             className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
           >
             Share Credit
@@ -95,7 +132,6 @@ const UserCreditCard = () => {
         </div>
       </div>
 
-      {/* Success/Error Messages */}
       {successMessage && (
         <p className="text-green-600 text-center font-medium">
           {successMessage}
@@ -119,17 +155,17 @@ const UserCreditCard = () => {
                 </tr>
               </thead>
               <tbody>
-                {transactions.map((transaction) => (
+                {transactions.map((transaction, index) => (
                   <tr
                     key={transaction.id}
                     className="border-b hover:bg-gray-100 transition"
                   >
-                    <td className="px-4 py-2">{transaction.id}</td>
-                    <td className="px-4 py-2">{transaction.name}</td>
+                    <td className="px-4 py-2">{index + 1}</td>
+                    <td className="px-4 py-2">{transaction.username}</td>
                     <td className="px-4 py-2 font-semibold text-blue-600">
                       ${transaction.amount}
                     </td>
-                    <td className="px-4 py-2">{transaction.date}</td>
+                    <td className="px-4 py-2">{transaction.updated_at}</td>
                   </tr>
                 ))}
               </tbody>
@@ -164,15 +200,28 @@ const UserCreditCard = () => {
 
               <label className="block text-gray-700 font-medium mt-4">
                 Payment Gateway:
-                <select
-                  value={gateway}
-                  onChange={(e) => setGateway(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
-                >
-                  <option value="paypal">PayPal</option>
-                  <option value="stripe">Stripe</option>
-                  <option value="Bank">Bank Transfer</option>
-                </select>
+                <div className="mt-2">
+                  <label className="inline-flex items-center mr-4">
+                    <input
+                      type="radio"
+                      value="paypal"
+                      checked={gateway === "paypal"}
+                      onChange={(e) => setGateway(e.target.value)}
+                      className="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-400"
+                    />
+                    <span className="ml-2">PayPal</span>
+                  </label>
+                  <label className="inline-flex items-center mr-4">
+                    <input
+                      type="radio"
+                      value="stripe"
+                      checked={gateway === "stripe"}
+                      onChange={(e) => setGateway(e.target.value)}
+                      className="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-400"
+                    />
+                    <span className="ml-2">Stripe</span>
+                  </label>
+                </div>
               </label>
 
               <div className="flex justify-between mt-6">
@@ -188,6 +237,57 @@ const UserCreditCard = () => {
                   className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
                 >
                   {loadingPayment ? "Processing..." : "Confirm Purchase"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Share Credit Modal */}
+      {shareModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Share Credit
+            </h2>
+
+            <form onSubmit={handleShareCredit}>
+              <label className="block text-gray-700 font-medium">
+                Amount:
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                />
+              </label>
+
+              <label className="block text-gray-700 font-medium mt-4">
+                Email:
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                />
+              </label>
+
+              <div className="flex justify-between mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShareModal(false)}
+                  className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+                >
+                  {loadingShare ? "Sharing..." : "Share Credit"}
                 </button>
               </div>
             </form>

@@ -45,27 +45,19 @@ const Sidebar = () => {
       icon: Users,
       label: "Users",
       subItems: [
-        { icon: UserPlus, label: "Add Credit", link: "/admin/user/add/cadit" },
+        { icon: UserPlus, label: "All User", link: "/admin/users" },
         { icon: UserPlus, label: "Add User", link: "/users/add" },
         { icon: UserCheck, label: "Manage Users", link: "/users/manage" },
       ],
     },
     {
-      icon: ShoppingCart,
-      label: "Products",
-      subItems: [
-        { icon: Package, label: "Inventory", link: "/products/inventory" },
-        { icon: Tags, label: "Categories", link: "/products/categories" },
-      ],
-    },
-    {
       icon: BarChart2,
-      label: "Analytics",
+      label: "Credit",
       subItems: [
-        { icon: LineChart, label: "Sales Report", link: "/analytics/sales" },
-        { icon: PieChart, label: "User Stats", link: "/analytics/users" },
+        { icon: UserPlus, label: "Add Credit", link: "/admin/user/add/cadit" },
       ],
     },
+
     {
       icon: Settings,
       label: "Settings",
