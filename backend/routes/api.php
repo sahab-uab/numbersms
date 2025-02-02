@@ -63,13 +63,4 @@ Route::group([
     Route::controller(PaymentController::class)->group(function () {
         Route::post('/payment', 'createPayment');
     });
-
-    // textverify
-    Route::prefix('/text')->controller(TextVerifiedController::class)->group(function () {
-        Route::get('/auth', 'generateBearerToken');
-        Route::get('/account', 'getAccountDetails');
-        Route::get('/services', 'getServiceList');
-        Route::post('/verifications', 'createVerification');
-        Route::get('/verifications/{href}', 'getVerificationDetails');
-    });
 });

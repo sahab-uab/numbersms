@@ -7,9 +7,9 @@ use App\Mail\Mailer;
 use App\Models\Otp;
 use App\Models\PasswordOtp;
 use App\Models\User;
-use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
