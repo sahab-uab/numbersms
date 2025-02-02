@@ -19,6 +19,11 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/verifyemail', [AuthController::class, 'verifyEmail']);
 Route::post('/sendotp', [AuthController::class, 'sendotp']);
 
+// payment
+Route::post('/payment', [PaymentController::class, 'createPayment']);
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('pay_success');
+Route::get('/payment-failed', [PaymentController::class, 'faild'])->name('pay_faild');
+
 // authenticated 
 Route::group([
     'middleware' => ['auth:api']
@@ -44,9 +49,4 @@ Route::group([
         Route::post('/addblance', [admin_CreaditConnntroller::class, 'index']);
         Route::get('/transaction', [admin_TransictionController::class, 'index']);
     });
-
-    // payment
-    Route::post('/payment', [PaymentController::class, 'createPayment']);
-    Route::get('/payment-success', [PaymentController::class, 'success'])->name('pay_success');
-    Route::get('/payment-failed', [PaymentController::class, 'faild'])->name('pay_faild');
 });

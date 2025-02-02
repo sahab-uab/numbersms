@@ -55,12 +55,12 @@ class PaymentController extends Controller
                     ]
                 ],
                 'mode' => 'payment',
-                'success_url' => $successUrl . '?session_id={CHECKOUT_SESSION_ID}',
+                'success_url' => "{$successUrl}?session_id={CHECKOUT_SESSION_ID}&gateway=stripe",
                 'cancel_url' => $failedUrl,
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => true,
                 'gateway' => 'stripe',
                 'payment_link' => $session->url,
             ]);
@@ -88,13 +88,13 @@ class PaymentController extends Controller
                     ]
                 ],
                 "application_context" => [
-                    "return_url" => $successUrl,
+                    "return_url" => "{$successUrl}?&gateway=paypal",
                     "cancel_url" => $failedUrl,
                 ]
             ]);
 
             return response()->json([
-                'status' => 'success',
+                'status' => true,
                 'gateway' => 'paypal',
                 'payment_link' => $order['links'][1]['href'],
             ]);
