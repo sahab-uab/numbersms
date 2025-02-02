@@ -13,3 +13,29 @@ const header {
 const header {
     Authorize: Bearer ***********
 }
+
+
+-------- get all user data --------
+01 => GET -> base_url/admin/getalluser
+const header {
+    Authorize: Bearer ***********
+}
+
+-------- delete user --------
+01 => GET -> base_url/admin/deleteuser
+const header {
+    Authorize: Bearer ***********
+}
+# => from_data{
+    id: 'required' // user id pass 
+}
+
+-------- change user role --------
+01 => GET -> base_url/admin/userolechnage
+const header {
+    Authorize: Bearer ***********
+}
+# => from_data{
+    id: 'required' // user id pass
+    role: 'required'
+}
