@@ -28,8 +28,8 @@ class TrannsictionController extends Controller
             ]);
         } catch (\Exception $th) {
             return response()->json([
-                'status' => true,
-                'message' => $th,
+                'status' => false,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }

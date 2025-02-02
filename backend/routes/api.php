@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\User\SupportController;
 use App\Http\Controllers\Api\User\CreaditController;
 use App\Http\Controllers\Api\User\TransictionController;
 
+use App\Http\Controllers\Api\Admin\AlluserController as admin_AlluserController;
 use App\Http\Controllers\Api\Admin\CreaditController as admin_CreaditConnntroller;
 use App\Http\Controllers\Api\User\TransictionController as admin_TransictionController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,11 @@ Route::group([
 
     // for admin
     Route::prefix('/admin')->group(function () {
+        Route::controller(admin_AlluserController::class)->group(function () {
+            Route::post('/deleteuser', 'deluser');
+            Route::post('/userolechnage', 'userRoleChnage');
+            Route::get('/getalluser', 'allUsers');
+        });
         Route::post('/addblance', [admin_CreaditConnntroller::class, 'index']);
         Route::get('/transaction', [admin_TransictionController::class, 'index']);
     });

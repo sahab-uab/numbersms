@@ -71,7 +71,7 @@ class CoinShareController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }

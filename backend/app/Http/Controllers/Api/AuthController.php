@@ -67,7 +67,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -83,7 +83,7 @@ class AuthController extends Controller
         ]);
 
         try {
-         
+
             $user = User::where('email', $request->email)->first();
 
             if (!$user) {
@@ -127,7 +127,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -136,12 +136,20 @@ class AuthController extends Controller
     // profile
     public function profile()
     {
-        $userData = auth()->user();
-        return response()->json([
-            'status' => true,
-            'message' => 'user profile data',
-            'data' => $userData
-        ]);
+        try {
+            $userData = auth()->user();
+            return response()->json([
+                'status' => true,
+                'message' => 'user profile data',
+                'data' => $userData
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'data' => []
+            ]);
+        }
     }
 
     // update prifle
@@ -165,7 +173,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -174,27 +182,44 @@ class AuthController extends Controller
     // refresh token
     public function refreshToken()
     {
-        $token = auth()->refresh();
+        try {
+            $token = auth()->refresh();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'New token making success',
-            'data' => [],
-            'token' => $token,
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'New token making success',
+                'data' => [],
+                'token' => $token,
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'data' => []
+            ]);
+        }
+
     }
 
     // logout
     public function logout()
     {
-        auth()->logout();
+        try {
+            auth()->logout();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User logged out',
-            'data' => []
-        ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'User logged out',
+                'data' => []
+            ]);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'data' => []
+            ]);
+        }
     }
 
     // verify email
@@ -267,7 +292,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -313,7 +338,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -348,7 +373,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -396,7 +421,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }
@@ -444,7 +469,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th,
+                'message' => $th->getMessage(),
                 'data' => []
             ]);
         }

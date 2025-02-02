@@ -16,26 +16,34 @@ class PaymentController extends Controller
     // ✅ Generate Payment Link (Stripe / PayPal)
     public function createPayment(Request $request)
     {
-        $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'user_id' => 'required',
-            'gateway' => 'required|string|in:stripe,paypal',
-        ]);
+        try {
+            $request->validate([
+                'amount' => 'required|numeric|min:1',
+                'user_id' => 'required',
+                'gateway' => 'required|string|in:stripe,paypal',
+            ]);
 
-        $amount = $request->amount;
-        $currency = strtoupper('usd');
-        $gateway = strtolower($request->gateway);
-        $successUrl = route('pay_success');
-        $failedUrl = route('pay_faild');
-        $userId = $request->user_id;
+            $amount = $request->amount;
+            $currency = strtoupper('usd');
+            $gateway = strtolower($request->gateway);
+            $successUrl = route('pay_success');
+            $failedUrl = route('pay_faild');
+            $userId = $request->user_id;
 
-        if ($gateway === 'stripe') {
-            return $this->createStripePayment($amount, $currency, $successUrl, $failedUrl, $userId);
-        } elseif ($gateway === 'paypal') {
-            return $this->createPayPalPayment($amount, $currency, $successUrl, $failedUrl, $userId);
+            if ($gateway === 'stripe') {
+                return $this->createStripePayment($amount, $currency, $successUrl, $failedUrl, $userId);
+            } elseif ($gateway === 'paypal') {
+                return $this->createPayPalPayment($amount, $currency, $successUrl, $failedUrl, $userId);
+            }
+
+            return response()->json(['status' => 'error', 'message' => 'Invalid payment gateway'], 400);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'data' => []
+            ]);
         }
-
-        return response()->json(['status' => 'error', 'message' => 'Invalid payment gateway'], 400);
     }
 
     // ✅ Stripe Payment Link
@@ -66,8 +74,12 @@ class PaymentController extends Controller
                 'gateway' => 'stripe',
                 'payment_link' => $session->url,
             ]);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 400);
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'data' => []
+            ]);
         }
     }
 
