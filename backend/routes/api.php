@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\TextVerifiedController;
 use App\Http\Controllers\Api\User\CoinShareController;
 use App\Http\Controllers\Api\User\SupportController;
 use App\Http\Controllers\Api\User\CreaditController;
@@ -61,5 +62,14 @@ Route::group([
     // payment
     Route::controller(PaymentController::class)->group(function () {
         Route::post('/payment', 'createPayment');
+    });
+
+    // textverify
+    Route::prefix('/text')->controller(TextVerifiedController::class)->group(function () {
+        Route::get('/auth', 'generateBearerToken');
+        Route::get('/account', 'getAccountDetails');
+        Route::get('/services', 'getServiceList');
+        Route::post('/verifications', 'createVerification');
+        Route::get('/verifications/{href}', 'getVerificationDetails');
     });
 });
