@@ -20,9 +20,10 @@ Route::post('/verifyemail', [AuthController::class, 'verifyEmail']);
 Route::post('/sendotp', [AuthController::class, 'sendotp']);
 
 // payment
-Route::post('/payment', [PaymentController::class, 'createPayment']);
-Route::get('/payment-success', [PaymentController::class, 'success'])->name('pay_success');
-Route::get('/payment-failed', [PaymentController::class, 'faild'])->name('pay_faild');
+Route::controller(PaymentController::class)->group(function () {
+    Route::get('/payment-success', 'success')->name('pay_success');
+    Route::get('/payment-failed', 'faild')->name('pay_faild');
+});
 
 // authenticated 
 Route::group([
@@ -48,5 +49,11 @@ Route::group([
     Route::prefix('/admin')->group(function () {
         Route::post('/addblance', [admin_CreaditConnntroller::class, 'index']);
         Route::get('/transaction', [admin_TransictionController::class, 'index']);
+    });
+
+
+    // payment
+    Route::controller(PaymentController::class)->group(function () {
+        Route::post('/payment', 'createPayment');
     });
 });

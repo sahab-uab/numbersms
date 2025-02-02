@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('username')->nullable();
             $table->string('getway');
             $table->float('amount');
+            $table->string('pay_id')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

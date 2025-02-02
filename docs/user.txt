@@ -22,5 +22,6 @@ const header {
 }
 # => from_data{
     amount: 'required'
+    user_id: 'required'
     gateway: 'required'
 }

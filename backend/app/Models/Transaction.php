@@ -13,6 +13,7 @@ class Transaction extends Model
         'username',
         'getway',
         'amount',
+        'pay_id',
         'status'
     ];
 }

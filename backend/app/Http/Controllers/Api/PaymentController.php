@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Checkout\Session;
@@ -18,6 +18,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:1',
+            'user_id' => 'required',
             'gateway' => 'required|string|in:stripe,paypal',
         ]);
 
@@ -26,18 +27,19 @@ class PaymentController extends Controller
         $gateway = strtolower($request->gateway);
         $successUrl = route('pay_success');
         $failedUrl = route('pay_faild');
+        $userId = $request->user_id;
 
         if ($gateway === 'stripe') {
-            return $this->createStripePayment($amount, $currency, $successUrl, $failedUrl);
+            return $this->createStripePayment($amount, $currency, $successUrl, $failedUrl, $userId);
         } elseif ($gateway === 'paypal') {
-            return $this->createPayPalPayment($amount, $currency, $successUrl, $failedUrl);
+            return $this->createPayPalPayment($amount, $currency, $successUrl, $failedUrl, $userId);
         }
 
         return response()->json(['status' => 'error', 'message' => 'Invalid payment gateway'], 400);
     }
 
     // ✅ Stripe Payment Link
-    private function createStripePayment($amount, $currency, $successUrl, $failedUrl)
+    private function createStripePayment($amount, $currency, $successUrl, $failedUrl, $currentUser)
     {
         try {
             Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -55,7 +57,7 @@ class PaymentController extends Controller
                     ]
                 ],
                 'mode' => 'payment',
-                'success_url' => "{$successUrl}?session_id={CHECKOUT_SESSION_ID}&gateway=stripe",
+                'success_url' => "{$successUrl}?session_id={CHECKOUT_SESSION_ID}&gateway=stripe&id={$currentUser}",
                 'cancel_url' => $failedUrl,
             ]);
 
@@ -70,7 +72,7 @@ class PaymentController extends Controller
     }
 
     // ✅ PayPal Payment Link
-    private function createPayPalPayment($amount, $currency, $successUrl, $failedUrl)
+    private function createPayPalPayment($amount, $currency, $successUrl, $failedUrl, $currentUser)
     {
         try {
             $provider = new PayPalClient;
@@ -88,7 +90,7 @@ class PaymentController extends Controller
                     ]
                 ],
                 "application_context" => [
-                    "return_url" => "{$successUrl}?&gateway=paypal",
+                    "return_url" => "{$successUrl}?&gateway=paypal&id={$currentUser}",
                     "cancel_url" => $failedUrl,
                 ]
             ]);
@@ -107,6 +109,7 @@ class PaymentController extends Controller
     public function success(Request $request)
     {
         $gateway = $request->query('gateway');
+        $userId = $request->query('id');
 
         if ($gateway === 'stripe') {
             $sessionId = $request->query('session_id');
@@ -114,8 +117,18 @@ class PaymentController extends Controller
             $session = StripeSession::retrieve($sessionId);
 
             // Save payment to database
-            $this->savePayment($session->id, $session->amount_total / 100, 'stripe', $session->payment_status, $session->customer_email);
-            
+            $this->savePayment($session->id, $session->amount_total / 100, 'stripe', ($session->payment_status == 'paid' ? true : false), $session->customer_email, $userId);
+
+            // return view
+            return view('success', [
+                'data' => [
+                    'payment_id' => $session->id,
+                    'amount' => $session->amount_total / 100,
+                    'geteway' => 'stripe',
+                    'total_amount' => User::find($userId)->coin
+                ]
+            ]);
+
         } elseif ($gateway === 'paypal') {
             $provider = new PayPalClient;
             $provider->setApiCredentials(config('paypal'));
@@ -125,37 +138,46 @@ class PaymentController extends Controller
             $order = $provider->capturePaymentOrder($paymentId);
 
             // Save payment to database
-            $this->savePayment($paymentId, $order['purchase_units'][0]['payments']['captures'][0]['amount']['value'], 'paypal', 'completed', $order['payer']['email_address']);
-        }
+            $this->savePayment($paymentId, $order['purchase_units'][0]['payments']['captures'][0]['amount']['value'], 'paypal', true, $order['payer']['email_address'], $userId);
 
-        return response()->json(['status' => false, 'message' => 'Invalid gateway']);
+            // return view
+            return view('success', [
+                'data' => [
+                    'payment_id' => $paymentId,
+                    'amount' => $order['purchase_units'][0]['payments']['captures'][0]['amount']['value'],
+                    'geteway' => 'paypal',
+                    'total_amount' => User::find($userId)->coin
+                ]
+            ]);
+        }
     }
 
     // ❌ Payment Failed
     public function faild(Request $request)
     {
-        return response()->json(['status' => false, 'message' => 'Payment failed or was cancelled.']);
+        return view('faild');
     }
 
     // 📌 Save Payment to Database
-    private function savePayment($paymentId, $amount, $gateway, $status, $email)
+    private function savePayment($paymentId, $amount, $gateway, $status, $email, $user)
     {
-        $currentUser = Auth::user();
-        Transaction::create([
-            'user_id' => $currentUser->id,
-            'username' => $currentUser->name,
-            'getway' => $gateway,
-            'amount' => $amount,
-            'status' => $status
-        ]);
+        if ($paymentId) {
+            $currentUser = User::find($user);
+            $transectionData = Transaction::where('pay_id', $paymentId)->exists();
+            if (!$transectionData) {
+                $currentUser->coin = $currentUser->coin + $amount;
+                $currentUser->save();
 
-        return response()->json([
-            'status' => true,
-            'message' => $amount . ' Amount added success and now your current balance is ' . $currentUser->coin,
-            'amount' => $amount,
-            'totalamount' => $currentUser->coin,
-            'getway' => $gateway,
-            'data' => []
-        ]);
+                // save history
+                Transaction::create([
+                    'user_id' => $currentUser->id,
+                    'username' => $currentUser->name,
+                    'getway' => $gateway,
+                    'amount' => $amount,
+                    'pay_id' => $paymentId,
+                    'status' => $status
+                ]);
+            }
+        }
     }
 }
