@@ -1,0 +1,35 @@
+-------- get service data --------
+01 => POST -> https://server.sms.numbersms.com/api/service
+
+-------- get service price --------
+02 => POST -> https://server.sms.numbersms.com/api/verification_pricing
+# json data = {
+    "serviceName": "required",
+    "areaCode": true,
+    "carrier": true,
+    "numberType": "required",
+    "capability": "required"
+}
+
+-------- create a verification --------
+03 => POST -> https://server.sms.numbersms.com/api/create_verification
+# json data ={
+    "areaCodeSelectOption": [],
+    "carrierSelectOption": [],
+    "serviceName": "required",
+    "capability": "required",
+    "serviceNotListedName": "required"
+}
+
+-------- start polling --------
+04 => POST -> https://server.sms.numbersms.com/api/start_polling
+# json data ={
+    "verification_href": "required"
+}
+
+-------- get otp --------
+05 => POST -> https://server.sms.numbersms.com/api/getotp // request this url after 1s using setinterval
+# json data ={
+    "href": "requred"
+    "methods": 'required'
+}
