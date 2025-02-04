@@ -39,3 +39,9 @@ const header {
     id: 'required' // user id pass
     role: 'required'
 }
+
+--------------- get sms uusages data ------------
+00 => GET -> base_url/admin/get-smshistory
+const header {
+    Authorize: Bearer ***********
+}

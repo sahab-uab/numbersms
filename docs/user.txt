@@ -25,3 +25,10 @@ const header {
     user_id: 'required'
     gateway: 'required'
 }
+
+
+--------------- get sms uusages data ------------
+00 => GET -> base_url/user/get-smshistory
+const header {
+    Authorize: Bearer ***********
+}
