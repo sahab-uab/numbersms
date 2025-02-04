@@ -9,7 +9,7 @@ const initialState = {
 export const UserSmsFetching = createAsyncThunk(
   "UserSms/UserSmsFetching",
   async () => {
-    const res = await axiosInstance.get("/admin/getalluser");
+    const res = await axiosInstance.get("/user/get-smshistory");
     return res.data;
   }
 );

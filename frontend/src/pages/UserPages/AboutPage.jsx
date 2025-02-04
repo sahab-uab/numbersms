@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 
-import { fadeInUp } from "../animation/Animation";
-import TeamSection from "../Components/AboutPageComponents/TeamSection";
-import CreativeTeamSection from "../Components/AboutPageComponents/CreativeTeamSection";
-import HeroSection from "../Components/AboutPageComponents/HeroSection";
-import OurMission from "../Components/AboutPageComponents/OurMission";
-import OurValue from "../Components/AboutPageComponents/OurValue";
-import GlobalImpactSection from "../Components/AboutPageComponents/GlobalImpactSection";
+import { fadeInUp } from "../../animation/Animation";
+import TeamSection from "../../Components/AboutPageComponents/TeamSection";
+import CreativeTeamSection from "../../Components/AboutPageComponents/CreativeTeamSection";
+import HeroSection from "../../Components/AboutPageComponents/HeroSection";
+import OurMission from "../../Components/AboutPageComponents/OurMission";
+import OurValue from "../../Components/AboutPageComponents/OurValue";
+import GlobalImpactSection from "../../Components/AboutPageComponents/GlobalImpactSection";
 
 const AboutPage = () => {
   return (

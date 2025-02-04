@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import HomeLayout from "../Layout/HomeLayout";
 import ServicesPage from "../pages/ServicesPage";
-import AboutPage from "../pages/AboutPage";
+import AboutPage from "../pages/UserPages/AboutPage";
 import ContactPage from "../pages/ContactPage";
 import PrivateRoute from "../utils/PrivateRoute";
 import RegistrationPage from "../pages/RegistrationPage";
