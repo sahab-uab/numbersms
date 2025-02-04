@@ -216,7 +216,7 @@ const HomePage = () => {
                 }`}
               >
                 <th className="px-4 py-3">Service</th>
-                <th className="px-4 py-3">DAISYSMS</th>
+
                 <th className="px-4 py-3">TEXTVERIFIED</th>
                 <th className="px-4 py-3">ONLINESIM</th>
                 <th className="px-4 py-3">SMSPVA</th>

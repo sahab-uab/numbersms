@@ -98,12 +98,12 @@ const Footer = () => {
             </li>
             <li>
               <a
-                href="mailto:support@daisysms.com"
+                href="mailto:"
                 className={`hover:${
                   darkMode ? "text-white" : "text-gray-900"
                 } transition`}
               >
-                Email: support@daisysms.com
+                Email:
               </a>
             </li>
             <li>
@@ -122,7 +122,7 @@ const Footer = () => {
                   darkMode ? "text-white" : "text-gray-900"
                 } transition`}
               >
-                Phone: 1 (808) 219-5564
+                Phone:
               </span>
             </li>
           </ul>

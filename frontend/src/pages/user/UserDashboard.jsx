@@ -1,11 +1,18 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserProfile } from "../../slices/userInfoSlice";
 
 const UserDashboard = () => {
   const { token, user } = useSelector((state) => state.auth);
-  // Placeholder values for the demo
+  const { userData } = useSelector((state) => state.userInfo);
 
-  console.log(user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserProfile(token)); // Dispatch the thunk
+    }
+  }, [dispatch, token]);
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -17,9 +24,9 @@ const UserDashboard = () => {
       {/* User Info Section */}
       <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Welcome, {user.name}
+          Welcome, {userData?.data?.name}
         </h2>
-        <p className="text-gray-600 mb-4">Email: {user.email}</p>
+        <p className="text-gray-600 mb-4">Email: {userData?.data?.email}</p>
 
         {/* Total Credit Section */}
         <div className="flex justify-between items-center mb-6">
@@ -27,7 +34,9 @@ const UserDashboard = () => {
             <h3 className="text-lg font-semibold text-gray-700">
               Total Credit
             </h3>
-            <p className="text-3xl font-bold text-green-600">${user.coin}</p>
+            <p className="text-3xl font-bold text-green-600">
+              ${userData?.data?.coin}
+            </p>
           </div>
           <button
             onClick={() => alert("Add Credit functionality")}

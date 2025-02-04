@@ -29,7 +29,7 @@ const Navbar = () => {
               }`}
             />
             <Link to="/" className="text-xl font-bold">
-              <span className="text-xl font-bold">daisysms</span>
+              <span className="text-xl font-bold">NumberSms</span>
             </Link>
           </div>
 

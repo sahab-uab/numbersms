@@ -16,6 +16,7 @@ import creditReducer from "../slices/creditSlice";
 import transactionSlice from "../slices/transationSlices";
 
 import userSlice from "../slices/userSlices";
+import userInfoSlice from "../slices/userInfoSlice";
 
 const persistConfig = {
   key: "auth",
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   credit: creditReducer,
   transation: transactionSlice,
   users: userSlice,
+  userInfo: userInfoSlice,
 });
 
 export const store = configureStore({

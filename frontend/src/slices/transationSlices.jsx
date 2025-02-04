@@ -10,6 +10,7 @@ export const fetchTransactions = createAsyncThunk(
       const response = await axiosInstance.get(`/admin/transaction`, {
         headers: {
           Authorization: `Bearer ${token}`,
+          Accept: "application/json",
         },
       });
 
