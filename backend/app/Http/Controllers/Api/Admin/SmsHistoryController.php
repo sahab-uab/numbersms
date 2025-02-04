@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Services;
 use App\Models\SmsHistory;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,42 @@ class SmsHistoryController extends Controller
                     'data' => []
                 ]);
             }
+        } catch (\Exception $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage(),
+                'data' => []
+            ]);
+        }
+    }
+
+    // services image
+    public function servicesImage(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required',
+                'image' => 'required'
+            ]);
+
+            $services = Services::find($request->id);
+            if ($services->image) {
+                $oldImagePath = public_path('uploads/' . basename($services->image));
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+            $services->image = asset('uploads/' . $filename);
+            $services->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Services image update',
+                'data' => []
+            ]);
         } catch (\Exception $th) {
             return response()->json([
                 'status' => false,

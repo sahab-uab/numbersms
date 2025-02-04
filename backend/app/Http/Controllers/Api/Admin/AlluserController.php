@@ -49,7 +49,12 @@ class AlluserController extends Controller
 
             // delete transaction
             $transaction = Transaction::where("user_id", $user->id)->get();
-            $transaction->delete();
+
+            if ($transaction) {
+                foreach ($transaction as $item) {
+                    $item->delete();
+                }
+            }
 
             // del user
             $user->delete();

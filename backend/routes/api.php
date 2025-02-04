@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\User\TransictionController;
 use App\Http\Controllers\Api\Admin\AlluserController as admin_AlluserController;
 use App\Http\Controllers\Api\Admin\CreaditController as admin_CreaditConnntroller;
 use App\Http\Controllers\Api\Admin\SmsHistoryController as admin_SmsHistoryController;
+use App\Http\Controllers\Api\Admin\SupportController as AdminSupportController;
 use App\Http\Controllers\Api\Admin\TrannsictionController as admin_TransictionController;
 
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,12 @@ Route::group([
         });
         Route::controller(admin_SmsHistoryController::class)->group(function () {
             Route::get('/get-smshistory', 'getSmsHistory');
+            Route::post('/services-image', 'servicesImage');
+        });
+        Route::controller(AdminSupportController::class)->group(function () {
+            Route::get('/get-support', 'index');
+            Route::post('/del-support', 'delete');
+            Route::post('/single-support', 'single');
         });
         Route::post('/addblance', [admin_CreaditConnntroller::class, 'index']);
         Route::get('/transaction', [admin_TransictionController::class, 'index']);
