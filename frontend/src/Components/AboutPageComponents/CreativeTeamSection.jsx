@@ -1,5 +1,3 @@
-import React from "react";
-import { motion } from "framer-motion";
 import Gallery from "./Gallery";
 
 const CreativeTeamSection = () => {

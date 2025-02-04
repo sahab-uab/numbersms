@@ -21,6 +21,7 @@ import AdminAllTransationPage from "../pages/AdminPages/AdminAllTransationPage";
 import AdminUserPage from "../pages/AdminPages/AdminUserPage";
 import AdminSettingsPage from "../pages/AdminPages/AdminSettingsPage";
 import AdminUserMennage from "../pages/AdminPages/AdminUserMennage";
+import UserSmsHistoryPage from "../pages/UserPages/UserSmsHistoryPage";
 
 export const route = createBrowserRouter([
   {
@@ -122,6 +123,14 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <UserSettingsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/sms-history",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserSmsHistoryPage />
           </Suspense>
         ),
       },
