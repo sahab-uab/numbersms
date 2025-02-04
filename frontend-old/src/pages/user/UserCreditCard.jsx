@@ -25,7 +25,7 @@ const UserCreditCard = () => {
   const [email, setEmail] = useState(""); // For email in share credit
   const [paymentLink, setPaymentLink] = useState(""); // To store the payment link
   const [loadingPayment, setLoadingPayment] = useState(false);
-  const [loadingShare, setLoadingShare] = useState(false); // For share credit loading
+  const [loadingShare, setLoadingShare] = useState(false);
 
   useEffect(() => {
     dispatch(fetchTransactions());

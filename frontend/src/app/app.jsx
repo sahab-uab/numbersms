@@ -15,6 +15,8 @@ import { combineReducers } from "redux";
 import authSlice from "../redux/authSlice";
 import allUserSlice from "../redux/getAllUserSlice";
 import alltransationsSlice from "../redux/getAllTransation";
+import userInfoSlice from "../redux/singleUserProfileSlice";
+import creditSlice from "../redux/singleUserTransation";
 
 const persistConfig = {
   key: "auth",
@@ -29,6 +31,8 @@ const rootReducer = combineReducers({
   auth: persistedAuthReducer,
   allUser: allUserSlice,
   transations: alltransationsSlice,
+  userInfo: userInfoSlice,
+  credit: creditSlice,
 });
 
 export const store = configureStore({
