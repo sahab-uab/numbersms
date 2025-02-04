@@ -1,13 +1,13 @@
 <?php
 
 use App\Console\Commands\TextVerifyApimake;
+use App\Console\Commands\TextVerifyPrice;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-
-// Artisan::command('inspire', function () {
-//     $this->comment(Inspiring::quote());
-// })->purpose('Display an inspiring quote')->hourly();
+use Illuminate\Support\Facades\Schedule;
 
 
 // make new service list
 Schedule::command(TextVerifyApimake::class)->daily();
+// get prices
+Schedule::command(TextVerifyPrice::class)->everyFiveSeconds();

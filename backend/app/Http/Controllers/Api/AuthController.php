@@ -17,14 +17,14 @@ class AuthController extends Controller
     // register
     public function register(Request $request)
     {
-        // validation
-        $request->validate([
-            'name' => 'required|string|min:1',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|max:50|confirmed',
-        ]);
-
         try {
+            // validation
+            $request->validate([
+                'name' => 'required|string|min:1',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required|min:6|max:50|confirmed',
+            ]);
+
             // check this email already register or not
             $existinguser = User::where('email', $request->email)->exists();
             if ($existinguser) {
