@@ -206,7 +206,7 @@ const ContactPage = () => {
       </section>
 
       {/* Office Locations */}
-      <section className="py-24 bg-gradient-to-br from-gray-900 to-blue-900 text-white">
+      <section className="py-24 bg-gradient-to-r from-orange-100 to-yellow-100 ">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -215,11 +215,9 @@ const ContactPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <Building className="w-16 h-16 text-blue-400 mx-auto mb-6" />
+            <Building className="w-16 h-16  mx-auto mb-6" />
             <h2 className="text-4xl font-bold mb-4">Our Offices</h2>
-            <p className="text-blue-100">
-              Visit us at one of our global locations
-            </p>
+            <p className="">Visit us at one of our global locations</p>
           </motion.div>
 
           <motion.div

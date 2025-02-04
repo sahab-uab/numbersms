@@ -58,11 +58,11 @@ const LoginPage = () => {
   return (
     <div>
       <section className="bg-gray-100 min-h-screen flex justify-center items-center py-10">
-        <div className="bg-[#dfa674] rounded-2xl max-w-4xl w-full flex flex-col md:flex-row p-6 md:p-12">
+        <div className="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl max-w-4xl w-full flex flex-col md:flex-row p-6 md:p-12">
           {/* Left Section */}
           <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
-            <h2 className="font-bold text-4xl text-[#002D74]">Login</h2>
-            <p className="text-sm mt-4 text-[#002D74]">
+            <h2 className="font-bold text-4xl ">Login</h2>
+            <p className="text-sm mt-4 ">
               If you are already a member, easily log in now.
             </p>
 

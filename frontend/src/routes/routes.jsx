@@ -20,6 +20,7 @@ import AdminAddCaditToUserPage from "../pages/AdminPages/AdminAddCaditToUserPage
 import AdminAllTransationPage from "../pages/AdminPages/AdminAllTransationPage";
 import AdminUserPage from "../pages/AdminPages/AdminUserPage";
 import AdminSettingsPage from "../pages/AdminPages/AdminSettingsPage";
+import AdminUserMennage from "../pages/AdminPages/AdminUserMennage";
 
 export const route = createBrowserRouter([
   {
@@ -167,6 +168,14 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <AdminUserPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/users/manage",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminUserMennage />
           </Suspense>
         ),
       },

@@ -13,6 +13,8 @@ import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 
 import authSlice from "../redux/authSlice";
+import allUserSlice from "../redux/getAllUserSlice";
+import alltransationsSlice from "../redux/getAllTransation";
 
 const persistConfig = {
   key: "auth",
@@ -25,6 +27,8 @@ const persistedAuthReducer = persistReducer(persistConfig, authSlice);
 
 const rootReducer = combineReducers({
   auth: persistedAuthReducer,
+  allUser: allUserSlice,
+  transations: alltransationsSlice,
 });
 
 export const store = configureStore({
