@@ -1,25 +1,28 @@
-import { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "../pages/HomePage";
 import HomeLayout from "../Layout/HomeLayout";
-import ServicesPage from "../pages/ServicesPage";
-import AboutPage from "../pages/AboutPage";
-import ContactPage from "../pages/ContactPage";
-import PrivateRoute from "../utils/PrivateRoute";
-import RegistrationPage from "../pages/RegistrationPage";
-import LoginPage from "../pages/LoginPage";
-import NotFoundPage from "../pages/NotFoundPage";
+import { Suspense, lazy } from "react";
 import UserLayout from "../Layout/UserLayout";
-import UserDashboardPage from "../pages/UserPages/UserDashboardPage";
-import UserCreditCardPage from "../pages/UserPages/UserCreditCardPage";
-import UserVerifactionPage from "../pages/UserPages/UserVerifactionPage";
-import UserSettingsPage from "../pages/UserPages/UserSettingsPage";
+import UserDashboard from "../pages/user/UserDashboard";
+import UserCreditCard from "../pages/user/UserCreditCard";
+import UserVerifaction from "../pages/user/UserVerifaction";
+import UserSettings from "../pages/user/UserSettings";
 import AdminLayout from "../Layout/AdminLayout";
-import AdminDashboardPage from "../pages/AdminPages/AdminDashboardPage";
-import AdminAddCaditToUserPage from "../pages/AdminPages/AdminAddCaditToUserPage";
-import AdminAllTransationPage from "../pages/AdminPages/AdminAllTransationPage";
-import AdminUserPage from "../pages/AdminPages/AdminUserPage";
-import AdminSettingsPage from "../pages/AdminPages/AdminSettingsPage";
+import AdminDashboard from "../pages/Admin/AdminDashboard";
+import AdminUser from "../pages/Admin/AdminUser";
+import AdminSettings from "../pages/Admin/AdminSettings";
+import AdminAddCaditToUser from "../pages/Admin/AdminAddCaditToUser";
+import AdminAllTransation from "../pages/Admin/AdminAllTransation";
+import PrivateRoute from "../utils/PrivateRoute";
+import AdminAllUser from "../pages/Admin/AdminAllUser";
+
+const HomePage = lazy(() => import("../pages/HomePage"));
+const Services = lazy(() => import("../pages/Services"));
+const About = lazy(() => import("../pages/About"));
+const Contact = lazy(() => import("../pages/Contact"));
+const Registration = lazy(() => import("../pages/Registion"));
+const Login = lazy(() => import("../pages/Login"));
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
+const Price = lazy(() => import("../pages/Price"));
 
 export const route = createBrowserRouter([
   {
@@ -38,7 +41,7 @@ export const route = createBrowserRouter([
         path: "/services",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <ServicesPage />
+            <Services />
           </Suspense>
         ),
       },
@@ -46,7 +49,15 @@ export const route = createBrowserRouter([
         path: "/about",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AboutPage />
+            <About />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/price",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Price />
           </Suspense>
         ),
       },
@@ -54,7 +65,7 @@ export const route = createBrowserRouter([
         path: "/contact",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <ContactPage />
+            <Contact />
           </Suspense>
         ),
       },
@@ -63,7 +74,7 @@ export const route = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Suspense fallback={<div>Loading...</div>}>
-              <RegistrationPage />
+              <Registration />
             </Suspense>
           </PrivateRoute>
         ),
@@ -73,7 +84,7 @@ export const route = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Suspense fallback={<div>Loading...</div>}>
-              <LoginPage />
+              <Login />
             </Suspense>
           </PrivateRoute>
         ),
@@ -96,7 +107,7 @@ export const route = createBrowserRouter([
         path: "/user/dashboard",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <UserDashboardPage />
+            <UserDashboard />
           </Suspense>
         ),
       },
@@ -104,7 +115,7 @@ export const route = createBrowserRouter([
         path: "/user/credit",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <UserCreditCardPage />
+            <UserCreditCard />
           </Suspense>
         ),
       },
@@ -112,7 +123,7 @@ export const route = createBrowserRouter([
         path: "/user/verification",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <UserVerifactionPage />
+            <UserVerifaction />
           </Suspense>
         ),
       },
@@ -120,7 +131,7 @@ export const route = createBrowserRouter([
         path: "/user/settings",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <UserSettingsPage />
+            <UserSettings />
           </Suspense>
         ),
       },
@@ -134,7 +145,7 @@ export const route = createBrowserRouter([
         path: "/admin/dashboard",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminDashboardPage />
+            <AdminDashboard />
           </Suspense>
         ),
       },
@@ -142,7 +153,7 @@ export const route = createBrowserRouter([
         path: "/admin/user/add/cadit",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminAddCaditToUserPage />
+            <AdminAddCaditToUser />
           </Suspense>
         ),
       },
@@ -150,7 +161,15 @@ export const route = createBrowserRouter([
         path: "/admin/transations",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminAllTransationPage />
+            <AdminAllTransation />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/user",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminUser />
           </Suspense>
         ),
       },
@@ -158,7 +177,7 @@ export const route = createBrowserRouter([
         path: "/admin/settings",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminSettingsPage />
+            <AdminSettings />
           </Suspense>
         ),
       },
@@ -166,7 +185,7 @@ export const route = createBrowserRouter([
         path: "/admin/users",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminUserPage />
+            <AdminAllUser />
           </Suspense>
         ),
       },

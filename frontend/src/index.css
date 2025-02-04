@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Container Styling */
+.team-grid {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto;
+  gap: 2rem;
+  justify-items: center;
+  align-items: center;
+}
+
+/* Image Styling */
+.team-member {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, rotate 0.3s ease-in-out;
+}
+
+.team-member:hover {
+  transform: scale(1.1) rotate(10deg); /* Scales and rotates */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Center Floating Element */
+.team-center {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #f39c12, #f1c40f);
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+  animation: float 3s infinite ease-in-out;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Float Animation */
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Hover Effect for Center Image */
+.team-center:hover {
+  transform: scale(1.1);
+}
+
+
+.grid-container {
+  margin: auto auto;
+  width: 100%;
+  height: 50rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+
+  grid-template-areas:
+    "   .    .      .    .     .  img3  img3  img3    .     .     .     . "
+    "  img1  img1   .    .     .  img3  img3  img3  img4  img4  img4   img4 "
+    "  img1  img1  img2 img2 img2 img3  img3  img3  img4  img4  img4   img4 "
+    "  img1  img1  img2 img2 img2 img3  img3  img3  img4  img4  img4   img4 "
+    "  img5  img5  img2 img2 img2 img3  img3  img3  img9  img9 img10   img10"
+    "  img5  img5  img6 img6 img7 img7  img8  img8  img9  img9 img10   img10"
+    "  img5  img5  img6 img6 img7 img7  img8  img8  img9  img9 img10   img10"
+    "  img5  img5  img6 img6 img7 img7  img8  img8   .     .   img10   img10"
+    "  .      .    img6 img6 img7 img7    .     .    .     .      .       . ";
+
+  gap: 1rem;
+  padding: 0.75rem 0rem;
+}
+
+.grid-container > div {
+  padding: 0.6rem 0rem;
+}
+
+.item1 {
+  grid-area: img1;
+}
+
+.item2 {
+  grid-area: img2;
+}
+
+.item3 {
+  grid-area: img3;
+}
+
+.item4 {
+  grid-area: img4;
+}
+
+.item5 {
+  grid-area: img5;
+}
+
+.item6 {
+  grid-area: img6;
+}
+
+.item7 {
+  grid-area: img7;
+}
+
+.item8 {
+  grid-area: img8;
+}
+
+.item9 {
+  grid-area: img9;
+}
+
+.item10 {
+  grid-area: img10;
+}
+
+/* Gallery Responsive Desing Starts*/
+@media only screen and (max-width: 1280px) {
+  .grid-container {
+    margin: 0 auto;
+    width: 65rem;
+    gap: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .grid-container {
+    margin: 0 auto;
+    width: 100%;
+    height: 80%;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    display: grid;
+    grid-template-areas:
+      "img1  img1  img1  img1  img2  img2"
+      "img5  img5  img6  img6  img7  img7"
+      "img3  img3  img4  img4  img4  img4";
+
+    gap: 1rem;
+    padding: 0.75rem 0rem;
+  }
+
+  .item8 {
+    display: none;
+  }
+
+  .item9 {
+    display: none;
+  }
+
+  .item10 {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .grid-container {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    display: grid;
+    grid-template-areas:
+      "img1 img2"
+      "img3 img4";
+
+    gap: 1rem;
+    padding: 0.75rem 0rem;
+  }
+
+  .item5 {
+    display: none;
+  }
+
+  .item6 {
+    display: none;
+  }
+  .item7 {
+    display: none;
+  }
+
+  .item8 {
+    display: none;
+  }
+
+  .item9 {
+    display: none;
+  }
+
+  .item10 {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 468px) {
+  .grid-container {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    display: grid;
+    grid-template-areas:
+      "img1"
+      "img2";
+    gap: 1rem;
+    padding: 0.75rem 0rem;
+  }
+
+  .item3 {
+    display: none;
+  }
+
+  .item4 {
+    display: none;
+  }
+
+  .item5 {
+    display: none;
+  }
+
+  .item6 {
+    display: none;
+  }
+
+  .item7 {
+    display: none;
+  }
+
+  .item8 {
+    display: none;
+  }
+
+  .item9 {
+    display: none;
+  }
+
+  .item10 {
+    display: none;
+  }
+}
