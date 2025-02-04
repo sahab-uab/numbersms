@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\User\TransictionController;
 use App\Http\Controllers\Api\Admin\AlluserController as admin_AlluserController;
 use App\Http\Controllers\Api\Admin\CreaditController as admin_CreaditConnntroller;
 use App\Http\Controllers\Api\Admin\SmsHistoryController as admin_SmsHistoryController;
-use App\Http\Controllers\Api\User\TransictionController as admin_TransictionController;
+use App\Http\Controllers\Api\Admin\TrannsictionController as admin_TransictionController;
 
 use Illuminate\Support\Facades\Route;
 
