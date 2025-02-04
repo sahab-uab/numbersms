@@ -40,8 +40,44 @@ const header {
     role: 'required'
 }
 
---------------- get sms uusages data ------------
+--------------- get sms usages data ------------
 00 => GET -> base_url/admin/get-smshistory
 const header {
     Authorize: Bearer ***********
+}
+
+--------------- update services image ------------
+00 => POST -> base_url/admin/services-image
+const header {
+    Authorize: Bearer ***********
+}
+# => from_data{
+    id: 'required'
+    image: 'required'
+}
+
+--------------- get support data ------------
+00 => GET -> base_url/admin/get-support
+const header {
+    Authorize: Bearer ***********
+}
+
+--------------- del support data ------------
+00 => POST -> base_url/admin/del-support
+const header {
+    Authorize: Bearer ***********
+}
+
+# => from_data{
+    id: 'required'
+}
+
+--------------- single support data ------------
+00 => POST -> base_url/admin/single-support
+const header {
+    Authorize: Bearer ***********
+}
+
+# => from_data{
+    id: 'required'
 }
