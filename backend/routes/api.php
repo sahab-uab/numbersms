@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\User\TransictionController;
 
 use App\Http\Controllers\Api\Admin\AlluserController as admin_AlluserController;
 use App\Http\Controllers\Api\Admin\CreaditController as admin_CreaditConnntroller;
+use App\Http\Controllers\Api\SmsController;
 use App\Http\Controllers\Api\User\TransictionController as admin_TransictionController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,9 +59,14 @@ Route::group([
         Route::get('/transaction', [admin_TransictionController::class, 'index']);
     });
 
-
     // payment
     Route::controller(PaymentController::class)->group(function () {
         Route::post('/payment', 'createPayment');
+    });
+
+    // sms
+    Route::controller(SmsController::class)->group(function () {
+        Route::get('/get-services', 'getServices');
+        Route::post('/create-verify', 'createVerify');
     });
 });
