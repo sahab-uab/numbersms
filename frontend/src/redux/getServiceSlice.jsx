@@ -3,7 +3,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../Api/axios";
 
 const initialState = {
-  items: [],
+  service: [],
+  loading: false,
   status: null,
 };
 
@@ -21,14 +22,17 @@ export const allServiceSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(allServicFetching.pending, (state) => {
-      state.status = "loading...";
+      state.status = "loading";
+      state.loading = true;
     });
     builder.addCase(allServicFetching.fulfilled, (state, action) => {
       state.status = "";
-      state.items = action.payload;
+      state.service = action.payload;
+      state.loading = false;
     });
     builder.addCase(allServicFetching.rejected, (state) => {
       state.status = "Something Went Wrong";
+      state.loading = false;
     });
   },
 });

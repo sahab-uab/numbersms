@@ -78,17 +78,17 @@ const ContactPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-r from-orange-100 to-yellow-100">
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-purple-500/10" />
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="container mx-auto px-6 text-center relative z-10"
         >
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-black text-transparent bg-clip-text">
             Get in Touch
           </h1>
           <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
@@ -117,7 +117,9 @@ const ContactPage = () => {
           >
             <motion.div variants={fadeIn} className="text-center mb-16">
               <MessageSquare className="w-16 h-16 text-blue-600 mx-auto mb-6" />
-              <h2 className="text-4xl font-bold mb-4">Send Us a Message</h2>
+              <h2 className="bg-orange-500 text-white py-3 px-6 rounded-full text-lg hover:bg-orange-600 transition duration-300">
+                Send Us a Message
+              </h2>
               <p className="text-gray-600">
                 Fill out the form below and we'll get back to you within 24
                 hours
@@ -196,7 +198,7 @@ const ContactPage = () => {
                 variants={fadeIn}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-blue-600 text-white py-4 px-8 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                className="bg-orange-500 text-white py-3 px-6 rounded-full text-lg hover:bg-orange-600 transition duration-300"
               >
                 Send Message
               </motion.button>

@@ -1,9 +1,14 @@
+import React from "react";
 import Sidebar from "../Components/AdminComponents/Sidebar";
 import { Outlet } from "react-router-dom";
+import TokenRefreshOnRouteChange from "../utils/TokenRefreshOnRouteChange";
 
 const AdminLayout = () => {
   return (
     <div className="flex min-h-screen">
+      {/* Token refresh component to handle route change */}
+      <TokenRefreshOnRouteChange />
+
       {/* Sidebar */}
       <Sidebar />
 

@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../Api/axios";
 
 const initialState = {
   token: null,
@@ -6,7 +7,22 @@ const initialState = {
   isAuthenticated: false,
   email: "",
   otpVerified: false,
+  status: null,
+  error: null,
 };
+
+// Define the asynchronous action for fetching the refresh token
+export const fetchingRefreshToken = createAsyncThunk(
+  "refreshToken",
+  async () => {
+    try {
+      const res = await axiosInstance.get("/refresh-token"); // Make sure this is a GET or POST based on your backend
+      return res.data.token; // Return the new token
+    } catch (error) {
+      throw Error("Something went wrong while fetching transactions");
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -34,8 +50,24 @@ const authSlice = createSlice({
       state.email = "";
     },
   },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchingRefreshToken.pending, (state) => {
+        state.status = "loading...";
+      })
+      .addCase(fetchingRefreshToken.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.token = action.payload;
+      })
+      .addCase(fetchingRefreshToken.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
+  },
 });
 
 export const { loginSuccess, registerSuccess, otpVerifySuccess, logout } =
   authSlice.actions;
+
 export default authSlice.reducer;

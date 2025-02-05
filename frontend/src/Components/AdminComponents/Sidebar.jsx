@@ -12,6 +12,8 @@ import {
   Sliders,
   Shield,
   MessageCircleDashed,
+  ServerCrash,
+  ServerCrashIcon,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
@@ -48,6 +50,11 @@ const Sidebar = () => {
       icon: MessageCircleDashed,
       label: "SMS Usages",
       link: "/admin/smsusages",
+    },
+    {
+      icon: ServerCrashIcon,
+      label: "Add Service Image",
+      link: "/admin/service-image",
     },
     {
       icon: Settings,

@@ -1,42 +1,43 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axiosInstance from "../Api/axios";
+import axios from "axios";
 
 const initialState = {
-  adminblance: [],
+  adminBalances: [], // Renamed for consistency
   status: null,
   error: null,
 };
 
-export const AdminBlanceFetch = createAsyncThunk(
-  "smsusages/AdminMessageUsagesFetch",
+export const adminBalanceFetching = createAsyncThunk(
+  "admin/adminBalanceFetching",
   async () => {
     try {
-      const res = await axiosInstance.post("https://server.sms.numbersms.com/api/me");
-      return res.data; // Ensure that we only return the data
+      const res = await axios.get(`https://server.sms.numbersms.com/api/me`);
+      return res.data;
     } catch (error) {
-      throw Error("Something went wrong while fetching transactions" + error);
+      // Handling the error gracefully
+      throw Error(error.response ? error.response.data.message : error.message);
     }
   }
 );
 
-export const AdminBlanceSlice = createSlice({
-  name: "adminblance",
+export const AdminBalanceSlice = createSlice({
+  name: "adminBalance",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(AdminBlanceFetch.pending, (state) => {
+      .addCase(adminBalanceFetching.pending, (state) => {
         state.status = "loading...";
       })
-      .addCase(AdminBlanceFetch.fulfilled, (state, action) => {
+      .addCase(adminBalanceFetching.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.adminblance = action.payload; // Make sure to assign to transations
+        state.adminBalances = action.payload; // Updated to match new state naming
       })
-      .addCase(AdminBlanceFetch.rejected, (state, action) => {
+      .addCase(adminBalanceFetching.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message; // Access error message for better debugging
+        state.error = action.error.message;
       });
   },
 });
 
-export default AdminBlanceSlice.reducer;
+export default AdminBalanceSlice.reducer;

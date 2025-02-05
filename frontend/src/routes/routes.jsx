@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import HomeLayout from "../Layout/HomeLayout";
 import ServicesPage from "../pages/ServicesPage";
-import AboutPage from "../pages/UserPages/AboutPage";
+import AboutPage from "../pages/AboutPage";
 import ContactPage from "../pages/ContactPage";
 import PrivateRoute from "../utils/PrivateRoute";
 import RegistrationPage from "../pages/RegistrationPage";
@@ -22,6 +22,7 @@ import AdminSettingsPage from "../pages/AdminPages/AdminSettingsPage";
 import AdminUserMennage from "../pages/AdminPages/AdminUserMennage";
 import AdminMessageUsages from "../pages/AdminPages/AdminMessageUsages";
 import UserSmsHistoryPage from "../pages/UserPages/UserSmsHistoryPage";
+import AdminServiceImage from "../pages/AdminPages/AdminServiceImage";
 
 export const route = createBrowserRouter([
   {
@@ -165,6 +166,14 @@ export const route = createBrowserRouter([
         ),
       },
       {
+        path: "/admin/service-image",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminServiceImage />
+          </Suspense>
+        ),
+      },
+      {
         path: "/admin/settings",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
@@ -184,10 +193,10 @@ export const route = createBrowserRouter([
         path: "/admin/smsusages",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminMessageUsages/>
+            <AdminMessageUsages />
           </Suspense>
         ),
-      }
+      },
     ],
   },
 ]);

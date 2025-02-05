@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { allUserFetching } from "../../redux/getAllUserSlice";
 import { allTransationsFetching } from "../../redux/getAllTransation";
-import { AdminBlanceFetch } from "../../redux/adminBlance";
+
+import axiosInstance from "../../Api/axios";
+// import { adminBalanceFetching } from "../../redux/adminBlance";
 
 const AdminDashboardPage = () => {
   const dispatch = useDispatch();
@@ -17,12 +19,6 @@ const AdminDashboardPage = () => {
   useEffect(() => {
     dispatch(allTransationsFetching());
   }, [dispatch]);
-  
-  useEffect(() => {
-    dispatch(AdminBlanceFetch());
-  }, [dispatch]);
-  
-
 
   const totalUsers = items?.data?.length || 0;
 
