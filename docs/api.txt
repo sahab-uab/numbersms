@@ -7,12 +7,6 @@
     "id": "required"
 }
 
--------- start polling --------
-04 => POST -> https://server.sms.numbersms.com/api/start_polling
-# json data ={
-    "verification_href": "required"
-}
-
 -------- get otp --------
 05 => POST -> https://server.sms.numbersms.com/api/getotp // request this url after 1s using setinterval
 # json data ={
@@ -21,4 +15,4 @@
 }
 
 ----------------- Admin acount details get ------------
-06 => POST -> https://server.sms.numbersms.com/api/me
+06 => POST -> https://server.numbersms.com/api/getaccountdetails
