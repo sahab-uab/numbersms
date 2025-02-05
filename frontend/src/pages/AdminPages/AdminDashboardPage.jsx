@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { allUserFetching } from "../../redux/getAllUserSlice";
 import { allTransationsFetching } from "../../redux/getAllTransation";
+import { AdminBlanceFetch } from "../../redux/adminBlance";
 
 const AdminDashboardPage = () => {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.allUser);
   const { transations } = useSelector((state) => state.transations);
+  const { adminblance } = useSelector((state) => state.adminblance);
 
   useEffect(() => {
     dispatch(allUserFetching());
@@ -16,11 +18,17 @@ const AdminDashboardPage = () => {
     dispatch(allTransationsFetching());
   }, [dispatch]);
   
+  useEffect(() => {
+    dispatch(AdminBlanceFetch());
+  }, [dispatch]);
+  
 
 
   const totalUsers = items?.data?.length || 0;
 
   const totalTransations = transations?.data?.length || 0;
+
+  const totaladminblance = adminblance?.data?.length || 0;
 
   return (
     <div className="flex h-screen">
@@ -32,7 +40,7 @@ const AdminDashboardPage = () => {
               Total Blance
             </h3>
             <p className="text-3xl font-bold text-gray-900">
-              0
+              {totaladminblance}
             </p>{" "}
             {/* Replace with actual value */}
           </div>

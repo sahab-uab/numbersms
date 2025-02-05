@@ -19,6 +19,8 @@ import userInfoSlice from "../redux/singleUserProfileSlice";
 import creditSlice from "../redux/singleUserTransation";
 import UserSmsSlice from "../redux/getUserSmsHistorySlice";
 import allServiceSlice from "../redux/getServiceSlice";
+import AdminMessageUsagesSlice from "../redux/adminMessageUsage";
+import AdminBlanceSlice from "../redux/adminBlance";
 
 const persistConfig = {
   key: "auth",
@@ -37,6 +39,8 @@ const rootReducer = combineReducers({
   credit: creditSlice,
   smsHistory: UserSmsSlice,
   service: allServiceSlice,
+  smsusagesdata: AdminMessageUsagesSlice,
+  adminblance: AdminBlanceSlice
 });
 
 export const store = configureStore({

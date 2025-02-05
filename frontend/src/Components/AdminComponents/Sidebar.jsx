@@ -9,9 +9,9 @@ import {
   Menu,
   X,
   ChevronDown,
-  UserPlus,
   Sliders,
   Shield,
+  MessageCircleDashed,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/authSlice";
@@ -36,23 +36,19 @@ const Sidebar = () => {
     },
     {
       icon: ArrowRightLeft,
-      label: "Transation",
-      subItems: [
-        {
-          icon: UserPlus,
-          label: "All Transation",
-          link: "/admin/transations",
-        },
-      ],
+      label: "All Transation",
+      link: "/admin/transations",
     },
     {
       icon: BarChart2,
       label: "Credit",
-      subItems: [
-        { icon: UserPlus, label: "Add Credit", link: "/admin/user/add/cadit" },
-      ],
+      link: "/admin/user/add/cadit",
     },
-
+    {
+      icon: MessageCircleDashed,
+      label: "SMS Usages",
+      link: "/admin/smsusages",
+    },
     {
       icon: Settings,
       label: "Settings",
@@ -86,7 +82,7 @@ const Sidebar = () => {
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b">
           {isSidebarOpen && (
-            <h1 className="text-lg font-bold text-gray-800">Admin Panel</h1>
+            <h1 className="text-lg font-bold text-gray-800">NumberSMS</h1>
           )}
           <button
             onClick={() => {

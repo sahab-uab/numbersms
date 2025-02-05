@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { allTransationsFetching } from "../../redux/getAllTransation";
+import { useSelector, useDispatch } from "react-redux";
+import { AdminMessageUsagesFetch } from "../../redux/adminMessageUsage";
 import ReactPaginate from "react-paginate";
-import moment from "moment";
+import moment from "moment"; // Adjust the import path as necessary
 
-const AdminAllTransactionPage = () => {
+const AdminMessageUsages = () => {
   const dispatch = useDispatch();
-  const { transations, status } = useSelector((state) => state.transations);
+  const { smsusagesdata } = useSelector((state) => state.smsusagesdata);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
-  const mainData = transations?.data || [];
+  const mainData = smsusagesdata?.data || [];
 
   useEffect(() => {
-    if (mainData.length === 0 && status !== "loading...") {
-      dispatch(allTransationsFetching());
-    }
-  }, [dispatch, mainData.length, status]);
+    dispatch(AdminMessageUsagesFetch());
+  }, [dispatch]);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -33,17 +31,16 @@ const AdminAllTransactionPage = () => {
     <div className="container mx-auto py-6">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-center uppercase">
-          All Transactions
+          All sms history
         </h2>
       </div>
 
       <table className="min-w-full border-collapse table-auto mt-5">
         <thead>
           <tr className="bg-gray-200">
-            <th className="py-3 px-6 text-left">Transaction ID</th>
-            <th className="py-3 px-6 text-left">User Name</th>
-            <th className="py-3 px-6 text-left">Amount</th>
-            <th className="py-3 px-6 text-left">Geteway</th>
+            <th className="py-3 px-6 text-left">ID</th>
+            <th className="py-3 px-6 text-left">Service Name</th>
+            <th className="py-3 px-6 text-left">price</th>
             <th className="py-3 px-6 text-left">Date</th>
             <th className="py-3 px-6 text-left">Status</th>
           </tr>
@@ -56,9 +53,8 @@ const AdminAllTransactionPage = () => {
                 className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <td className="py-3 px-6">#{transaction.id}</td>
-                <td className="py-3 px-6">{transaction.username}</td>
-                <td className="py-3 px-6">${transaction.amount}</td>
-                <td className="py-3 px-6 capitalize">{transaction.getway}</td>
+                <td className="py-3 px-6">{transaction.service}</td>
+                <td className="py-3 px-6 capitalize">${transaction.price}</td>
                 <td className="py-3 px-6">
                   {moment(transaction?.created_at).format("MMMM Do YYYY")}
                 </td>
@@ -94,4 +90,4 @@ const AdminAllTransactionPage = () => {
   );
 };
 
-export default AdminAllTransactionPage;
+export default AdminMessageUsages;

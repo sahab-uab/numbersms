@@ -126,7 +126,7 @@ const AdminUserMennage = () => {
                 <td className="py-3 px-6 capitalize">{user.name}</td>
                 <td className="py-3 px-6">{user.email}</td>
                 <td className="py-3 px-6">
-                  {user.role == "admin" ? "--" : "$." + user.coin}
+                  {user.role == "admin" ? "--" : "$" + user.coin}
                 </td>
                 <td className="py-3 px-6">
                   <button
