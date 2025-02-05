@@ -18,7 +18,6 @@ import AdminLayout from "../Layout/AdminLayout";
 import AdminDashboardPage from "../pages/AdminPages/AdminDashboardPage";
 import AdminAddCaditToUserPage from "../pages/AdminPages/AdminAddCaditToUserPage";
 import AdminAllTransationPage from "../pages/AdminPages/AdminAllTransationPage";
-import AdminUserPage from "../pages/AdminPages/AdminUserPage";
 import AdminSettingsPage from "../pages/AdminPages/AdminSettingsPage";
 import AdminUserMennage from "../pages/AdminPages/AdminUserMennage";
 import UserSmsHistoryPage from "../pages/UserPages/UserSmsHistoryPage";
@@ -176,18 +175,10 @@ export const route = createBrowserRouter([
         path: "/admin/users",
         element: (
           <Suspense fallback={<div>Loading...</div>}>
-            <AdminUserPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/admin/users/manage",
-        element: (
-          <Suspense fallback={<div>Loading...</div>}>
             <AdminUserMennage />
           </Suspense>
         ),
-      },
+      }
     ],
   },
 ]);

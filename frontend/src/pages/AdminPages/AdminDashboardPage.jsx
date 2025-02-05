@@ -6,8 +6,7 @@ import { allTransationsFetching } from "../../redux/getAllTransation";
 const AdminDashboardPage = () => {
   const dispatch = useDispatch();
   const { items } = useSelector((state) => state.allUser);
-  const { transations, status } = useSelector((state) => state.transations);
-  console.log(transations);
+  const { transations } = useSelector((state) => state.transations);
 
   useEffect(() => {
     dispatch(allUserFetching());
@@ -16,6 +15,8 @@ const AdminDashboardPage = () => {
   useEffect(() => {
     dispatch(allTransationsFetching());
   }, [dispatch]);
+  
+
 
   const totalUsers = items?.data?.length || 0;
 
@@ -26,6 +27,15 @@ const AdminDashboardPage = () => {
       {/* Main Content Area */}
       <div className="flex-1 bg-gray-100 p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold text-gray-700">
+              Total Blance
+            </h3>
+            <p className="text-3xl font-bold text-gray-900">
+              0
+            </p>{" "}
+            {/* Replace with actual value */}
+          </div>
           {/* Dashboard Cards */}
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-xl font-semibold text-gray-700">Total Users</h3>
@@ -39,14 +49,6 @@ const AdminDashboardPage = () => {
             <p className="text-3xl font-bold text-gray-900">
               {totalTransations}
             </p>{" "}
-            {/* Replace with actual value */}
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h3 className="text-xl font-semibold text-gray-700">
-              Pending Tasks
-            </h3>
-            <p className="text-3xl font-bold text-gray-900">12</p>{" "}
             {/* Replace with actual value */}
           </div>
         </div>

@@ -41,6 +41,7 @@ const AdminAllTransactionPage = () => {
             <th className="py-3 px-6 text-left">Transaction ID</th>
             <th className="py-3 px-6 text-left">User Name</th>
             <th className="py-3 px-6 text-left">Amount</th>
+            <th className="py-3 px-6 text-left">Geteway</th>
             <th className="py-3 px-6 text-left">Date</th>
             <th className="py-3 px-6 text-left">Status</th>
           </tr>
@@ -48,14 +49,15 @@ const AdminAllTransactionPage = () => {
         <tbody>
           {currentTransactions.length > 0 ? (
             currentTransactions.map((transaction) => (
-              <tr key={transaction.id} className="border-b hover:bg-gray-100">
-                <td className="py-3 px-6">{transaction.id}</td>
+              <tr key={transaction.id} className="border-b hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="py-3 px-6">#{transaction.id}</td>
                 <td className="py-3 px-6">{transaction.username}</td>
-                <td className="py-3 px-6">{transaction.amount}</td>
+                <td className="py-3 px-6">$.{transaction.amount}</td>
+                <td className="py-3 px-6 capitalize">{transaction.getway}</td>
                 <td className="py-3 px-6">
                   {moment(transaction?.created_at).format("MMMM Do YYYY")}
                 </td>
-                <td className="py-3 px-6">{transaction.status}</td>
+                <td className="py-1 px-3">{transaction.status ==  true ? 'Success' : 'Faild'}</td>
               </tr>
             ))
           ) : (

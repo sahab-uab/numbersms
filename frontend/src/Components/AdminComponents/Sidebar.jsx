@@ -10,7 +10,6 @@ import {
   X,
   ChevronDown,
   UserPlus,
-  UserCheck,
   Sliders,
   Shield,
 } from "lucide-react";
@@ -31,6 +30,11 @@ const Sidebar = () => {
       link: "/admin/dashboard",
     },
     {
+      icon: Users,
+      label: "All users",
+      link: "/admin/users",
+    },
+    {
       icon: ArrowRightLeft,
       label: "Transation",
       subItems: [
@@ -39,15 +43,6 @@ const Sidebar = () => {
           label: "All Transation",
           link: "/admin/transations",
         },
-      ],
-    },
-    {
-      icon: Users,
-      label: "Users",
-      subItems: [
-        { icon: UserPlus, label: "All User", link: "/admin/users" },
-        { icon: UserPlus, label: "Add User", link: "/users/add" },
-        { icon: UserCheck, label: "Manage Users", link: "/admin/users/manage" },
       ],
     },
     {

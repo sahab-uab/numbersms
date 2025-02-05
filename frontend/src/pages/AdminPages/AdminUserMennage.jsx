@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { allUserFetching } from "../../redux/getAllUserSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,7 +47,7 @@ const AdminUserMennage = () => {
 
     try {
       const response = await axiosInstance.post("admin/deleteuser", {
-        data: { id: selectedUser.id },
+        id: selectedUser.id,
       });
 
       if (response.status === 200) {
@@ -63,6 +63,35 @@ const AdminUserMennage = () => {
     }
   };
 
+  // user role chanage
+  const roleChange = async () => {
+    if (!selectedUser) return;
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to chnage this user role ${selectedUser.role} to ${
+        selectedUser.role == "user" ? "Admin" : "User"
+      }?`
+    );
+    if (!confirmDelete) return;
+    try {
+      const response = await axiosInstance.post("admin/userolechnage", {
+        id: selectedUser.id,
+        role: selectedUser.role == "user" ? "admin" : "user",
+      });
+
+      if (response.status === 200) {
+        alert(response.data.message);
+        closeModal();
+        dispatch(allUserFetching());
+      } else {
+        alert(response.data.message || "Failed to role change");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Error change role");
+    }
+  };
+
   // Get current items based on pagination
   const indexOfLastUser = (currentPage + 1) * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
@@ -70,9 +99,13 @@ const AdminUserMennage = () => {
 
   return (
     <div className="container mx-auto py-6">
-      <h2 className="text-3xl font-bold text-center mb-6">All Users</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-3xl font-bold text-center uppercase">
+          manage Users
+        </h2>
+      </div>
 
-      <table className="min-w-full border-collapse table-auto">
+      <table className="min-w-full border-collapse table-auto mt-5">
         <thead>
           <tr className="bg-gray-200">
             <th className="py-3 px-6 text-left">User ID</th>
@@ -85,14 +118,22 @@ const AdminUserMennage = () => {
         <tbody>
           {currentUsers.length > 0 ? (
             currentUsers.map((user) => (
-              <tr key={user.id} className="border-b hover:bg-gray-100">
+              <tr
+                key={user.id}
+                className="border-b hover:bg-gray-100 dark:hover:bg-gray-900"
+              >
                 <td className="py-3 px-6">{user.id}</td>
-                <td className="py-3 px-6">{user.name}</td>
+                <td className="py-3 px-6 capitalize">{user.name}</td>
                 <td className="py-3 px-6">{user.email}</td>
-                <td className="py-3 px-6">{user.coin}</td>
                 <td className="py-3 px-6">
-                  <button onClick={() => openModal(user)}>
-                    <Eye />
+                  {user.role == "admin" ? "--" : "$." + user.coin}
+                </td>
+                <td className="py-3 px-6">
+                  <button
+                    onClick={() => openModal(user)}
+                    className="flex items-center gap-x-3 bg-gray-100 text-gray-600 py-2 px-3 rounded-md"
+                  >
+                    <Eye /> View
                   </button>
                 </td>
               </tr>
@@ -125,48 +166,54 @@ const AdminUserMennage = () => {
       {modalVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50">
           <div className="bg-white p-6 rounded-md w-[50%]">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">User Details</h2>
+            <div className="flex justify-between items-center mb-4 border-b  border-gray-100 pb-5">
+              <h2 className="text-xl font-semibold text-gray-600 uppercase">
+                User Details
+              </h2>
               <button
                 onClick={closeModal}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 w-[40px] h-[40px] flex items-center justify-center bg-gray-100"
               >
                 X
               </button>
             </div>
             {selectedUser && (
-              <div>
-                <p className="mb-2">
-                  <strong>Name:</strong> {selectedUser.name}
+              <div className="border border-gray-100 rounded-lg">
+                <p className="mb-2 border-b border-gray-100 py-3 px-5">
+                  <strong className="text-gray-950">Name:</strong>{" "}
+                  <span className="pl-3">{selectedUser.name}</span>
                 </p>
-                <p className="mb-2">
-                  <strong>Email:</strong> {selectedUser.email}
+                <p className="mb-2 border-b border-gray-100 py-3 px-5">
+                  <strong className="text-gray-950">Email:</strong>{" "}
+                  <span className="pl-3">{selectedUser.email}</span>
                 </p>
-                <p className="mb-2">
-                  <strong>Coin:</strong> {selectedUser.coin}
+                {selectedUser.role == "user" ? (
+                  <p className="mb-2 border-b border-gray-100 py-3 px-5">
+                    <strong className="text-gray-950">Coin:</strong>{" "}
+                    <span className="pl-3">{selectedUser.coin}</span>
+                  </p>
+                ) : (
+                  ""
+                )}
+                <p className="mb-2 py-3 px-5">
+                  <strong className="text-gray-950">Role:</strong>{" "}
+                  <span className="pl-3">{selectedUser.role}</span>
                 </p>
-                <p className="mb-2">
-                  <strong>Role:</strong> {selectedUser.role}
-                </p>
-                <p className="mb-2"></p>
               </div>
             )}
 
-            <div>
+            <div className="mt-5 flex items-center justify-end gap-x-5">
+              <button
+                className="bg-gray-100 px-4 py-2 text-gray-500 rounded-md"
+                onClick={roleChange}
+              >
+                {selectedUser.role == "user" ? "Make admin" : "Make user"}
+              </button>
               <button
                 onClick={deleteUser}
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
               >
                 Delete User
-              </button>
-            </div>
-
-            <div className="mt-4 flex justify-end">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-              >
-                Close
               </button>
             </div>
           </div>
