@@ -1,6 +1,3 @@
-import { BsArrowRight } from "react-icons/bs";
-
-import { Link } from "react-router-dom";
 import GridItemForGallery from "./GridItemForGallery";
 
 const data = [

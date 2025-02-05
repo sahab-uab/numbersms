@@ -23,6 +23,8 @@ import AdminUserMennage from "../pages/AdminPages/AdminUserMennage";
 import AdminMessageUsages from "../pages/AdminPages/AdminMessageUsages";
 import UserSmsHistoryPage from "../pages/UserPages/UserSmsHistoryPage";
 import AdminServiceImage from "../pages/AdminPages/AdminServiceImage";
+import AdminAccountSettingsPage from "../pages/AdminPages/AdminAccountSettingsPage";
+import AdminServicePage from "../pages/AdminPages/AdminServicePage";
 
 export const route = createBrowserRouter([
   {
@@ -194,6 +196,22 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <AdminMessageUsages />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/allservice",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminServicePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/accout/settings",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminAccountSettingsPage />
           </Suspense>
         ),
       },

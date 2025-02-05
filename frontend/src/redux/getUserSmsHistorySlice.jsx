@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../Api/axios";
 
 const initialState = {
-  items: [],
+  smsUser: [],
   status: null,
 };
 
 export const UserSmsFetching = createAsyncThunk(
   "UserSms/UserSmsFetching",
   async () => {
-    const res = await axiosInstance.get("/user/get-smshistory");
+    const res = await axiosInstance.get("/app/get-smshistory");
     return res.data;
   }
 );
@@ -24,7 +24,7 @@ export const UserSmsSlice = createSlice({
     });
     builder.addCase(UserSmsFetching.fulfilled, (state, action) => {
       state.status = "";
-      state.items = action.payload;
+      state.smsUser = action.payload;
     });
     builder.addCase(UserSmsFetching.rejected, (state) => {
       state.status = "Something Went Wrong";

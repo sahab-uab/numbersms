@@ -5,20 +5,38 @@ import { allServicFetching } from "../../redux/getServiceSlice";
 import { PinIcon } from "lucide-react";
 import { addToPin } from "../../redux/pinnedSlice";
 import axiosInstance from "../../Api/axios";
-import axios from "axios";
+import SmsVerificationModal from "../../Components/AdminComponents/SmsVerificationModal";
+import moment from "moment";
+import ReactPaginate from "react-paginate";
 
 const UserVerificationPage = () => {
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
+  const [newModal, setNewModal] = useState(false);
+
+  const { smsUser } = useSelector((state) => state.smsHistory);
+
+  console.log(smsUser);
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10;
+  const mainData = smsUser?.data || [];
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const indexOfLastTransaction = (currentPage + 1) * itemsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
+  const currentTransactions = mainData.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
 
   const { service, loading } = useSelector((state) => state.service);
 
-  const data = useSelector((state) => state.pinnedService);
-
   const [verifactionData, setVerifactionData] = useState(null);
-
-  console.log(service);
 
   useEffect(() => {
     dispatch(UserSmsFetching());
@@ -27,9 +45,6 @@ const UserVerificationPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Log the services data to inspect the structure
-  console.log("Services data:", service?.data);
-
   const filteredServices =
     service?.data && service.data.length > 0
       ? service.data.filter((service) =>
@@ -37,56 +52,25 @@ const UserVerificationPage = () => {
         )
       : [];
 
-  const verifactionpoll = async (verifactionData) => {
-    const href = verifactionData?.data?.data?.href;
-
-    if (!href) {
-      console.log("No href found in the verification data.");
-      return;
-    }
-    console.log("Verification href:", href);
-    try {
-      const response = await axios.post(
-        "https://server.sms.numbersms.com/api/start_polling",
-        { verification_href: href },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("Polling started:", response.data);
-    } catch (error) {
-      console.error("Error starting the polling:", error);
-      if (error.response) {
-        console.error("Response Error:", error.response.data);
-      } else if (error.request) {
-        console.error("Request Error:", error.request);
-      } else {
-        console.error("Error Message:", error.message);
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (verifactionData) {
-      verifactionpoll(verifactionData);
-    }
-  }, [verifactionData]);
-
   const addToPinFuntion = (service) => {
     dispatch(addToPin(service));
   };
 
   const createVerification = async (service) => {
-    console.log(service.id);
-
     try {
-      const response = await axiosInstance.post("/create-verify", {
-        id: service?.id,
+      const formData = new FormData();
+
+      formData.append("id", service?.id);
+
+      const response = await axiosInstance.post("/create-verify", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       setVerifactionData(response.data);
+      setModal(false);
+      setNewModal(true);
     } catch (error) {
       console.error("Error occurred:", error);
     }
@@ -94,18 +78,79 @@ const UserVerificationPage = () => {
 
   return (
     <div>
-      <div className="mt-10 mx-5">
-        <button
-          onClick={() => setModal(true)}
-          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
-        >
-          Create Verification
-        </button>
+      <div className="py-6 ml-10">
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-center uppercase">
+            All sms history
+          </h2>
+          <button
+            onClick={() => setModal(true)}
+            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
+          >
+            Create Verification
+          </button>
+        </div>
+
+        <table className="min-w-full border-collapse table-auto mt-5">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="py-3 px-6 text-left">ID</th>
+              <th className="py-3 px-6 text-left">Service Name</th>
+              <th className="py-3 px-6 text-left">price</th>
+              <th className="py-3 px-6 text-left">Date</th>
+              <th className="py-3 px-6 text-left">Status</th>
+            </tr>
+          </thead>
+          {
+            <tbody>
+              {currentTransactions.length > 0 ? (
+                currentTransactions.map((transaction) => (
+                  <tr
+                    key={transaction.id}
+                    className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <td className="py-3 px-6">#{transaction.id}</td>
+                    <td className="py-3 px-6">{transaction.service}</td>
+                    <td className="py-3 px-6 capitalize">
+                      ${transaction.price}
+                    </td>
+                    <td className="py-3 px-6">
+                      {moment(transaction?.created_at).format("MMMM Do YYYY")}
+                    </td>
+                    <td className="py-1 px-3">
+                      {transaction.status == true ? "Success" : "Faild"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="py-3 px-6 text-center">
+                    No transactions found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          }
+        </table>
+
+        {mainData.length > 0 && (
+          <ReactPaginate
+            previousLabel={"previous"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            pageCount={Math.ceil(mainData.length / itemsPerPage)}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageChange}
+            containerClassName={"pagination"}
+            activeClassName={"active"}
+          />
+        )}
       </div>
 
       {modal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[50%]">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[450px]">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">
               SMS Verifications
             </h2>
@@ -131,7 +176,7 @@ const UserVerificationPage = () => {
                       filteredServices.map((service, index) => (
                         <li
                           key={index}
-                          className="grid grid-cols-3 items-center py-2 border-b border-gray-200"
+                          className="grid grid-cols-[50%_25%_25%] items-center py-2 border-b border-gray-200"
                         >
                           <button
                             onClick={() => createVerification(service)}
@@ -141,7 +186,7 @@ const UserVerificationPage = () => {
                               <img
                                 src={service.image}
                                 alt=""
-                                className="w-20 h-20 object-cover"
+                                className="w-8 h-8 object-cover rounded-full"
                               />
                             ) : (
                               <img
@@ -190,6 +235,13 @@ const UserVerificationPage = () => {
             )}
           </div>
         </div>
+      )}
+
+      {newModal && (
+        <SmsVerificationModal
+          verifactionData={verifactionData}
+          setNewModal={setNewModal}
+        />
       )}
     </div>
   );

@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import { route } from "./routes/routes";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const App = () => {
         pauseOnHover
         theme="light"
       />
-
+      {/* <ScrollToTop /> */}
       <RouterProvider router={route} />
     </>
   );

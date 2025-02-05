@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import UserSidebar from "../Components/UserComponents/UserSidebar";
 import TokenRefreshOnRouteChange from "../utils/TokenRefreshOnRouteChange";
+import ScrollToTop from "../utils/ScrollToTop";
 
 const UserLayout = () => {
   return (
@@ -10,7 +11,9 @@ const UserLayout = () => {
         <UserSidebar />
       </div>
       <div className="flex-1">
-        <Outlet />
+        <ScrollToTop>
+          <Outlet />
+        </ScrollToTop>
       </div>
     </div>
   );

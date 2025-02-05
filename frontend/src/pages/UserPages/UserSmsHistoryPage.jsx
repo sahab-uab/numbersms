@@ -6,7 +6,6 @@ const UserSmsHistoryPage = () => {
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.smsHistory);
-  console.log(data);
 
   useEffect(() => {
     dispatch(UserSmsFetching());

@@ -51,17 +51,36 @@ const Sidebar = () => {
       label: "SMS Usages",
       link: "/admin/smsusages",
     },
+    // {
+    //   icon: ServerCrashIcon,
+    //   label: "Add Service Image",
+    //   link: "/admin/service-image",
+    // },
     {
       icon: ServerCrashIcon,
-      label: "Add Service Image",
-      link: "/admin/service-image",
+      label: "Service",
+      subItems: [
+        {
+          icon: Sliders,
+          label: "All Services",
+          link: "/admin/allservice",
+        },
+        {
+          icon: Sliders,
+          label: "Add Service Image",
+          link: "/admin/service-image",
+        },
+      ],
     },
     {
       icon: Settings,
       label: "Settings",
       subItems: [
-        { icon: Sliders, label: "Preferences", link: "/settings/preferences" },
-        { icon: Shield, label: "Security", link: "/settings/security" },
+        {
+          icon: Sliders,
+          label: "Account Settings",
+          link: "/admin/accout/settings",
+        },
       ],
     },
   ];

@@ -11,11 +11,21 @@ const LoginPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [verificationModal, setVerificationModal] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [forgotPasswordError, setForgotPasswordError] = useState("");
+  const [forgotPasswordSuccess, setForgotPasswordSuccess] = useState("");
+
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [verificationError, setVerificationError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -55,6 +65,80 @@ const LoginPage = () => {
     }
   };
 
+  // Modal handling for forgot password
+  const openModal = () => {
+    setModalOpen(true);
+    setForgotPasswordError("");
+    setForgotPasswordSuccess("");
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleForgotPasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!forgotPasswordEmail) {
+      setForgotPasswordError("Please enter your email.");
+      return;
+    }
+
+    try {
+      // Ensure correct headers if necessary
+      const response = await axiosInstance.post(
+        "/forget-password", // Check if this endpoint is correct
+        { email: forgotPasswordEmail },
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure correct content-type
+          },
+        }
+      );
+      setForgotPasswordSuccess(
+        "Password reset instructions have been sent to your email."
+      );
+      setForgotPasswordEmail("");
+      setModalOpen(false);
+      setVerificationModal(true);
+    } catch (err) {
+      // Handle the error appropriately
+      if (err.response) {
+        setForgotPasswordError(
+          err.response.data.message || "An error occurred."
+        );
+      } else {
+        setForgotPasswordError("Error sending password reset instructions.");
+      }
+    }
+  };
+
+  // Verification modal handling
+  const handleVerificationSubmit = async (e) => {
+    e.preventDefault();
+    if (!otp || !newPassword || !confirmPassword) {
+      setVerificationError("All fields are required.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setVerificationError("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post("/reset-password", {
+        otp,
+        password: newPassword,
+        password_confirmation: confirmPassword,
+      });
+      setVerificationError("");
+      setForgotPasswordSuccess("Password reset successful.");
+      setVerificationModal(false);
+    } catch (err) {
+      setVerificationError("Error resetting password.");
+    }
+  };
+
   return (
     <div>
       <section className="bg-gray-100 min-h-screen flex justify-center items-center py-10">
@@ -88,30 +172,6 @@ const LoginPage = () => {
                   onChange={handleChange}
                   required
                 />
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="gray"
-                  id="togglePassword"
-                  className="bi bi-eye absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer z-20 opacity-100"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"></path>
-                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"></path>
-                </svg>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-eye-slash-fill absolute top-1/2 right-3 -z-1 -translate-y-1/2 cursor-pointer hidden"
-                  id="mama"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7.029 7.029 0 0 0 2.79-.588zM5.21 3.088A7.028 7.028 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474L5.21 3.089z"></path>
-                  <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829l-2.83-2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12-.708.708z"></path>
-                </svg>
               </div>
 
               {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -130,15 +190,11 @@ const LoginPage = () => {
             </div>
 
             <div className="mt-10 text-sm text-center">
-              <a href="#" className="text-[#002D74] hover:underline">
+              <button
+                onClick={openModal}
+                className="text-[#002D74] hover:underline"
+              >
                 Forgot password?
-              </a>
-            </div>
-
-            <div className="mt-4 text-sm text-center flex justify-between items-center">
-              <p>If you don't have an account..</p>
-              <button className="hover:border register text-white bg-black hover:border-gray-400 rounded-xl py-2 px-5 hover:scale-110 hover:bg-[#002c7424] font-semibold duration-300">
-                Register
               </button>
             </div>
           </div>
@@ -153,6 +209,144 @@ const LoginPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Forgot Password Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Forgot Password
+            </h2>
+            <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="forgotPasswordEmail"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Enter your email:
+                </label>
+                <input
+                  type="email"
+                  id="forgotPasswordEmail"
+                  name="forgotPasswordEmail"
+                  value={forgotPasswordEmail}
+                  onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+              {forgotPasswordError && (
+                <p className="text-red-500 text-sm">{forgotPasswordError}</p>
+              )}
+              {forgotPasswordSuccess && (
+                <p className="text-green-500 text-sm">
+                  {forgotPasswordSuccess}
+                </p>
+              )}
+
+              <div className="flex justify-between items-center">
+                <button
+                  type="submit"
+                  className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Verification Modal */}
+      {verificationModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              Reset Password
+            </h2>
+            <form onSubmit={handleVerificationSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="otp"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  OTP:
+                </label>
+                <input
+                  type="text"
+                  id="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  New Password:
+                </label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Confirm Password:
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+
+              {verificationError && (
+                <p className="text-red-500 text-sm">{verificationError}</p>
+              )}
+
+              <div className="flex justify-between items-center">
+                <button
+                  type="submit"
+                  className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

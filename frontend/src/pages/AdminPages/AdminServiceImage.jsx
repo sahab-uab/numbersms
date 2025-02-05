@@ -1,12 +1,17 @@
 import { useState } from "react";
 import axiosInstanceImage from "../../Api/axioxTow";
+import { useLocation } from "react-router-dom";
 
 const AdminServiceImage = () => {
+  const location = useLocation();
+
   const [image, setImage] = useState(null);
-  const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+
+  // Get serviceId from location state
+  const { serviceId } = location.state || {};
 
   // Handle file input change
   const handleImageChange = (e) => {
@@ -16,13 +21,14 @@ const AdminServiceImage = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!id || !image) {
-      setError("ID and image are required.");
+
+    if (!serviceId || !image) {
+      setError("Service ID and image are required.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("id", id);
+    formData.append("id", serviceId);
     formData.append("image", image);
 
     setLoading(true);
@@ -52,30 +58,22 @@ const AdminServiceImage = () => {
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* ID Input */}
+        {/* Service ID Display */}
         <div>
-          <label
-            htmlFor="id"
-            className="block text-sm font-medium text-gray-600"
-          >
+          <label className="block text-sm font-medium text-gray-600">
             Service ID:
           </label>
           <input
             type="text"
-            id="id"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            value={serviceId} // Display the serviceId
+            readOnly
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter service ID"
           />
         </div>
 
         {/* Image Upload */}
         <div>
-          <label
-            htmlFor="image"
-            className="block text-sm font-medium text-gray-600"
-          >
+          <label className="block text-sm font-medium text-gray-600">
             Upload Image:
           </label>
           <input

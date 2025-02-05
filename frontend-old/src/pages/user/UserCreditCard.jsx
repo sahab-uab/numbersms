@@ -14,8 +14,6 @@ const UserCreditCard = () => {
     (state) => state.credit
   );
 
-  console.log(transactions);
-
   const { token, user } = useSelector((state) => state.auth);
 
   const [modal, setModal] = useState(false);

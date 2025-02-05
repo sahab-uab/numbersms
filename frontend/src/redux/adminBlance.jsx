@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import axiosInstanceForServer from "../Api/axiosForSms";
 
 const initialState = {
-  adminBalances: [], // Renamed for consistency
+  adminBalances: [],
   status: null,
   error: null,
 };
@@ -11,10 +12,9 @@ export const adminBalanceFetching = createAsyncThunk(
   "admin/adminBalanceFetching",
   async () => {
     try {
-      const res = await axios.get(`https://server.sms.numbersms.com/api/me`);
+      const res = await axiosInstanceForServer.post("/getaccountdetails");
       return res.data;
     } catch (error) {
-      // Handling the error gracefully
       throw Error(error.response ? error.response.data.message : error.message);
     }
   }

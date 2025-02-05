@@ -1,30 +1,51 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { allUserFetching } from "../../redux/getAllUserSlice";
 import { allTransationsFetching } from "../../redux/getAllTransation";
-
-import axiosInstance from "../../Api/axios";
-// import { adminBalanceFetching } from "../../redux/adminBlance";
+import axios from "axios";
 
 const AdminDashboardPage = () => {
   const dispatch = useDispatch();
+
+  const { token } = useSelector((state) => state.auth);
   const { items } = useSelector((state) => state.allUser);
   const { transations } = useSelector((state) => state.transations);
-  const { adminblance } = useSelector((state) => state.adminblance);
+
+  const [adminBalance, setadminBalance] = useState(null);
 
   useEffect(() => {
-    dispatch(allUserFetching());
-  }, [dispatch]);
+    const getUserData = async () => {
+      try {
+        const res = await axios.post(
+          "https://server.numbersms.com/api/getaccountdetails",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        setadminBalance(res?.data?.data?.currentBalance);
+      } catch (error) {
+        throw Error(
+          error.response ? error.response.data.message : error.message
+        );
+      }
+    };
+
+    getUserData();
+  }, [token]);
 
   useEffect(() => {
     dispatch(allTransationsFetching());
+    dispatch(allUserFetching());
   }, [dispatch]);
 
   const totalUsers = items?.data?.length || 0;
 
   const totalTransations = transations?.data?.length || 0;
-
-  const totaladminblance = adminblance?.data?.length || 0;
 
   return (
     <div className="flex h-screen">
@@ -35,9 +56,7 @@ const AdminDashboardPage = () => {
             <h3 className="text-xl font-semibold text-gray-700">
               Total Blance
             </h3>
-            <p className="text-3xl font-bold text-gray-900">
-              {totaladminblance}
-            </p>{" "}
+            <p className="text-3xl font-bold text-gray-900">$ {adminBalance}</p>{" "}
             {/* Replace with actual value */}
           </div>
           {/* Dashboard Cards */}
