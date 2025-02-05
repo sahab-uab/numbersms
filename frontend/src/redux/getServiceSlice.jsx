@@ -1,0 +1,36 @@
+// https://server.numbersms.com/api/get-services
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axiosInstance from "../Api/axios";
+
+const initialState = {
+  items: [],
+  status: null,
+};
+
+export const allServicFetching = createAsyncThunk(
+  "users/allUserFetching",
+  async () => {
+    const res = await axiosInstance.get("/get-services");
+    return res.data;
+  }
+);
+
+export const allServiceSlice = createSlice({
+  name: "users",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(allServicFetching.pending, (state) => {
+      state.status = "loading...";
+    });
+    builder.addCase(allServicFetching.fulfilled, (state, action) => {
+      state.status = "";
+      state.items = action.payload;
+    });
+    builder.addCase(allServicFetching.rejected, (state) => {
+      state.status = "Something Went Wrong";
+    });
+  },
+});
+
+export default allServiceSlice.reducer;

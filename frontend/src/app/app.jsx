@@ -18,6 +18,7 @@ import alltransationsSlice from "../redux/getAllTransation";
 import userInfoSlice from "../redux/singleUserProfileSlice";
 import creditSlice from "../redux/singleUserTransation";
 import UserSmsSlice from "../redux/getUserSmsHistorySlice";
+import allServiceSlice from "../redux/getServiceSlice";
 
 const persistConfig = {
   key: "auth",
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   userInfo: userInfoSlice,
   credit: creditSlice,
   smsHistory: UserSmsSlice,
+  service: allServiceSlice,
 });
 
 export const store = configureStore({

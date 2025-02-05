@@ -29,7 +29,7 @@ const HeroSection = () => {
           animate={{ rotate: 360 }}
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         >
-          <Sparkle className="w-16 h-16 mx-auto mb-8 text-black" />
+          <Sparkle className="w-16 h-16 mx-auto mb-8 text-white" />
         </motion.div>
 
         <motion.h1
