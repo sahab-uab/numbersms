@@ -3,7 +3,8 @@ import axiosInstance from "../Api/axios";
 
 const initialState = {
   smsUser: [],
-  status: null,
+  loading: false,
+  status: false,
 };
 
 export const UserSmsFetching = createAsyncThunk(
@@ -20,14 +21,17 @@ export const UserSmsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(UserSmsFetching.pending, (state) => {
-      state.status = "loading...";
+      state.status = true;
+      state.loading = true;
     });
     builder.addCase(UserSmsFetching.fulfilled, (state, action) => {
-      state.status = "";
+      state.status = false;
       state.smsUser = action.payload;
+      state.loading = false;
     });
     builder.addCase(UserSmsFetching.rejected, (state) => {
-      state.status = "Something Went Wrong";
+      state.status = false;
+      state.loading = false;
     });
   },
 });

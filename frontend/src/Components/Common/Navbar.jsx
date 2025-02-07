@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const { token, user } = useSelector((state) => state.auth);
+
+  console.log(user?.role);
   return (
     <div className="bg-base-100">
       {/* The navbar with background color applied */}
@@ -54,20 +57,43 @@ const Navbar = () => {
               Number-SMS
             </Link>
           </div>
-          <div className="navbar-end flex gap-5">
-            <Link
-              to={"/login"}
-              className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
-            >
-              Log-in
-            </Link>
 
-            <Link
-              to={"/sign-up"}
-              className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
-            >
-              Sign-up
-            </Link>
+          <div className="navbar-end flex gap-5">
+            {token ? (
+              <div>
+                {user?.role === "user" ? (
+                  <Link
+                    to={"/user/dashboard"}
+                    className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <Link
+                    to={"/admin/dashboard"}
+                    className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link
+                  to={"/login"}
+                  className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+                >
+                  Log-in
+                </Link>
+
+                <Link
+                  to={"/sign-up"}
+                  className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+                >
+                  Sign-up
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

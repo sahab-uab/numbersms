@@ -1,10 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+import axiosInstance from "../../Api/axios";
+import { toast } from "react-toastify";
+import { fetchUserProfile } from "../../redux/singleUserProfileSlice";
 // Assuming you have an action to update user settings
 
 const UserSettingsPage = () => {
   const dispatch = useDispatch();
   const { userData, loading } = useSelector((state) => state.userInfo);
+  const { token } = useSelector((state) => state.auth);
+
+  const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
 
   const [formData, setFormData] = useState({
     name: userData?.data?.name || "",
@@ -13,7 +19,7 @@ const UserSettingsPage = () => {
 
   const [modal, setModal] = useState(false);
   const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
+    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -26,7 +32,6 @@ const UserSettingsPage = () => {
     }));
   };
 
-  // Handle password change form field changes
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
     setPasswordData((prevData) => ({
@@ -35,10 +40,28 @@ const UserSettingsPage = () => {
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Dispatch update action if needed
+
+    setLoadingPasswordChange(true);
+
+    try {
+      const response = await axiosInstance.post("/upadte-profile", {
+        name: formData.name,
+      });
+
+      if (response?.status) {
+        dispatch(fetchUserProfile(token));
+        setModal(false);
+        toast.success("Profile updated successfully!");
+      } else {
+        alert(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingPasswordChange(false);
+    }
   };
 
   const handleChangePassword = () => {
@@ -49,14 +72,33 @@ const UserSettingsPage = () => {
     setModal(false);
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
+
     if (passwordData.newPassword === passwordData.confirmPassword) {
-      console.log("Password change successful!");
-      // Call dispatch or API to change password
-      setModal(false);
+      setLoadingPasswordChange(true);
+
+      try {
+        const response = await axiosInstance.post("/chanage-password", {
+          old_password: passwordData.oldPassword,
+          password: passwordData.newPassword,
+        });
+
+        console.log(response);
+        if (response?.status) {
+          setModal(false);
+          alert("Password changed successfully!");
+        } else {
+          alert(response?.message || "Password change failed.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("An error occurred while changing password.");
+      } finally {
+        setLoadingPasswordChange(false); // Hide loader after process completes
+      }
     } else {
-      console.log("Passwords do not match");
+      alert("Passwords do not match.");
     }
   };
 
@@ -94,8 +136,8 @@ const UserSettingsPage = () => {
             type="email"
             id="email"
             name="email"
+            readOnly
             value={formData.email}
-            onChange={handleChange}
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -137,9 +179,9 @@ const UserSettingsPage = () => {
                 </label>
                 <input
                   type="password"
-                  id="currentPassword"
-                  name="currentPassword"
-                  value={passwordData.currentPassword}
+                  id="oldPassword"
+                  name="oldPassword"
+                  value={passwordData.oldPassword}
                   onChange={handlePasswordChange}
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />

@@ -3,11 +3,12 @@ import ReactPaginate from "react-paginate";
 import { allUserFetching } from "../../redux/getAllUserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Eye } from "lucide-react";
+import { BarLoader } from "react-spinners";
 import axiosInstance from "../../Api/axios";
 
 const AdminUserMennage = () => {
   const dispatch = useDispatch();
-  const { items, status } = useSelector((state) => state.allUser);
+  const { items, status, loading } = useSelector((state) => state.allUser);
 
   const [currentPage, setCurrentPage] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,7 +18,7 @@ const AdminUserMennage = () => {
 
   useEffect(() => {
     if (mainData.length === 0 && status !== "loading...") {
-      dispatch(allUserFetching()); // Fetch users if they are not already loaded
+      dispatch(allUserFetching());
     }
   }, [dispatch, mainData.length, status]);
 
@@ -116,34 +117,48 @@ const AdminUserMennage = () => {
           </tr>
         </thead>
         <tbody>
-          {currentUsers.length > 0 ? (
-            currentUsers.map((user) => (
-              <tr
-                key={user.id}
-                className="border-b hover:bg-gray-100 dark:hover:bg-gray-900"
-              >
-                <td className="py-3 px-6">{user.id}</td>
-                <td className="py-3 px-6 capitalize">{user.name}</td>
-                <td className="py-3 px-6">{user.email}</td>
-                <td className="py-3 px-6">
-                  {user.role == "admin" ? "--" : "$" + user.coin}
-                </td>
-                <td className="py-3 px-6">
-                  <button
-                    onClick={() => openModal(user)}
-                    className="flex items-center gap-x-3 bg-gray-100 text-gray-600 py-2 px-3 rounded-md"
-                  >
-                    <Eye /> View
-                  </button>
+          {loading ? (
+            <>
+              <tr>
+                <td colSpan="5">
+                  <div className="flex items-center justify-center py-6">
+                    <BarLoader size={40} color="#4F46E5" loading={true} />
+                  </div>
                 </td>
               </tr>
-            ))
+            </>
           ) : (
-            <tr>
-              <td colSpan="4" className="py-3 px-6 text-center">
-                No users found
-              </td>
-            </tr>
+            <>
+              {currentUsers.length > 0 ? (
+                currentUsers.map((user) => (
+                  <tr
+                    key={user.id}
+                    className="border-b hover:bg-gray-100 dark:hover:bg-gray-900"
+                  >
+                    <td className="py-3 px-6">{user.id}</td>
+                    <td className="py-3 px-6 capitalize">{user.name}</td>
+                    <td className="py-3 px-6">{user.email}</td>
+                    <td className="py-3 px-6">
+                      {user.role == "admin" ? "--" : "$" + user.coin}
+                    </td>
+                    <td className="py-3 px-6">
+                      <button
+                        onClick={() => openModal(user)}
+                        className="flex items-center gap-x-3 bg-gray-100 text-gray-600 py-2 px-3 rounded-md"
+                      >
+                        <Eye /> View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="py-3 px-6 text-center">
+                    No users found
+                  </td>
+                </tr>
+              )}
+            </>
           )}
         </tbody>
       </table>

@@ -4,6 +4,8 @@ import { allTransationsFetching } from "../../redux/getAllTransation";
 import ReactPaginate from "react-paginate";
 import moment from "moment";
 
+import { BarLoader } from "react-spinners";
+
 const AdminAllTransactionPage = () => {
   const dispatch = useDispatch();
   const { transations, status } = useSelector((state) => state.transations);
@@ -49,30 +51,44 @@ const AdminAllTransactionPage = () => {
           </tr>
         </thead>
         <tbody>
-          {currentTransactions.length > 0 ? (
-            currentTransactions.map((transaction) => (
-              <tr
-                key={transaction.id}
-                className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <td className="py-3 px-6">#{transaction.id}</td>
-                <td className="py-3 px-6">{transaction.username}</td>
-                <td className="py-3 px-6">${transaction.amount}</td>
-                <td className="py-3 px-6 capitalize">{transaction.getway}</td>
-                <td className="py-3 px-6">
-                  {moment(transaction?.created_at).format("MMMM Do YYYY")}
-                </td>
-                <td className="py-1 px-3">
-                  {transaction.status == true ? "Success" : "Faild"}
-                </td>
-              </tr>
-            ))
-          ) : (
+          {status === "loading..." ? (
             <tr>
-              <td colSpan="4" className="py-3 px-6 text-center">
-                No transactions found
+              <td colSpan="5">
+                <div className="flex items-center justify-center py-6">
+                  <BarLoader size={40} color="#4F46E5" loading={true} />
+                </div>
               </td>
             </tr>
+          ) : (
+            <>
+              {currentTransactions.length > 0 ? (
+                currentTransactions.map((transaction) => (
+                  <tr
+                    key={transaction.id}
+                    className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <td className="py-3 px-6">#{transaction.id}</td>
+                    <td className="py-3 px-6">{transaction.username}</td>
+                    <td className="py-3 px-6">${transaction.amount}</td>
+                    <td className="py-3 px-6 capitalize">
+                      {transaction.getway}
+                    </td>
+                    <td className="py-3 px-6">
+                      {moment(transaction?.created_at).format("MMMM Do YYYY")}
+                    </td>
+                    <td className="py-1 px-3">
+                      {transaction.status == true ? "Success" : "Faild"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="py-3 px-6 text-center">
+                    No transactions found
+                  </td>
+                </tr>
+              )}
+            </>
           )}
         </tbody>
       </table>

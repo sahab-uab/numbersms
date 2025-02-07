@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { allServicFetching } from "../../redux/getServiceSlice";
 import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
+import { BarLoader } from "react-spinners";
 
 const AdminServicePage = () => {
   const dispatch = useDispatch();
@@ -80,11 +81,15 @@ const AdminServicePage = () => {
         </thead>
         <tbody>
           {loading ? (
-            <tr>
-              <td colSpan="3" className="text-center py-4">
-                Loading...
-              </td>
-            </tr>
+            <>
+              <tr>
+                <td colSpan="5">
+                  <div className="flex items-center justify-center py-6">
+                    <BarLoader size={40} color="#4F46E5" loading={true} />
+                  </div>
+                </td>
+              </tr>
+            </>
           ) : (
             currentItems?.map((serviceItem, index) => (
               <tr key={index}>

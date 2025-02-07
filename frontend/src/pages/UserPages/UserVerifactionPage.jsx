@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UserSmsFetching } from "../../redux/getUserSmsHistorySlice";
 import { allServicFetching } from "../../redux/getServiceSlice";
@@ -8,6 +8,7 @@ import axiosInstance from "../../Api/axios";
 import SmsVerificationModal from "../../Components/AdminComponents/SmsVerificationModal";
 import moment from "moment";
 import ReactPaginate from "react-paginate";
+import { PulseLoader, BarLoader } from "react-spinners";
 
 const UserVerificationPage = () => {
   const dispatch = useDispatch();
@@ -15,9 +16,9 @@ const UserVerificationPage = () => {
   const [modal, setModal] = useState(false);
   const [newModal, setNewModal] = useState(false);
 
-  const { smsUser } = useSelector((state) => state.smsHistory);
+  const [dataLoading, setDataLoading] = useState(false);
 
-  console.log(smsUser);
+  const { smsUser, status } = useSelector((state) => state.smsHistory);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
@@ -34,7 +35,7 @@ const UserVerificationPage = () => {
     indexOfLastTransaction
   );
 
-  const { service, loading } = useSelector((state) => state.service);
+  const { service } = useSelector((state) => state.service);
 
   const [verifactionData, setVerifactionData] = useState(null);
 
@@ -58,6 +59,7 @@ const UserVerificationPage = () => {
 
   const createVerification = async (service) => {
     try {
+      setDataLoading(true);
       const formData = new FormData();
 
       formData.append("id", service?.id);
@@ -69,6 +71,7 @@ const UserVerificationPage = () => {
       });
 
       setVerifactionData(response.data);
+      setDataLoading(false);
       setModal(false);
       setNewModal(true);
     } catch (error) {
@@ -103,31 +106,45 @@ const UserVerificationPage = () => {
           </thead>
           {
             <tbody>
-              {currentTransactions.length > 0 ? (
-                currentTransactions.map((transaction) => (
-                  <tr
-                    key={transaction.id}
-                    className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    <td className="py-3 px-6">#{transaction.id}</td>
-                    <td className="py-3 px-6">{transaction.service}</td>
-                    <td className="py-3 px-6 capitalize">
-                      ${transaction.price}
-                    </td>
-                    <td className="py-3 px-6">
-                      {moment(transaction?.created_at).format("MMMM Do YYYY")}
-                    </td>
-                    <td className="py-1 px-3">
-                      {transaction.status == true ? "Success" : "Faild"}
-                    </td>
-                  </tr>
-                ))
-              ) : (
+              {status ? (
                 <tr>
-                  <td colSpan="4" className="py-3 px-6 text-center">
-                    No transactions found
+                  <td colSpan="5">
+                    <div className="flex items-center justify-center py-6">
+                      <BarLoader size={40} color="#4F46E5" loading={true} />
+                    </div>
                   </td>
                 </tr>
+              ) : (
+                <>
+                  {currentTransactions.length > 0 ? (
+                    currentTransactions.map((transaction) => (
+                      <tr
+                        key={transaction.id}
+                        className="border-b hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        <td className="py-3 px-6">#{transaction.id}</td>
+                        <td className="py-3 px-6">{transaction.service}</td>
+                        <td className="py-3 px-6 capitalize">
+                          ${transaction.price}
+                        </td>
+                        <td className="py-3 px-6">
+                          {moment(transaction?.created_at).format(
+                            "MMMM Do YYYY"
+                          )}
+                        </td>
+                        <td className="py-1 px-3">
+                          {transaction.status == true ? "Success" : "Faild"}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" className="py-3 px-6 text-center">
+                        No transactions found
+                      </td>
+                    </tr>
+                  )}
+                </>
               )}
             </tbody>
           }
@@ -151,87 +168,93 @@ const UserVerificationPage = () => {
       {modal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[450px]">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              SMS Verifications
-            </h2>
-
-            {loading ? (
-              <div>Loading....</div>
+            {dataLoading ? (
+              <>
+                <div className="w-full text-center">
+                  <PulseLoader />
+                </div>
+              </>
             ) : (
-              <div>
-                {/* Search Input */}
-                <div className="mb-4">
-                  <input
-                    type="text"
-                    placeholder="Search services..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  />
-                </div>
+              <>
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                  SMS Verifications
+                </h2>
 
-                <div className="h-72 overflow-y-auto">
-                  <ul>
-                    {filteredServices?.length > 0 ? (
-                      filteredServices.map((service, index) => (
-                        <li
-                          key={index}
-                          className="grid grid-cols-[50%_25%_25%] items-center py-2 border-b border-gray-200"
-                        >
-                          <button
-                            onClick={() => createVerification(service)}
-                            className="flex gap-2"
-                          >
-                            {service.image ? (
-                              <img
-                                src={service.image}
-                                alt=""
-                                className="w-8 h-8 object-cover rounded-full"
-                              />
-                            ) : (
-                              <img
-                                src={
-                                  "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
-                                }
-                                alt=""
-                                className="w-10 h-10 object-cover"
-                              />
-                            )}
+                <div>
+                  {/* Search Input */}
+                  <div className="mb-4">
+                    <input
+                      type="text"
+                      placeholder="Search services..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                  </div>
 
-                            <span>{service.service}</span>
-                          </button>
-                          <div className="text-gray-600">
-                            ${service.selling_price}
-                          </div>
-                          <button
-                            onClick={() => addToPinFuntion(service)}
-                            className="text-gray-600"
+                  <div className="h-72 overflow-y-auto">
+                    <ul>
+                      {filteredServices?.length > 0 ? (
+                        filteredServices.map((service, index) => (
+                          <li
+                            key={index}
+                            className="grid grid-cols-[50%_25%_25%] items-center py-2 border-b border-gray-200"
                           >
-                            <PinIcon />
-                          </button>
+                            <button
+                              onClick={() => createVerification(service)}
+                              className="flex gap-2"
+                            >
+                              {service.image ? (
+                                <img
+                                  src={service.image}
+                                  alt=""
+                                  className="w-8 h-8 object-cover rounded-full"
+                                />
+                              ) : (
+                                <img
+                                  src={
+                                    "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
+                                  }
+                                  alt=""
+                                  className="w-10 h-10 object-cover"
+                                />
+                              )}
+
+                              <span>{service.service}</span>
+                            </button>
+                            <div className="text-gray-600">
+                              ${service.selling_price}
+                            </div>
+                            <button
+                              onClick={() => addToPinFuntion(service)}
+                              className="text-gray-600"
+                            >
+                              <PinIcon />
+                            </button>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-center py-2 text-gray-600">
+                          No services found
                         </li>
-                      ))
-                    ) : (
-                      <li className="text-center py-2 text-gray-600">
-                        No services found
-                      </li>
-                    )}
-                  </ul>
-                </div>
+                      )}
+                    </ul>
+                  </div>
 
-                {/* Modal Actions */}
-                <div className="flex justify-between mt-4">
-                  <button
-                    onClick={() => setModal(false)} // Close modal when clicked
-                    className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
-                  >
-                    Close
-                  </button>
-                  <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">
-                    Confirm
-                  </button>
+                  {/* Modal Actions */}
+                  <div className="flex justify-between mt-4">
+                    <button
+                      onClick={() => setModal(false)} // Close modal when clicked
+                      className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
+                    >
+                      Close
+                    </button>
+                    <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">
+                      Confirm
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>

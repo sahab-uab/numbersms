@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../../Api/axios";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,6 +7,7 @@ import {
 } from "../../redux/singleUserTransation";
 import ReactPaginate from "react-paginate";
 import moment from "moment";
+import { BarLoader } from "react-spinners";
 
 const UserCreditCardPage = () => {
   // credit
@@ -18,17 +19,16 @@ const UserCreditCardPage = () => {
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
-  const [shareModal, setShareModal] = useState(false); // For Share Credit Modal
+  const [shareModal, setShareModal] = useState(false);
   const [amount, setAmount] = useState("");
   const [gateway, setGateway] = useState("paypal");
-  const [email, setEmail] = useState(""); // For email in share credit
-  const [paymentLink, setPaymentLink] = useState(""); // To store the payment link
+  const [email, setEmail] = useState("");
+
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [loadingShare, setLoadingShare] = useState(false);
 
-  // Pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 5; // Set the number of items per page
+  const itemsPerPage = 10;
 
   useEffect(() => {
     dispatch(fetchTransactions());
@@ -67,11 +67,7 @@ const UserCreditCardPage = () => {
         }
       );
 
-      const res = response.data;
-
       if (response.data.status === true) {
-        setPaymentLink(response?.data?.payment_link);
-
         if (gateway === "stripe" || gateway === "paypal") {
           const link = response?.data?.payment_link;
           const paymentWindow = window.open(link, "_blank");
@@ -144,7 +140,9 @@ const UserCreditCardPage = () => {
       {/* Transactions Table */}
       <div className="bg-white p-4 rounded-lg shadow-lg">
         {loading ? (
-          <p className="text-center text-gray-600 font-semibold">Loading...</p>
+          <div className="flex items-center justify-center h-full w-full py-6">
+            <BarLoader color="#4F46E5" loading={true} />
+          </div>
         ) : currentTransactions?.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-200">
@@ -215,12 +213,37 @@ const UserCreditCardPage = () => {
                 <input
                   type="number"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setAmount(parseFloat(e.target.value))}
                   required
+                  min="2.50"
+                  step="2.50"
                   className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
                 />
+                {amount < 2.5 && (
+                  <p className="text-red-500 text-sm mt-1">
+                    Minimum purchase amount is $2.50
+                  </p>
+                )}
               </label>
 
+              {/* Fixed Amount Options */}
+              <div className="mt-2">
+                <p className="text-gray-700 font-medium">Quick Select:</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {[2.5, 5.0, 7.5, 10.0, 12.5].map((amt) => (
+                    <button
+                      key={amt}
+                      type="button"
+                      onClick={() => setAmount(amt)}
+                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                    >
+                      ${amt.toFixed(2)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Payment Gateway Options */}
               <label className="block text-gray-700 font-medium mt-4">
                 Payment Gateway:
                 <div className="mt-2">
@@ -247,6 +270,7 @@ const UserCreditCardPage = () => {
                 </div>
               </label>
 
+              {/* Buttons */}
               <div className="flex justify-between mt-6">
                 <button
                   type="button"
@@ -257,7 +281,12 @@ const UserCreditCardPage = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
+                  disabled={amount < 2.5}
+                  className={`px-4 py-2 text-white font-semibold rounded-lg transition ${
+                    amount < 2.5
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-600"
+                  }`}
                 >
                   {loadingPayment ? "Processing..." : "Confirm Purchase"}
                 </button>

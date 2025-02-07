@@ -59,14 +59,14 @@ const AdminAddCaditToUserPage = () => {
           {/* User ID Field */}
           <div>
             <label className="block text-gray-700 font-medium mb-2">
-              User ID <span className="text-red-500">*</span>
+              User ID/Email <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               name="user_id"
               value={formData.user_id}
               onChange={handleChange}
-              placeholder="Enter User ID"
+              placeholder="Enter User ID or Email"
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />

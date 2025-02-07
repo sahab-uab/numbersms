@@ -3,7 +3,7 @@ import axiosInstance from "../Api/axios";
 
 const initialState = {
   smsusagesdata: [],
-  status: null,
+  status: false,
   error: null,
 };
 
@@ -26,14 +26,14 @@ export const AdminMessageUsagesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(AdminMessageUsagesFetch.pending, (state) => {
-        state.status = "loading...";
+        state.status = true;
       })
       .addCase(AdminMessageUsagesFetch.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = false;
         state.smsusagesdata = action.payload; // Make sure to assign to transations
       })
       .addCase(AdminMessageUsagesFetch.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = false;
         state.error = action.error.message; // Access error message for better debugging
       });
   },
