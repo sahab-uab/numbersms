@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axiosInstance from "../../Api/axios";
+import { toast } from "react-toastify";
+import { fetchUserProfile } from "../../redux/singleUserProfileSlice";
 
 const AdminAccountSettingsPage = () => {
+  const dispatch = useDispatch();
   const { userData, loading } = useSelector((state) => state.userInfo);
+  const { token } = useSelector((state) => state.auth);
+
+  const [loadingPasswordChange, setLoadingPasswordChange] = useState(false);
 
   const [formData, setFormData] = useState({
     name: userData?.data?.name || "",
@@ -12,16 +18,11 @@ const AdminAccountSettingsPage = () => {
 
   const [modal, setModal] = useState(false);
   const [passwordData, setPasswordData] = useState({
-    currentPassword: "",
+    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
-    otp: "", // Added OTP field
   });
 
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -38,8 +39,28 @@ const AdminAccountSettingsPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoadingPasswordChange(true);
+
+    try {
+      const response = await axiosInstance.post("/upadte-profile", {
+        name: formData.name,
+      });
+
+      if (response?.status) {
+        dispatch(fetchUserProfile(token));
+        setModal(false);
+        toast.success("Profile updated successfully!");
+      } else {
+        alert(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingPasswordChange(false);
+    }
   };
 
   const handleChangePassword = () => {
@@ -50,29 +71,34 @@ const AdminAccountSettingsPage = () => {
     setModal(false);
   };
 
-  // Reset password API call
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
 
-    try {
-      const response = await axiosInstance.post("/reset-password", {
-        otp: passwordData.otp,
-        password: passwordData.newPassword,
-        password_confirmation: passwordData.confirmPassword,
-      });
-      setSuccess(true);
-      setError(null);
-      console.log("Password reset successful:", response.data);
-      setModal(false);
-    } catch (err) {
-      setError(
-        err.response ? err.response.data.message : "Error resetting password"
-      );
-      console.error("Error resetting password:", err);
+    if (passwordData.newPassword === passwordData.confirmPassword) {
+      setLoadingPasswordChange(true);
+
+      try {
+        const response = await axiosInstance.post("/chanage-password", {
+          old_password: passwordData.oldPassword,
+          password: passwordData.newPassword,
+          password_confirmation: passwordData.confirmPassword,
+        });
+
+        console.log(response);
+        if (response?.status) {
+          setModal(false);
+          alert("Password changed successfully!");
+        } else {
+          alert(response?.message || "Password change failed.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("An error occurred while changing password.");
+      } finally {
+        setLoadingPasswordChange(false); // Hide loader after process completes
+      }
+    } else {
+      alert("Passwords do not match.");
     }
   };
 
@@ -110,8 +136,8 @@ const AdminAccountSettingsPage = () => {
             type="email"
             id="email"
             name="email"
+            readOnly
             value={formData.email}
-            onChange={handleChange}
             className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -146,16 +172,16 @@ const AdminAccountSettingsPage = () => {
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
                 <label
-                  htmlFor="otp"
+                  htmlFor="currentPassword"
                   className="block text-sm font-medium text-gray-600"
                 >
-                  OTP (One-time password):
+                  Current Password:
                 </label>
                 <input
-                  type="text"
-                  id="otp"
-                  name="otp"
-                  value={passwordData.otp}
+                  type="password"
+                  id="oldPassword"
+                  name="oldPassword"
+                  value={passwordData.oldPassword}
                   onChange={handlePasswordChange}
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -194,14 +220,6 @@ const AdminAccountSettingsPage = () => {
                   className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-
-              {/* Error Message */}
-              {error && <p className="text-red-600 text-sm">{error}</p>}
-              {success && (
-                <p className="text-green-600 text-sm">
-                  Password changed successfully!
-                </p>
-              )}
 
               <div className="flex justify-between items-center">
                 <button

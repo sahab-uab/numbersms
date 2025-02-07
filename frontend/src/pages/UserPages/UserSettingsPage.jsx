@@ -82,6 +82,7 @@ const UserSettingsPage = () => {
         const response = await axiosInstance.post("/chanage-password", {
           old_password: passwordData.oldPassword,
           password: passwordData.newPassword,
+          password_confirmation: passwordData.confirmPassword,
         });
 
         console.log(response);

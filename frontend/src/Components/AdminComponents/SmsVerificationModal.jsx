@@ -1,23 +1,30 @@
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 import axiosInstance from "../../Api/axios";
+import { toast } from "react-toastify";
+import { UserSmsFetching } from "../../redux/getUserSmsHistorySlice";
+import { useDispatch } from "react-redux";
 
 const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [smsNumber, setSmsNumber] = useState(
-    `+1 ${verifactionData?.data?.number}`
+    `+1 ${verifactionData?.data?.data?.number}`
   );
+
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(false);
 
   const [otp, setOtp] = useState(null);
   // Function to calculate time left
   const calculateTimeLeft = () => {
     const now = new Date().getTime();
-    const endTime = new Date(verifactionData?.data?.endsAt).getTime(); // endAt should be in the correct format (ISO 8601)
+    const endTime = new Date(verifactionData?.data?.data?.endsAt).getTime(); // endAt should be in the correct format (ISO 8601)
 
     // If endAt is not available, use createdAt + a 5-minute limit as fallback
     if (!endTime) {
       const createdAtTime = new Date(
-        verifactionData?.data?.createdAt
+        verifactionData?.data?.data?.createdAt
       ).getTime();
       const fallbackEndTime = createdAtTime + 5 * 60 * 1000; // Add 5 minutes to createdAt
       return fallbackEndTime - now;
@@ -50,33 +57,28 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
     return () => clearInterval(timer);
   }, [verifactionData, otp]);
 
-  //
   useEffect(() => {
     // Set up the interval
     const intervalId = setInterval(async () => {
       try {
         // Make the API call
-        const response = await axiosInstance.post("/getotp", {
-          href: verifactionData?.data?.sms?.href,
-          methods: verifactionData?.data?.sms?.method,
-        });
+        await axiosInstance
+          .post("/getotp", {
+            id: verifactionData?.data?.id,
+          })
+          .then((res) => {
+            console.log(res.data.data);
+            if (res.data.status) {
+              let smsContent = res?.data?.data;
 
-        const data = response?.data?.data?.data;
-
-        // Check if data exists and is not empty
-        if (data && data.length > 0) {
-          let smsContent = data[0];
-
-          // Ensure smsContent is available before trying to access its properties
-          if (smsContent) {
-            setOtp(smsContent?.smsContent); // Safely access smsContent
-          }
-        }
-
-        // Stop the interval once the OTP is fetched
-        if (response?.data?.data?.count === 1) {
-          clearInterval(intervalId);
-        }
+              if (smsContent) {
+                setOtp(smsContent);
+              }
+            }
+            if (res.data.status == true) {
+              clearInterval(intervalId);
+            }
+          });
       } catch (error) {
         console.error("Error fetching OTP:", error);
       }
@@ -91,14 +93,33 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
+  const cancleUrl = async () => {
+    setLoading(true);
+    try {
+      await axiosInstance
+        .post("/cancel-services", {
+          id: verifactionData.data.id,
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+        });
+      dispatch(UserSmsFetching());
+      setLoading(false);
+      setNewModal(false);
+    } catch (error) {
+      toast.error("Server Error");
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center p-4">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <div className="flex items-center border-b border-gray-200 pb-4 justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-800">
             <span className="uppercase">
-              {verifactionData?.data?.serviceName}
-            </span>
+              {verifactionData?.data?.data?.serviceName}
+            </span>{" "}
             - SMS Verification
           </h2>
 
@@ -143,7 +164,6 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
         </div>
 
         {/* Warning Message */}
-
         <div className="bg-yellow-100 p-3 rounded-lg mb-4 text-yellow-700">
           {!otp ? (
             <p>
@@ -154,6 +174,16 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
             <p>{otp}</p>
           )}
         </div>
+
+        {!otp && (
+          <button
+            onClick={() => cancleUrl()}
+            disabled={loading}
+            className="w-full h-[42px] flex items-center justify-center bg-red-100 text-red-600 px-2 mt-5 uppercase font-semibold "
+          >
+            {loading ? <>Processing....</> : <>cancle</>}
+          </button>
+        )}
       </div>
     </div>
   );
