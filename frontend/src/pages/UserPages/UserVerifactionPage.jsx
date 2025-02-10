@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UserSmsFetching } from "../../redux/getUserSmsHistorySlice";
 import { allServicFetching } from "../../redux/getServiceSlice";
-import { PinIcon } from "lucide-react";
+import { PinIcon, X } from "lucide-react";
 import { addToPin } from "../../redux/pinnedSlice";
 import axiosInstance from "../../Api/axios";
 import SmsVerificationModal from "../../Components/AdminComponents/SmsVerificationModal";
@@ -174,12 +174,16 @@ const UserVerificationPage = () => {
                             )}
                           </td>
                           <td className="py-3 px-6">
-                            <button
-                              onClick={() => cancleVerfy(transaction.id)}
-                              className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
-                            >
-                              Cancle
-                            </button>
+                            {transaction.status === "pending" ? (
+                              <button
+                                onClick={() => cancleVerfy(transaction.id)}
+                                className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
+                              >
+                                Cancle
+                              </button>
+                            ) : (
+                              <>--</>
+                            )}
                           </td>
                         </tr>
                       ))
@@ -223,9 +227,17 @@ const UserVerificationPage = () => {
               </>
             ) : (
               <>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">
-                  SMS Verifications
-                </h2>
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    SMS Verifications
+                  </h2>
+                  <button
+                    onClick={() => setModal(false)}
+                    className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
+                  >
+                    <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
+                  </button>
+                </div>
 
                 <div>
                   {/* Search Input */}
@@ -239,13 +251,13 @@ const UserVerificationPage = () => {
                     />
                   </div>
 
-                  <div className="h-72 overflow-y-auto">
+                  <div className="h-72 overflow-y-auto  bg-gray-100 rounded-lg">
                     <ul>
                       {filteredServices?.length > 0 ? (
                         filteredServices.map((service, index) => (
                           <li
                             key={index}
-                            className="grid grid-cols-[50%_25%_25%] items-center py-2 border-b border-gray-200"
+                            className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-300 items-center py-3 border-b border-gray-200"
                           >
                             <button
                               onClick={() => createVerification(service)}
@@ -263,7 +275,7 @@ const UserVerificationPage = () => {
                                     "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
                                   }
                                   alt=""
-                                  className="w-10 h-10 object-cover"
+                                  className="w-8 h-8 object-cover rounded-full"
                                 />
                               )}
 
@@ -273,8 +285,8 @@ const UserVerificationPage = () => {
                               ${service.selling_price}
                             </div>
                             <button
-                              onClick={() => addToPinFuntion(service)}
-                              className="text-gray-600"
+                              onClick={() => addToPinFuntion(service.id)}
+                              className="text-gray-600 flex items-center justify-end"
                             >
                               <PinIcon />
                             </button>
@@ -286,19 +298,6 @@ const UserVerificationPage = () => {
                         </li>
                       )}
                     </ul>
-                  </div>
-
-                  {/* Modal Actions */}
-                  <div className="flex justify-between mt-4">
-                    <button
-                      onClick={() => setModal(false)} // Close modal when clicked
-                      className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
-                    >
-                      Close
-                    </button>
-                    <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition">
-                      Confirm
-                    </button>
                   </div>
                 </div>
               </>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import axiosInstance from "../../Api/axios";
 import { toast } from "react-toastify";
 import { fetchUserProfile } from "../../redux/singleUserProfileSlice";
-import { ClipboardIcon } from "lucide-react";
+import { ClipboardIcon, X } from "lucide-react";
 // Assuming you have an action to update user settings
 
 const UserSettingsPage = () => {
@@ -74,6 +74,12 @@ const UserSettingsPage = () => {
     setModal(false);
   };
 
+  // copy user id to clipboard
+  const copyUserId = () => {
+    navigator.clipboard.writeText(formData.id);
+    toast.success("User ID copied to clipboard.");
+  };
+
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
 
@@ -122,10 +128,13 @@ const UserSettingsPage = () => {
           <input
             type="text"
             value={formData.id}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="mt-1 block w-full px-4 py-2 border border-r-0 rounded-e-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             readOnly
           />
-          <button className="py-2 bg-gray-200 text-gray-600 px-4">
+          <button
+            onClick={copyUserId}
+            className="py-2 bg-gray-200 text-gray-600 px-4 mt-1 border border-gray-300"
+          >
             <ClipboardIcon className="w-[14px]" />
           </button>
         </div>
@@ -177,7 +186,7 @@ const UserSettingsPage = () => {
       </form>
 
       {/* Password Change Button */}
-      <div className="mt-6 text-center">
+      <div className="mt-2 text-center">
         <button
           onClick={handleChangePassword}
           className="w-full py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -190,9 +199,17 @@ const UserSettingsPage = () => {
       {modal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Change Password
-            </h2>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Change Password
+              </h2>
+              <button
+                onClick={handleModalClose}
+                className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
+              >
+                <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
+              </button>
+            </div>
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
                 <label
@@ -245,19 +262,12 @@ const UserSettingsPage = () => {
                 />
               </div>
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="py-2 w-full px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  Change Password
-                </button>
-                <button
-                  type="button"
-                  onClick={handleModalClose}
-                  className="py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                >
-                  Cancel
+                  Save Changes
                 </button>
               </div>
             </form>

@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [smsNumber, setSmsNumber] = useState(
-    `+1 ${verifactionData?.data?.data?.number}`
+    `${verifactionData?.data?.data?.number}`
   );
 
   const dispatch = useDispatch();
@@ -39,6 +39,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(smsNumber);
+    toast.success("Number copied to clipboard");
   };
 
   useEffect(() => {
@@ -125,7 +126,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
 
           <button
             onClick={() => closeModal()}
-            className="font-semibold text-2xl w-[40px] h-[40px] flex items-center justify-center bg-gray-100 text-gray-400"
+            className="font-semibold text-2xl rounded-md w-[40px] h-[40px] flex items-center justify-center bg-gray-100 text-gray-400"
           >
             <span>
               <X />
@@ -139,7 +140,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
           <div className="flex justify-between bg-gray-100 rounded-lg py-2 px-4 w-full max-w-full">
             {!otp ? (
               <>
-                <span className="text-gray-800">{smsNumber}</span>
+                <span className="text-gray-800">+1 {smsNumber}</span>
                 <button
                   onClick={handleCopyClick}
                   className="ml-2 text-blue-500 border-l border-gray-400 pl-3"
@@ -181,7 +182,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
             disabled={loading}
             className="w-full h-[42px] flex items-center justify-center bg-red-100 text-red-600 px-2 mt-5 uppercase font-semibold "
           >
-            {loading ? <>Processing....</> : <>cancle</>}
+            {loading ? <>Processing....</> : <>Cancel</>}
           </button>
         )}
       </div>

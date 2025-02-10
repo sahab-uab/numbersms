@@ -8,6 +8,7 @@ import {
 import ReactPaginate from "react-paginate";
 import moment from "moment";
 import { BarLoader } from "react-spinners";
+import { X } from "lucide-react";
 
 const UserCreditCardPage = () => {
   // credit
@@ -223,10 +224,17 @@ const UserCreditCardPage = () => {
       {modal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Buy Credit
-            </h2>
-
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Buy Credit
+              </h2>
+              <button
+                onClick={() => setModal(false)}
+                className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
+              >
+                <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
+              </button>
+            </div>
             <form onSubmit={handleBuyCredit}>
               <label className="block text-gray-700 font-medium">
                 Amount:
@@ -237,7 +245,8 @@ const UserCreditCardPage = () => {
                   required
                   min="2.50"
                   step="2.50"
-                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                  readOnly
+                  className="w-full outline-none px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
                 />
                 {amount < 2.5 && (
                   <p className="text-red-500 text-sm mt-1">
@@ -250,12 +259,12 @@ const UserCreditCardPage = () => {
               <div className="mt-2">
                 <p className="text-gray-700 font-medium">Quick Select:</p>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {[2.5, 5.0, 7.5, 10.0, 12.5].map((amt) => (
+                  {[2.5, 5.0, 7.5, 10.0, 12.5, 20, 50, 100].map((amt) => (
                     <button
                       key={amt}
                       type="button"
                       onClick={() => setAmount(amt)}
-                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                      className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-300"
                     >
                       ${amt.toFixed(2)}
                     </button>
@@ -266,8 +275,8 @@ const UserCreditCardPage = () => {
               {/* Payment Gateway Options */}
               <label className="block text-gray-700 font-medium mt-4">
                 Payment Gateway:
-                <div className="mt-2">
-                  <label className="inline-flex items-center mr-4">
+                <div className="mt-2 flex items-center gap-x-2 justify-between">
+                  <label className="inline-flex duration-300 hover:bg-gray-200 items-center mr-4 bg-gray-100 rounded-md px-3 py-2 w-full">
                     <input
                       type="radio"
                       value="paypal"
@@ -277,7 +286,7 @@ const UserCreditCardPage = () => {
                     />
                     <span className="ml-2">PayPal</span>
                   </label>
-                  <label className="inline-flex items-center mr-4">
+                  <label className="inline-flex duration-300 hover:bg-gray-200 items-center mr-4 bg-gray-100 rounded-md px-3 py-2 w-full">
                     <input
                       type="radio"
                       value="stripe"
@@ -293,16 +302,9 @@ const UserCreditCardPage = () => {
               {/* Buttons */}
               <div className="flex justify-between mt-6">
                 <button
-                  type="button"
-                  onClick={() => setModal(false)}
-                  className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
-                >
-                  Cancel
-                </button>
-                <button
                   type="submit"
                   disabled={amount < 2.5}
-                  className={`px-4 py-2 text-white font-semibold rounded-lg transition ${
+                  className={`px-4 py-2 text-white font-semibold rounded-lg transition duration-300 w-full ${
                     amount < 2.5
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-blue-500 hover:bg-blue-600"
@@ -320,9 +322,17 @@ const UserCreditCardPage = () => {
       {shareModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              Share Credit
-            </h2>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Share Credit
+              </h2>
+              <button
+                onClick={() => setShareModal(false)}
+                className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
+              >
+                <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
+              </button>
+            </div>
 
             <form onSubmit={handleShareCredit}>
               <label className="block text-gray-700 font-medium">
@@ -332,7 +342,7 @@ const UserCreditCardPage = () => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                  className="w-full outline-none px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
                 />
               </label>
 
@@ -343,21 +353,14 @@ const UserCreditCardPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
+                  className="w-full outline-none px-3 py-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-blue-400"
                 />
               </label>
 
               <div className="flex justify-between mt-6">
                 <button
-                  type="button"
-                  onClick={() => setShareModal(false)}
-                  className="px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg hover:bg-gray-500 transition"
-                >
-                  Cancel
-                </button>
-                <button
                   type="submit"
-                  className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+                  className="px-4 w-full py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
                 >
                   {loadingShare ? "Sharing..." : "Share Credit"}
                 </button>
