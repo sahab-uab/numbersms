@@ -125,8 +125,8 @@ const UserVerificationPage = () => {
                   <th className="py-3 px-6 text-left">Number</th>
                   <th className="py-3 px-6 text-left">OTP</th>
                   <th className="py-3 px-6 text-left">price</th>
-                  <th className="py-3 px-6 text-left">Date</th>
                   <th className="py-3 px-6 text-left">Status</th>
+                  <th className="py-3 px-6 text-left">Date</th>
                   <th className="py-3 px-6 text-left">Atcion</th>
                 </tr>
               </thead>
@@ -148,28 +148,35 @@ const UserVerificationPage = () => {
                           <td className="py-3 px-6 capitalize">
                             ${transaction.price}
                           </td>
+                          <td className={`py-1 px-3`}>
+                            <span
+                              className={`rounded-full px-3 py-1
+                                ${
+                                  transaction.status == "pending" &&
+                                  "text-yellow-500 bg-yellow-100"
+                                }
+                              ${
+                                transaction.status == "complete" &&
+                                "text-green-500 bg-green-100"
+                              }
+                              ${
+                                transaction.status == "canceled" &&
+                                "text-red-500 bg-red-100"
+                              }
+                          `}
+                            >
+                              {transaction.status}
+                            </span>
+                          </td>
                           <td className="py-3 px-6">
                             {moment(transaction?.created_at).format(
                               "MMMM Do YYYY"
                             )}
                           </td>
-                          <td
-                            className={` py-1 px-3 ${
-                              transaction.status == "pending" &&
-                              "text-yellow-500"
-                            }  ${
-                              transaction.status == "complete" &&
-                              "text-green-500"
-                            }
-                          ${transaction.status == "canceled" && "text-red-500"}
-                          `}
-                          >
-                            {transaction.status}
-                          </td>
                           <td className="py-3 px-6">
                             <button
                               onClick={() => cancleVerfy(transaction.id)}
-                              className="felx items-center justify-center w-full bg-red-100 text-red-600 h-[40px] px-2 font-semibold"
+                              className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
                             >
                               Cancle
                             </button>

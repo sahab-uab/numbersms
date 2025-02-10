@@ -149,9 +149,14 @@ const UserCreditCardPage = () => {
               <thead>
                 <tr className="bg-gray-200 text-gray-700">
                   <th className="px-4 py-2 text-left font-semibold">ID</th>
-                  <th className="px-4 py-2 text-left font-semibold">Name</th>
-                  <th className="px-4 py-2 text-left font-semibold">Credit</th>
-                  <th className="px-4 py-2 text-left font-semibold">Date</th>
+                  <th className="px-4 py-2 text-left font-semibold">NAME</th>
+                  <th className="px-4 py-2 text-left font-semibold">CREADIT</th>
+                  <th className="px-4 py-2 text-left font-semibold">GETEWAY</th>
+                  <th className="px-4 py-2 text-left font-semibold">
+                    SHARED FOR
+                  </th>
+                  <th className="px-4 py-2 text-left font-semibold">DATE</th>
+                  <th className="px-4 py-2 text-left font-semibold">STATSU</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,10 +172,25 @@ const UserCreditCardPage = () => {
                     <td className="px-4 py-2 font-semibold text-blue-600">
                       ${transaction.amount}
                     </td>
+                    <td className="px-4 py-2 font-semibold capitalize">
+                      {transaction.getway}
+                    </td>
+                    <td className="px-4 py-2 font-medium">
+                      {transaction.shared_for ? transaction.shared_for : "--"}
+                    </td>
                     <td className="px-4 py-2">
-                      {moment(transaction.updated_at).format(
-                        "MMMM Do YYYY, h:mm:ss a"
-                      )}
+                      {moment(transaction.updated_at).format("MMMM Do YYYY")}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span
+                        className={`py-1 px-4 rounded-full text-[14px] font-normal ${
+                          transaction.status
+                            ? "bg-green-100 text-green-600"
+                            : "bg-red-100 text-red-600"
+                        }`}
+                      >
+                        {transaction.status ? "complete" : "faild"}
+                      </span>
                     </td>
                   </tr>
                 ))}

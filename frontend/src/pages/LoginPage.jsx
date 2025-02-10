@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../Api/axios";
 import { loginSuccess } from "../redux/authSlice";
+import { X } from "lucide-react";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -214,9 +215,17 @@ const LoginPage = () => {
       {modalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Forgot Password
-            </h2>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-semibold text-gray-800">
+                Forgot Password
+              </h2>
+              <button
+                onClick={closeModal}
+                className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
+              >
+                <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
+              </button>
+            </div>
             <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
               <div>
                 <label
@@ -231,7 +240,7 @@ const LoginPage = () => {
                   name="forgotPasswordEmail"
                   value={forgotPasswordEmail}
                   onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 duration-700"
                   required
                 />
               </div>
@@ -245,19 +254,12 @@ const LoginPage = () => {
                 </p>
               )}
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-center items-center">
                 <button
                   type="submit"
-                  className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="py-2 w-full px-4 bg-blue-500 duration-700 text-white text-[14px] font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Submit
-                </button>
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                >
-                  Cancel
                 </button>
               </div>
             </form>

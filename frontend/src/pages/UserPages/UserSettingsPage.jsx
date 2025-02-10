@@ -3,6 +3,7 @@ import { useState } from "react";
 import axiosInstance from "../../Api/axios";
 import { toast } from "react-toastify";
 import { fetchUserProfile } from "../../redux/singleUserProfileSlice";
+import { ClipboardIcon } from "lucide-react";
 // Assuming you have an action to update user settings
 
 const UserSettingsPage = () => {
@@ -15,6 +16,7 @@ const UserSettingsPage = () => {
   const [formData, setFormData] = useState({
     name: userData?.data?.name || "",
     email: userData?.data?.email || "",
+    id: userData?.data?.id || "",
   });
 
   const [modal, setModal] = useState(false);
@@ -108,6 +110,27 @@ const UserSettingsPage = () => {
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">
         User Settings
       </h1>
+
+      <div className="mb-4">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-600"
+        >
+          User ID:
+        </label>
+        <div className="flex items-center justify-between">
+          <input
+            type="text"
+            value={formData.id}
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            readOnly
+          />
+          <button className="py-2 bg-gray-200 text-gray-600 px-4">
+            <ClipboardIcon className="w-[14px]" />
+          </button>
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
