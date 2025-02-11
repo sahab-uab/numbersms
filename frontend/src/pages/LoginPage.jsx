@@ -190,7 +190,7 @@ const LoginPage = () => {
               <p>OR</p>
             </div>
 
-            <div className="mt-6 text-sm text-center">
+            <div className="mt-5 text-sm text-center">
               <button
                 onClick={openModal}
                 className="text-[#002D74] hover:underline"
@@ -220,7 +220,7 @@ const LoginPage = () => {
                 Forgot Password
               </h2>
               <button
-                onClick={closeModal}
+                onClick={() => setModalOpen(false)}
                 className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
               >
                 <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />

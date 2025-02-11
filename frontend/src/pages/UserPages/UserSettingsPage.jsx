@@ -112,87 +112,89 @@ const UserSettingsPage = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
-      <h1 className="text-2xl font-semibold text-gray-800 mb-6">
-        User Settings
-      </h1>
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className=" max-w-lg mx-auto p-6 bg-white rounded-lg shadow-lg mt-10 ">
+        <h1 className="text-2xl font-semibold text-gray-800 mb-6">
+          User Settings
+        </h1>
 
-      <div className="mb-4">
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium text-gray-600"
-        >
-          User ID:
-        </label>
-        <div className="flex items-center justify-between">
-          <input
-            type="text"
-            value={formData.id}
-            className="mt-1 block w-full px-4 py-2 border border-r-0 rounded-e-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            readOnly
-          />
-          <button
-            onClick={copyUserId}
-            className="py-2 bg-gray-200 text-gray-600 px-4 mt-1 border border-gray-300"
-          >
-            <ClipboardIcon className="w-[14px]" />
-          </button>
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <div className="mb-4">
           <label
             htmlFor="name"
             className="block text-sm font-medium text-gray-600"
           >
-            Name:
+            User ID:
           </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="flex items-center justify-between">
+            <input
+              type="text"
+              value={formData.id}
+              className="mt-1 block w-full px-4 py-2 border border-r-0 rounded-e-none border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              readOnly
+            />
+            <button
+              onClick={copyUserId}
+              className="py-2 bg-gray-200 text-gray-600 px-4 mt-1 border border-gray-300"
+            >
+              <ClipboardIcon className="w-[14px]" />
+            </button>
+          </div>
         </div>
 
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-600"
-          >
-            Email:
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            readOnly
-            value={formData.email}
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Name:
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <div className="flex justify-center">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-600"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              readOnly
+              value={formData.email}
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Save Changes
+            </button>
+          </div>
+        </form>
+
+        {/* Password Change Button */}
+        <div className="mt-2 text-center">
           <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={handleChangePassword}
+            className="w-full py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
-            Save Changes
+            Change Password
           </button>
         </div>
-      </form>
-
-      {/* Password Change Button */}
-      <div className="mt-2 text-center">
-        <button
-          onClick={handleChangePassword}
-          className="w-full py-2 px-4 bg-gray-600 text-white font-semibold rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
-        >
-          Change Password
-        </button>
       </div>
 
       {/* Modal for Password Change */}

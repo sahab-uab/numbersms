@@ -90,7 +90,7 @@ const UserDashboardPage = () => {
           <HashLoader size={50} color="#4F46E5" loading={true} />
         </div>
       ) : (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-6 bg-gray-100 min-h-screen">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-3xl font-semibold text-gray-800">
