@@ -139,21 +139,21 @@ const UserCreditCardPage = () => {
       {error && <p className="text-red-600 text-center font-medium">{error}</p>}
 
       {/* Transactions Table */}
-      <div className="bg-white p-4 rounded-lg shadow-lg">
+      <div className="mt-6">
         {loading ? (
           <div className="flex items-center justify-center h-full w-full py-6">
             <BarLoader color="#4F46E5" loading={true} />
           </div>
         ) : currentTransactions?.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200">
+            <table className="min-w-full border border-gray-200">
               <thead>
                 <tr className="bg-gray-200 text-gray-700">
-                  <th className="px-4 py-2 text-left font-semibold">ID</th>
-                  <th className="px-4 py-2 text-left font-semibold">NAME</th>
-                  <th className="px-4 py-2 text-left font-semibold">CREADIT</th>
-                  <th className="px-4 py-2 text-left font-semibold">GETEWAY</th>
-                  <th className="px-4 py-2 text-left font-semibold">
+                  <th className="px-4 py-3 text-left font-semibold">ID</th>
+                  <th className="px-4 py-3 text-left font-semibold">NAME</th>
+                  <th className="px-4 py-3 text-left font-semibold">CREADIT</th>
+                  <th className="px-4 py-3 text-left font-semibold">GETEWAY</th>
+                  <th className="px-4 py-3 text-left font-semibold">
                     SHARED FOR
                   </th>
                   <th className="px-4 py-2 text-left font-semibold">DATE</th>
