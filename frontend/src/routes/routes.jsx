@@ -25,6 +25,7 @@ import UserSmsHistoryPage from "../pages/UserPages/UserSmsHistoryPage";
 import AdminServiceImage from "../pages/AdminPages/AdminServiceImage";
 import AdminAccountSettingsPage from "../pages/AdminPages/AdminAccountSettingsPage";
 import AdminServicePage from "../pages/AdminPages/AdminServicePage";
+import AdminDiscountPage from "../pages/AdminPages/AdminDiscountPage";
 
 export const route = createBrowserRouter([
   {
@@ -212,6 +213,14 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <AdminAccountSettingsPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/admin/add-discount",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdminDiscountPage />
           </Suspense>
         ),
       },

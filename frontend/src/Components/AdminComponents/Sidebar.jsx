@@ -70,6 +70,11 @@ const Sidebar = () => {
           label: "Add Service Image",
           link: "/admin/service-image",
         },
+        {
+          icon: Sliders,
+          label: "Add Discount",
+          link: "/admin/add-discount",
+        },
       ],
     },
     {
