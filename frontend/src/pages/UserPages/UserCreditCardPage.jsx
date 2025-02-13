@@ -9,6 +9,7 @@ import ReactPaginate from "react-paginate";
 import moment from "moment";
 import { BarLoader } from "react-spinners";
 import { X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const UserCreditCardPage = () => {
   // credit
@@ -122,12 +123,13 @@ const UserCreditCardPage = () => {
           >
             Buy Credit
           </button>
-          <button
-            onClick={() => setShareModal(true)}
+          <Link
+            to={"/user/share-credit"}
+            // onClick={() => setShareModal(true)}
             className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
           >
             Share Credit
-          </button>
+          </Link>
         </div>
       </div>
 

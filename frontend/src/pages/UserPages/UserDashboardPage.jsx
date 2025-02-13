@@ -58,31 +58,6 @@ const UserDashboardPage = () => {
     }
   };
 
-  // Handle Share Credit
-  const handleShareCredit = async (e) => {
-    e.preventDefault();
-    setLoadingShare(true);
-
-    try {
-      const response = await axiosInstance.post("/app/share-token", {
-        amount: amount,
-        email: email,
-      });
-
-      if (response.data.status === true) {
-        dispatch(fetchUserProfile(token));
-        setShareModal(false);
-      } else {
-        alert("Error: " + response.data.message);
-      }
-    } catch (err) {
-      console.error("Failed to share credit", err);
-      alert("Failed to share credit. Please try again.");
-    } finally {
-      setLoadingShare(false);
-    }
-  };
-
   return (
     <>
       {loading ? (
@@ -157,12 +132,12 @@ const UserDashboardPage = () => {
               <p className="text-gray-600 mb-4">
                 Share your credit with others easily.
               </p>
-              <button
-                onClick={() => setShareModal(true)}
+              <Link
+                to={"/user/share-credit"}
                 className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
               >
                 Share Credit
-              </button>
+              </Link>
             </div>
 
             {/* Action 3 */}

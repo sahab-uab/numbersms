@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const StickyNavbar = () => {
-  const [isVisible, setIsVisible] = useState(true); // Navbar visibility
-  const [lastScrollY, setLastScrollY] = useState(0); // Last scroll position
-  const [isScrolled, setIsScrolled] = useState(false); // Background color toggle
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { token, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,52 +63,78 @@ const StickyNavbar = () => {
         </div>
 
         {/* Navigation Links */}
-        <div className="hidden md:flex space-x-6">
-          <a
+        <div className="hidden md:flex gap-5">
+          <Link
             href="#solutions"
             className={`transition ${
               isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
             }`}
           >
             Solutions
-          </a>
-          <a
+          </Link>
+          <Link
             href="#pricing"
             className={`transition ${
               isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
             }`}
           >
-            Pricing
-          </a>
-          <a
-            href="#help"
+            About
+          </Link>
+          <Link
+            to={"/services"}
             className={`transition ${
               isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
             }`}
           >
-            Help
-          </a>
-          <a
-            href="#contact"
+            services
+          </Link>
+          <Link
+            to={"/contact"}
             className={`transition ${
               isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
             }`}
           >
             Contact
-          </a>
+          </Link>
         </div>
 
         {/* Button */}
-        <div>
-          <button
-            className={`py-2 px-6 rounded-lg font-semibold transition ${
-              isScrolled
-                ? "bg-purple-600 text-white hover:bg-purple-500"
-                : "bg-white text-purple-600 hover:bg-gray-100"
-            }`}
-          >
-            Get started
-          </button>
+        <div className="navbar-end flex gap-5">
+          {token ? (
+            <div>
+              {user?.role === "user" ? (
+                <Link
+                  to={"/user/dashboard"}
+                  className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  to={"/admin/dashboard"}
+                  className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link
+                to={"/login"}
+                className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+              >
+                Log-in
+              </Link>
+
+              <Link
+                to={"/sign-up"}
+                className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
+              >
+                Sign-up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -26,6 +26,7 @@ import AdminServiceImage from "../pages/AdminPages/AdminServiceImage";
 import AdminAccountSettingsPage from "../pages/AdminPages/AdminAccountSettingsPage";
 import AdminServicePage from "../pages/AdminPages/AdminServicePage";
 import AdminDiscountPage from "../pages/AdminPages/AdminDiscountPage";
+import UserShareCredirtPage from "../pages/UserPages/UserShareCredirtPage";
 
 export const route = createBrowserRouter([
   {
@@ -135,6 +136,14 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <UserSmsHistoryPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/user/share-credit",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <UserShareCredirtPage />
           </Suspense>
         ),
       },

@@ -68,7 +68,6 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
             id: verifactionData?.data?.id,
           })
           .then((res) => {
-            console.log(res.data.data);
             if (res.data.status) {
               let smsContent = res?.data?.data;
 
@@ -78,6 +77,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
             }
             if (res.data.status == true) {
               clearInterval(intervalId);
+              dispatch(UserSmsFetching());
             }
           });
       } catch (error) {
@@ -87,7 +87,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
 
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
-  }, [verifactionData]);
+  }, [verifactionData, dispatch]);
   const formatTimeLeft = () => {
     const minutes = Math.floor(timeLeft / 60000);
     const seconds = Math.floor((timeLeft % 60000) / 1000);
