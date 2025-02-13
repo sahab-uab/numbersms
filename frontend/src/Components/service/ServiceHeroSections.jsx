@@ -4,13 +4,13 @@ const ServiceHeroSections = () => {
   return (
     <div className="wrapper flex flex-col lg:flex-row items-center justify-center bg-[#F5F5FF] overflow-hidden p-10 gap-5">
       <div className="flex flex-col gap-3">
-        <span className="text-purple-600 text-sm font-bold uppercase">
+        <span className="signika text-purple-600 text-sm font-bold uppercase">
           Intuitive Dashboard
         </span>
-        <h2 className="text-3xl font-extrabold text-gray-900 mt-4">
+        <h2 className="text-3xl font-extrabold text-gray-900 mt-4 signika">
           Smart insights, better business strategy
         </h2>
-        <p className="text-[#4C4C47] text-[18px]">
+        <p className="text-[#4C4C47] text-[18px] rubik">
           Visualize data, track sales, and analyze customer behavior, empowering
           you to make informed decisions.
         </p>

@@ -15,7 +15,7 @@ const CurvedBackground = ({
       }}
     >
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-5xl font-extrabold text-center">
+        <h1 className="signika text-5xl font-extrabold text-center ">
           <span className="relative inline-block">
             {/* Main Heading */}
             {heading && (
@@ -30,7 +30,7 @@ const CurvedBackground = ({
         </h1>
 
         {/* Subtitle */}
-        <p className="my-10 text-[18px] text-center leading-7 text-gray-200 w-1/2">
+        <p className="rubik my-10 text-[18px] text-center leading-7 text-gray-200 w-1/2">
           {subtitle}
         </p>
       </div>

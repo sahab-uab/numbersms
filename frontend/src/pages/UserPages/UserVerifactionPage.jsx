@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UserSmsFetching } from "../../redux/getUserSmsHistorySlice";
 import { allServicFetching } from "../../redux/getServiceSlice";
-import { PinIcon, X } from "lucide-react";
-import { addToPin } from "../../redux/pinnedSlice";
+import { PinIcon, X, PinOff } from "lucide-react";
+import { addToPin, removeTopin } from "../../redux/pinnedSlice";
 import axiosInstance from "../../Api/axios";
 import SmsVerificationModal from "../../Components/AdminComponents/SmsVerificationModal";
 import moment from "moment";
@@ -20,6 +20,8 @@ const UserVerificationPage = () => {
   const [dataLoading, setDataLoading] = useState(false);
 
   const { smsUser, status } = useSelector((state) => state.smsHistory);
+  const { pinedItems } = useSelector((state) => state.pinedItems);
+  console.log(pinedItems);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
@@ -56,6 +58,9 @@ const UserVerificationPage = () => {
 
   const addToPinFuntion = (service) => {
     dispatch(addToPin(service));
+  };
+  const addTodeleteFuntion = (service) => {
+    dispatch(removeTopin(service));
   };
 
   const createVerification = async (service) => {
@@ -251,6 +256,55 @@ const UserVerificationPage = () => {
                     />
                   </div>
 
+                  {pinedItems.length > 0 && (
+                    <div className="h-40 overflow-y-auto  bg-gray-100 rounded-lg mb-4 border-b-2">
+                      <span className="flex items-center justify-center py-4 uppercase text-gray-800 font-semibold">
+                        Pinned Items
+                      </span>
+                      <ul>
+                        {pinedItems.length > 0 &&
+                          pinedItems.map((service, index) => (
+                            <li
+                              key={index}
+                              className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-300 items-center py-3 border-b border-gray-200"
+                            >
+                              <button
+                                onClick={() => createVerification(service)}
+                                className="flex gap-2"
+                              >
+                                {service.image ? (
+                                  <img
+                                    src={service.image}
+                                    alt=""
+                                    className="w-8 h-8 object-cover rounded-full"
+                                  />
+                                ) : (
+                                  <img
+                                    src={
+                                      "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
+                                    }
+                                    alt=""
+                                    className="w-8 h-8 object-cover rounded-full"
+                                  />
+                                )}
+
+                                <span>{service.service}</span>
+                              </button>
+                              <div className="text-gray-600">
+                                ${service.selling_price}
+                              </div>
+                              <button
+                                onClick={() => addTodeleteFuntion(service)}
+                                className="text-gray-600 flex items-center justify-end"
+                              >
+                                <PinOff />
+                              </button>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  )}
+
                   <div className="h-72 overflow-y-auto  bg-gray-100 rounded-lg">
                     <ul>
                       {filteredServices?.length > 0 ? (
@@ -285,7 +339,7 @@ const UserVerificationPage = () => {
                               ${service.selling_price}
                             </div>
                             <button
-                              onClick={() => addToPinFuntion(service.id)}
+                              onClick={() => addToPinFuntion(service)}
                               className="text-gray-600 flex items-center justify-end"
                             >
                               <PinIcon />

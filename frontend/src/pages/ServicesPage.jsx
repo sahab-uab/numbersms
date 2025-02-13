@@ -1,6 +1,7 @@
 import React from "react";
 import CurvedBackground from "../Components/Contract/CurvedBackground";
 import ServiceHeroSections from "../Components/service/ServiceHeroSections";
+import ServiceSecendSection from "../Components/service/ServiceSecendSection";
 
 const ServicesPage = () => {
   const backgroundData = {
@@ -17,6 +18,8 @@ const ServicesPage = () => {
       <div className="mb-52 min-h-screen">
         <CurvedBackground {...backgroundData} />
       </div>
+
+      <ServiceSecendSection />
     </div>
   );
 };

@@ -8,17 +8,20 @@ const initialState = {
 };
 
 const pinedSlice = createSlice({
-  name: "cart",
+  name: "pined",
   initialState,
   reducers: {
     addToPin(state, action) {
-      const existedItemIndex = state.cartItems.findIndex(
+      const existedItemIndex = state.pinedItems.findIndex(
         (item) => item.id === action.payload.id
       );
 
-      // if exist
-      if (existedItemIndex >= 0) {
-        toast.info("Service Already Pined", {
+      // If item doesn't exist, add to the pinedItems
+      if (existedItemIndex === -1) {
+        const assembledItem = action.payload;
+        state.pinedItems.unshift(assembledItem);
+
+        toast.success("Service pinned into cart!", {
           position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
@@ -28,12 +31,13 @@ const pinedSlice = createSlice({
           progress: undefined,
           theme: "light",
         });
-      } else {
-        // add to cart
-        const assembledItem = { ...action.payload };
-        state.cartItems.push(assembledItem);
 
-        toast.success("Service pined into cart!", {
+        localStorage.setItem(
+          "pinnedServices",
+          JSON.stringify(state.pinedItems)
+        );
+      } else {
+        toast.warning("Service Already Pined", {
           position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
@@ -44,10 +48,35 @@ const pinedSlice = createSlice({
           theme: "light",
         });
       }
-      localStorage.setItem("pinnedServices", JSON.stringify(state.pinedItems));
+    },
+    removeTopin(state, action) {
+      const existedItemIndex = state.pinedItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      // If item exist, remove from the pinedItems
+      if (existedItemIndex !== -1) {
+        state.pinedItems.splice(existedItemIndex, 1);
+
+        toast.error("Service removed from cart!", {
+          position: "bottom-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+
+        localStorage.setItem(
+          "pinnedServices",
+          JSON.stringify(state.pinedItems)
+        );
+      }
     },
   },
 });
 
-export const { addToPin } = pinedSlice.actions;
+export const { addToPin, removeTopin } = pinedSlice.actions;
 export default pinedSlice.reducer;

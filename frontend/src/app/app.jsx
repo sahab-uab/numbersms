@@ -21,6 +21,7 @@ import UserSmsSlice from "../redux/getUserSmsHistorySlice";
 import allServiceSlice from "../redux/getServiceSlice";
 import AdminMessageUsagesSlice from "../redux/adminMessageUsage";
 import AdminBlanceSlice from "../redux/adminBlance";
+import pinedSlice from "../redux/pinnedSlice";
 
 const persistConfig = {
   key: "auth",
@@ -40,7 +41,8 @@ const rootReducer = combineReducers({
   smsHistory: UserSmsSlice,
   service: allServiceSlice,
   smsusagesdata: AdminMessageUsagesSlice,
-  adminblance: AdminBlanceSlice
+  pinedItems: pinedSlice,
+  adminblance: AdminBlanceSlice,
 });
 
 export const store = configureStore({
