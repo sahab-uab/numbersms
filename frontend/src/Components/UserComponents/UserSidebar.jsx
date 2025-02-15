@@ -20,7 +20,7 @@ const UserSidebar = () => {
 
   return (
     <div>
-      <aside className="w-64 bg-white shadow-md rounded-lg h-screen">
+      <aside className="w-64 h-scree">
         <div className="mt-6 p-4">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Menu</h2>
           <div className="flex flex-col gap-2">
