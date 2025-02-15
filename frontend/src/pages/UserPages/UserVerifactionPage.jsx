@@ -109,22 +109,6 @@ const UserVerificationPage = () => {
     setReVerifactionData(id);
   };
 
-  // calculate time
-  const calculateTimeLeft = (data) => {
-    let jsonParsData = {};
-    if (data) {
-      jsonParsData = JSON.parse(data);
-    }
-    const now = new Date().getTime();
-    const endTime = new Date(jsonParsData.endsAt).getTime();
-    let cal = endTime - now;
-    if (cal > 0) {
-      return true;
-    }else{
-      return false
-    }
-  };
-
   return (
     <div className="p-6 bg-gray-100 min-h-screen overflow-y-auto">
       <div className="py-6">
@@ -208,7 +192,7 @@ const UserVerificationPage = () => {
                           </td>
                           <td className="py-3 px-6">
                             <div className="flex flex-col items-center gap-y-2">
-                              {transaction.status === "pending" && calculateTimeLeft(transaction.sms_data) ? (
+                              {transaction.status === "pending" ? (
                                 <button
                                   onClick={() => reOpen(transaction.id)}
                                   className="felx items-center justify-center w-full bg-blue-100 text-blue-700 h-[35px] px-4 font-normal"
