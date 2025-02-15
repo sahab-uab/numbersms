@@ -207,7 +207,7 @@ const UserVerificationPage = () => {
                                   onClick={() => cancleVerfy(transaction.id)}
                                   className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
                                 >
-                                  Cancle
+                                  Cancel
                                 </button>
                               ) : (
                                 <>--</>
