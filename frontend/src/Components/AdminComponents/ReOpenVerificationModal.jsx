@@ -198,7 +198,7 @@ const ReOpenVerificationModal = ({ verifactionData, setNewModal }) => {
                     {formatTimeLeft() === "0:00" && !otp ? (
                       <>Timeout</>
                     ) : (
-                      <>complet</>
+                      <>Complete</>
                     )}
                   </p>
                 )}

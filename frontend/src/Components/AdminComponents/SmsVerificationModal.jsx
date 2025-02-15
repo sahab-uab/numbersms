@@ -150,7 +150,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
                 </button>
               </>
             ) : (
-              <p className="text-center w-full">complet</p>
+              <p className="text-center w-full">Complete</p>
             )}
           </div>
         </div>
