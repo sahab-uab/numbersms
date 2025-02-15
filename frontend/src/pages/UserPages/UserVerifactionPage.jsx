@@ -39,7 +39,7 @@ const UserVerificationPage = () => {
     indexOfLastTransaction
   );
 
-  const { service } = useSelector((state) => state.service);
+  const { service, loading } = useSelector((state) => state.service);
 
   const [verifactionData, setVerifactionData] = useState(null);
   const [reVerifactionData, setReVerifactionData] = useState(null);
@@ -321,49 +321,58 @@ const UserVerificationPage = () => {
                             </button>
                           </li>
                         ))}
-                      {filteredServices?.length > 0 ? (
-                        filteredServices.map((service, index) => (
-                          <li
-                            key={index}
-                            className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-100 items-center py-3 border-b border-gray-200"
-                          >
-                            <button
-                              onClick={() => createVerification(service)}
-                              className="flex gap-2"
-                            >
-                              {service.image ? (
-                                <img
-                                  src={service.image}
-                                  alt=""
-                                  className="w-8 h-8 object-cover rounded-full"
-                                />
-                              ) : (
-                                <img
-                                  src={
-                                    "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
-                                  }
-                                  alt=""
-                                  className="w-8 h-8 object-cover rounded-full"
-                                />
-                              )}
 
-                              <span>{service.service}</span>
-                            </button>
-                            <div className="text-gray-600">
-                              ${service.selling_price}
-                            </div>
-                            <button
-                              onClick={() => addToPinFuntion(service)}
-                              className="text-gray-600 flex items-center justify-end"
-                            >
-                              <Star className="text-yellow-400 w-[20px]" />
-                            </button>
-                          </li>
-                        ))
+                      {loading ? (
+                        <div className="w-full text-center">
+                          <PulseLoader />
+                        </div>
                       ) : (
-                        <li className="text-center py-2 text-gray-600">
-                          No services found
-                        </li>
+                        <>
+                          {filteredServices?.length > 0 ? (
+                            filteredServices.map((service, index) => (
+                              <li
+                                key={index}
+                                className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-100 items-center py-3 border-b border-gray-200"
+                              >
+                                <button
+                                  onClick={() => createVerification(service)}
+                                  className="flex gap-2"
+                                >
+                                  {service.image ? (
+                                    <img
+                                      src={service.image}
+                                      alt=""
+                                      className="w-8 h-8 object-cover rounded-full"
+                                    />
+                                  ) : (
+                                    <img
+                                      src={
+                                        "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
+                                      }
+                                      alt=""
+                                      className="w-8 h-8 object-cover rounded-full"
+                                    />
+                                  )}
+
+                                  <span>{service.service}</span>
+                                </button>
+                                <div className="text-gray-600">
+                                  ${service.selling_price}
+                                </div>
+                                <button
+                                  onClick={() => addToPinFuntion(service)}
+                                  className="text-gray-600 flex items-center justify-end"
+                                >
+                                  <Star className="text-yellow-400 w-[20px]" />
+                                </button>
+                              </li>
+                            ))
+                          ) : (
+                            <li className="text-center py-2 text-gray-600">
+                              No services found
+                            </li>
+                          )}
+                        </>
                       )}
                     </ul>
                   </div>

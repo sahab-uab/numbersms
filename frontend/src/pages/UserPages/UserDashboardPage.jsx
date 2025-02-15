@@ -60,7 +60,7 @@ const UserDashboardPage = () => {
 
   return (
     <>
-      {loading ? (
+      {!token && loading ? (
         <div className="flex items-center justify-center h-screen w-full">
           <HashLoader size={50} color="#4F46E5" loading={true} />
         </div>
