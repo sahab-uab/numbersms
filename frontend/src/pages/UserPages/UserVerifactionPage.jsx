@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { UserSmsFetching } from "../../redux/getUserSmsHistorySlice";
 import { allServicFetching } from "../../redux/getServiceSlice";
-import { PinIcon, X, PinOff } from "lucide-react";
+import { X, Star, StarOff } from "lucide-react";
 import { addToPin, removeTopin } from "../../redux/pinnedSlice";
 import axiosInstance from "../../Api/axios";
 import SmsVerificationModal from "../../Components/AdminComponents/SmsVerificationModal";
@@ -21,7 +21,6 @@ const UserVerificationPage = () => {
 
   const { smsUser, status } = useSelector((state) => state.smsHistory);
   const { pinedItems } = useSelector((state) => state.pinedItems);
-  console.log(pinedItems);
 
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
@@ -97,7 +96,7 @@ const UserVerificationPage = () => {
         });
       dispatch(UserSmsFetching());
     } catch (error) {
-      toast.error("Server Error");
+      toast.error("Server Error" + error);
     }
   };
 
@@ -179,16 +178,25 @@ const UserVerificationPage = () => {
                             )}
                           </td>
                           <td className="py-3 px-6">
-                            {transaction.status === "pending" ? (
-                              <button
-                                onClick={() => cancleVerfy(transaction.id)}
-                                className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
-                              >
-                                Cancle
-                              </button>
-                            ) : (
-                              <>--</>
-                            )}
+                            <div className="flex flex-col items-center gap-y-2">
+                              {transaction.status === "pending" ? (
+                                <button className="felx items-center justify-center w-full bg-blue-100 text-blue-700 h-[35px] px-4 font-normal">
+                                  Open
+                                </button>
+                              ) : (
+                                <>--</>
+                              )}
+                              {transaction.status === "pending" ? (
+                                <button
+                                  onClick={() => cancleVerfy(transaction.id)}
+                                  className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
+                                >
+                                  Cancle
+                                </button>
+                              ) : (
+                                <>--</>
+                              )}
+                            </div>
                           </td>
                         </tr>
                       ))
@@ -223,7 +231,7 @@ const UserVerificationPage = () => {
 
       {modal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[450px]">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[450px] max-h-[80%] min-h-fit">
             {dataLoading ? (
               <>
                 <div className="w-full text-center">
@@ -256,62 +264,52 @@ const UserVerificationPage = () => {
                     />
                   </div>
 
-                  {pinedItems.length > 0 && (
-                    <div className="h-40 overflow-y-auto  bg-gray-100 rounded-lg mb-4 border-b-2">
-                      <span className="flex items-center justify-center py-4 uppercase text-gray-800 font-semibold">
-                        Pinned Items
-                      </span>
-                      <ul>
-                        {pinedItems.length > 0 &&
-                          pinedItems.map((service, index) => (
-                            <li
-                              key={index}
-                              className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-300 items-center py-3 border-b border-gray-200"
-                            >
-                              <button
-                                onClick={() => createVerification(service)}
-                                className="flex gap-2"
-                              >
-                                {service.image ? (
-                                  <img
-                                    src={service.image}
-                                    alt=""
-                                    className="w-8 h-8 object-cover rounded-full"
-                                  />
-                                ) : (
-                                  <img
-                                    src={
-                                      "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
-                                    }
-                                    alt=""
-                                    className="w-8 h-8 object-cover rounded-full"
-                                  />
-                                )}
-
-                                <span>{service.service}</span>
-                              </button>
-                              <div className="text-gray-600">
-                                ${service.selling_price}
-                              </div>
-                              <button
-                                onClick={() => addTodeleteFuntion(service)}
-                                className="text-gray-600 flex items-center justify-end"
-                              >
-                                <PinOff />
-                              </button>
-                            </li>
-                          ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  <div className="h-72 overflow-y-auto  bg-gray-100 rounded-lg">
+                  <div className="h-72 overflow-y-auto bg-gray-50 rounded-lg">
                     <ul>
+                      {pinedItems.length > 0 &&
+                        pinedItems.map((service, index) => (
+                          <li
+                            key={index}
+                            className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-100 items-center py-3 border-b border-gray-200"
+                          >
+                            <button
+                              onClick={() => createVerification(service)}
+                              className="flex gap-2"
+                            >
+                              {service.image ? (
+                                <img
+                                  src={service.image}
+                                  alt=""
+                                  className="w-8 h-8 object-cover rounded-full"
+                                />
+                              ) : (
+                                <img
+                                  src={
+                                    "https://static.vecteezy.com/system/resources/previews/002/212/346/original/line-icon-for-demo-vector.jpg"
+                                  }
+                                  alt=""
+                                  className="w-8 h-8 object-cover rounded-full"
+                                />
+                              )}
+
+                              <span>{service.service}</span>
+                            </button>
+                            <div className="text-gray-600">
+                              ${service.selling_price}
+                            </div>
+                            <button
+                              onClick={() => addTodeleteFuntion(service)}
+                              className="text-gray-600 flex items-center justify-end"
+                            >
+                              <StarOff className="text-yellow-400 w-[20px]"/>
+                            </button>
+                          </li>
+                        ))}
                       {filteredServices?.length > 0 ? (
                         filteredServices.map((service, index) => (
                           <li
                             key={index}
-                            className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-300 items-center py-3 border-b border-gray-200"
+                            className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-100 items-center py-3 border-b border-gray-200"
                           >
                             <button
                               onClick={() => createVerification(service)}
@@ -342,7 +340,7 @@ const UserVerificationPage = () => {
                               onClick={() => addToPinFuntion(service)}
                               className="text-gray-600 flex items-center justify-end"
                             >
-                              <PinIcon />
+                              <Star className="text-yellow-400 w-[20px]"/>
                             </button>
                           </li>
                         ))
