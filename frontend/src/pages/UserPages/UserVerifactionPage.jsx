@@ -163,7 +163,7 @@ const UserVerificationPage = () => {
                           </td>
                           <td className={`py-1 px-3`}>
                             <span
-                              className={`rounded-full px-3 py-1
+                              className={`rounded-full px-3 py-1 capitalize
                                 ${
                                   transaction.status == "pending" &&
                                   "text-yellow-500 bg-yellow-100"
@@ -195,7 +195,7 @@ const UserVerificationPage = () => {
                               {transaction.status === "pending" ? (
                                 <button
                                   onClick={() => reOpen(transaction.id)}
-                                  className="felx items-center justify-center w-full bg-blue-100 text-blue-700 h-[35px] px-4 font-normal"
+                                  className="felx items-center capitalize justify-center w-full bg-blue-100 text-blue-700 h-[35px] px-4 font-normal"
                                 >
                                   Open
                                 </button>
@@ -205,7 +205,7 @@ const UserVerificationPage = () => {
                               {transaction.status === "pending" ? (
                                 <button
                                   onClick={() => cancleVerfy(transaction.id)}
-                                  className="felx items-center justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
+                                  className="felx items-center capitalize justify-center w-full bg-red-100 text-red-700 h-[35px] px-4 font-normal"
                                 >
                                   Cancel
                                 </button>
