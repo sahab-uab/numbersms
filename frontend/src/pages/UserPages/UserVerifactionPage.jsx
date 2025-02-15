@@ -10,12 +10,14 @@ import moment from "moment";
 import ReactPaginate from "react-paginate";
 import { PulseLoader, BarLoader } from "react-spinners";
 import { toast } from "react-toastify";
+import ReOpenVerificationModal from "../../Components/AdminComponents/ReOpenVerificationModal";
 
 const UserVerificationPage = () => {
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
   const [newModal, setNewModal] = useState(false);
+  const [reModal, setReModal] = useState(false);
 
   const [dataLoading, setDataLoading] = useState(false);
 
@@ -40,6 +42,7 @@ const UserVerificationPage = () => {
   const { service } = useSelector((state) => state.service);
 
   const [verifactionData, setVerifactionData] = useState(null);
+  const [reVerifactionData, setReVerifactionData] = useState(null);
 
   useEffect(() => {
     dispatch(UserSmsFetching());
@@ -97,6 +100,28 @@ const UserVerificationPage = () => {
       dispatch(UserSmsFetching());
     } catch (error) {
       toast.error("Server Error" + error);
+    }
+  };
+
+  // reopen model
+  const reOpen = async (id) => {
+    setReModal(true);
+    setReVerifactionData(id);
+  };
+
+  // calculate time
+  const calculateTimeLeft = (data) => {
+    let jsonParsData = {};
+    if (data) {
+      jsonParsData = JSON.parse(data);
+    }
+    const now = new Date().getTime();
+    const endTime = new Date(jsonParsData.endsAt).getTime();
+    let cal = endTime - now;
+    if (cal > 0) {
+      return true;
+    }else{
+      return false
     }
   };
 
@@ -179,8 +204,11 @@ const UserVerificationPage = () => {
                           </td>
                           <td className="py-3 px-6">
                             <div className="flex flex-col items-center gap-y-2">
-                              {transaction.status === "pending" ? (
-                                <button className="felx items-center justify-center w-full bg-blue-100 text-blue-700 h-[35px] px-4 font-normal">
+                              {transaction.status === "pending" && calculateTimeLeft(transaction.sms_data) ? (
+                                <button
+                                  onClick={() => reOpen(transaction.id)}
+                                  className="felx items-center justify-center w-full bg-blue-100 text-blue-700 h-[35px] px-4 font-normal"
+                                >
                                   Open
                                 </button>
                               ) : (
@@ -301,7 +329,7 @@ const UserVerificationPage = () => {
                               onClick={() => addTodeleteFuntion(service)}
                               className="text-gray-600 flex items-center justify-end"
                             >
-                              <StarOff className="text-yellow-400 w-[20px]"/>
+                              <StarOff className="text-yellow-400 w-[20px]" />
                             </button>
                           </li>
                         ))}
@@ -340,7 +368,7 @@ const UserVerificationPage = () => {
                               onClick={() => addToPinFuntion(service)}
                               className="text-gray-600 flex items-center justify-end"
                             >
-                              <Star className="text-yellow-400 w-[20px]"/>
+                              <Star className="text-yellow-400 w-[20px]" />
                             </button>
                           </li>
                         ))
@@ -362,6 +390,13 @@ const UserVerificationPage = () => {
         <SmsVerificationModal
           verifactionData={verifactionData}
           setNewModal={setNewModal}
+        />
+      )}
+
+      {reModal && (
+        <ReOpenVerificationModal
+          verifactionData={reVerifactionData}
+          setNewModal={setReModal}
         />
       )}
     </div>
