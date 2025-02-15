@@ -192,6 +192,10 @@ const UserVerificationPage = () => {
                                 transaction.status == "canceled" &&
                                 "text-red-500 bg-red-100"
                               }
+                              ${
+                                transaction.status == "timeout" &&
+                                "text-red-500 bg-red-100"
+                              }
                           `}
                             >
                               {transaction.status}
