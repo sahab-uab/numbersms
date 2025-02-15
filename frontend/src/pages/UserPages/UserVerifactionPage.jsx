@@ -166,19 +166,19 @@ const UserVerificationPage = () => {
                               className={`rounded-full px-3 py-1 capitalize
                                 ${
                                   transaction.status == "pending" &&
-                                  "text-yellow-500 bg-yellow-100"
+                                  "text-yellow-500 "
                                 }
                               ${
                                 transaction.status == "complete" &&
-                                "text-green-500 bg-green-100"
+                                "text-green-500 "
                               }
                               ${
                                 transaction.status == "canceled" &&
-                                "text-red-500 bg-red-100"
+                                "text-red-500 "
                               }
                               ${
                                 transaction.status == "timeout" &&
-                                "text-red-500 bg-red-100"
+                                "text-red-500 "
                               }
                           `}
                             >

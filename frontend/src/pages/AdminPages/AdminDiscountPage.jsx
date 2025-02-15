@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../Api/axios";
 import { toast } from "react-toastify";
+import { HashLoader } from "react-spinners";
 
 const AdminDiscountPage = () => {
   const [discounts, setDiscounts] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const [discountValue, setDiscountValue] = useState(0);
 
   useEffect(() => {
+    setLoading(true);
     axiosInstance
       .get("/admin/discount-manegar/get")
       .then((res) => {
@@ -15,9 +18,11 @@ const AdminDiscountPage = () => {
           setDiscountValue(res?.data?.data?.discount);
         }
         setDiscounts(res.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching discount data:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -46,34 +51,42 @@ const AdminDiscountPage = () => {
       <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
         Add Discount
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label
-            htmlFor="discountValue"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Discount Value
-          </label>
-          <input
-            type="number"
-            id="discountValue"
-            value={discountValue}
-            onChange={(e) => setDiscountValue(e.target.value)}
-            required
-            placeholder="Enter discount value"
-            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+      {loading ? (
+        <>
+          <div className="flex items-center justify-center h-screen w-full">
+            <HashLoader size={50} color="#4F46E5" loading={true} />
+          </div>
+        </>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="discountValue"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Discount Value
+            </label>
+            <input
+              type="number"
+              id="discountValue"
+              value={discountValue}
+              onChange={(e) => setDiscountValue(e.target.value)}
+              required
+              placeholder="Enter discount value"
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            Add Discount
-          </button>
-        </div>
-      </form>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            >
+              Add Discount
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

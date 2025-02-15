@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const StickyNavbar = () => {
@@ -117,6 +117,10 @@ const StickyNavbar = () => {
                   Dashboard
                 </Link>
               )}
+
+              {/* <button className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out">
+                Logout
+              </button> */}
             </div>
           ) : (
             <>

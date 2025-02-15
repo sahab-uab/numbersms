@@ -277,7 +277,7 @@ const UserCreditCardPage = () => {
               {/* Payment Gateway Options */}
               <label className="block text-gray-700 font-medium mt-4">
                 Payment Gateway:
-                <div className="mt-2 flex items-center gap-x-2 justify-between">
+                <div className="mt-2 flex flex-col items-center gap-x-2 justify-between">
                   <label className="inline-flex duration-300 hover:bg-gray-200 items-center mr-4 bg-gray-100 rounded-md px-3 py-2 w-full">
                     <input
                       type="radio"
@@ -296,7 +296,7 @@ const UserCreditCardPage = () => {
                       onChange={(e) => setGateway(e.target.value)}
                       className="form-radio h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-400"
                     />
-                    <span className="ml-2">Stripe</span>
+                    <span className="ml-2 capitalize">debit/credit card</span>
                   </label>
                 </div>
               </label>
