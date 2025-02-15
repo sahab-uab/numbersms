@@ -117,6 +117,12 @@ const ReOpenVerificationModal = ({ verifactionData, setNewModal }) => {
     }
   };
 
+  useEffect(() => {
+    if (formatTimeLeft() === "0:00") {
+      dispatch(UserSmsFetching());
+    }
+  }, [newData]);
+
   //   get services from redux
   useEffect(() => {
     const fetchData = async () => {
@@ -189,7 +195,11 @@ const ReOpenVerificationModal = ({ verifactionData, setNewModal }) => {
                         : "text-green-500"
                     }`}
                   >
-                    {formatTimeLeft() === "0:00" && !otp ? <>Timeout</> : <>complet</>}
+                    {formatTimeLeft() === "0:00" && !otp ? (
+                      <>Timeout</>
+                    ) : (
+                      <>complet</>
+                    )}
                   </p>
                 )}
               </div>
