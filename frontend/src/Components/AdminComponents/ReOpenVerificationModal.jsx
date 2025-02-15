@@ -184,12 +184,12 @@ const ReOpenVerificationModal = ({ verifactionData, setNewModal }) => {
                 ) : (
                   <p
                     className={`text-center w-full font-semibold uppercase text-[14px] ${
-                      formatTimeLeft() === "0:00"
+                      formatTimeLeft() === "0:00" && !otp
                         ? "text-red-500"
                         : "text-green-500"
                     }`}
                   >
-                    {formatTimeLeft() === "0:00" ? <>Timeout</> : <>complet</>}
+                    {formatTimeLeft() === "0:00" && !otp ? <>Timeout</> : <>complet</>}
                   </p>
                 )}
               </div>
