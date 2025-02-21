@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { UserSmsFetching } from "../../redux/getUserSmsHistorySlice";
 import { useDispatch } from "react-redux";
 
-const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
+const SmsVerificationModal = ({ verifactionData, setNewModal, newModal }) => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [smsNumber, setSmsNumber] = useState(
     `${verifactionData?.data?.data?.number}`
@@ -16,6 +16,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
   const [loading, setLoading] = useState(false);
 
   const [otp, setOtp] = useState(null);
+  const [code, setCode] = useState(null);
   // Function to calculate time left
   const calculateTimeLeft = () => {
     const now = new Date().getTime();
@@ -40,6 +41,11 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
   const handleCopyClick = () => {
     navigator.clipboard.writeText(smsNumber);
     toast.success("Number copied to clipboard");
+  };
+
+  const copyCode = (code) => {
+    navigator.clipboard.writeText(code);
+    toast.success("Code copied to clipboard");
   };
 
   useEffect(() => {
@@ -70,12 +76,19 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
           .then((res) => {
             if (res.data.status) {
               let smsContent = res?.data?.data;
+              let smsCode = res?.data?.otp;
 
-              if (smsContent) {
+              if (smsContent && smsCode) {
                 setOtp(smsContent);
+                setCode(smsCode);
               }
             }
             if (res.data.status == true) {
+              clearInterval(intervalId);
+              dispatch(UserSmsFetching());
+            }
+
+            if (newModal == false) {
               clearInterval(intervalId);
               dispatch(UserSmsFetching());
             }
@@ -83,12 +96,12 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
       } catch (error) {
         console.error("Error fetching OTP:", error);
       }
-    }, 1000);
+    }, 2000);
 
     // Clean up the interval on component unmount
     return () => clearInterval(intervalId);
   }, [verifactionData, dispatch]);
-  
+
   const formatTimeLeft = () => {
     const minutes = Math.floor(timeLeft / 60000);
     const seconds = Math.floor((timeLeft % 60000) / 1000);
@@ -144,7 +157,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
                 <span className="text-gray-800">+1 {smsNumber}</span>
                 <button
                   onClick={handleCopyClick}
-                  className="ml-2 text-blue-500 border-l border-gray-400 pl-3"
+                  className="ml-2 text-blue-500 border-l border-gray-300 pl-3"
                 >
                   Copy
                 </button>
@@ -166,7 +179,7 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
         </div>
 
         {/* Warning Message */}
-        <div className="bg-yellow-100 p-3 rounded-lg mb-4 text-yellow-700">
+        <div className="bg-gray-50 p-3 rounded-lg mb-4 text-gray-950">
           {!otp ? (
             <p>
               Please request only one code. Multiple requests may result in
@@ -176,6 +189,24 @@ const SmsVerificationModal = ({ verifactionData, setNewModal }) => {
             <p>{otp}</p>
           )}
         </div>
+
+        {/* opt */}
+        {code && (
+          <div className="flex items-center justify-between h-[40px] px-3 bg-gray-100 rounded-lg border border-gray-100">
+            <input
+              type="text"
+              readOnly
+              value={code}
+              className="w-full bg-transparent text-gray-950 outline-none text-base"
+            />
+            <button
+              onClick={() => copyCode(code)}
+              className="text-blue-500 border-l border-gray-300 pl-4"
+            >
+              Copy
+            </button>
+          </div>
+        )}
 
         {!otp && (
           <button

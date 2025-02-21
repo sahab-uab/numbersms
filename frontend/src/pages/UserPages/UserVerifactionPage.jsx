@@ -66,6 +66,7 @@ const UserVerificationPage = () => {
   };
 
   const createVerification = async (service) => {
+    console.log(service);
     try {
       setDataLoading(true);
       const formData = new FormData();
@@ -78,11 +79,17 @@ const UserVerificationPage = () => {
         },
       });
 
-      setVerifactionData(response.data);
-      setDataLoading(false);
-      setModal(false);
+      if (response.data.status === false) {
+        setNewModal(false);
+        toast.error(response.data.message);
+        setDataLoading(false);
+      } else {
+        setVerifactionData(response.data);
+        setDataLoading(false);
+        setModal(false);
+        setNewModal(true);
+      }
       dispatch(UserSmsFetching());
-      setNewModal(true);
     } catch (error) {
       console.error("Error occurred:", error);
     }
@@ -387,6 +394,7 @@ const UserVerificationPage = () => {
         <SmsVerificationModal
           verifactionData={verifactionData}
           setNewModal={setNewModal}
+          newModal={newModal}
         />
       )}
 
@@ -394,6 +402,7 @@ const UserVerificationPage = () => {
         <ReOpenVerificationModal
           verifactionData={reVerifactionData}
           setNewModal={setReModal}
+          newModal={reModal}
         />
       )}
     </div>

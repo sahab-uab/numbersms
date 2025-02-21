@@ -91,12 +91,12 @@ const UserDashboardPage = () => {
                   ${userData?.data?.coin}
                 </p>
               </div>
-              <button
+              {/* <button
                 onClick={() => setModal(true)}
                 className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
               >
                 Add Credit
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -132,12 +132,12 @@ const UserDashboardPage = () => {
               <p className="text-gray-600 mb-4">
                 Share your credit with others easily.
               </p>
-              <Link
+              {/* <Link
                 to={"/user/share-credit"}
                 className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
               >
                 Send Credit
-              </Link>
+              </Link> */}
             </div>
 
             {/* Action 3 */}

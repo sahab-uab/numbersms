@@ -117,19 +117,19 @@ const UserCreditCardPage = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Credit Management</h1>
         <div className="flex gap-3">
-          <button
+          {/* <button
             onClick={() => setModal(true)}
             className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition"
           >
             Buy Credit
-          </button>
-          <Link
+          </button> */}
+          {/* <Link
             to={"/user/share-credit"}
             // onClick={() => setShareModal(true)}
             className="px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition"
           >
             Send Credit
-          </Link>
+          </Link> */}
         </div>
       </div>
 
