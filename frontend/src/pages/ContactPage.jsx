@@ -1,4 +1,3 @@
-import React from "react";
 import CurvedBackground from "../Components/Contract/CurvedBackground";
 import InfoSection from "./../Components/Contract/InfoSection";
 import MapSection from "./../Components/Contract/MapSection";
@@ -9,7 +8,7 @@ const ContactPage = () => {
   // Dynamic data for the CurvedBackground
   const backgroundData = {
     bgImage:
-      "https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/10/webapp-bg-drk.jpg", // Replace with a dynamic background URL
+      "https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/10/webapp-bg-drk.jpg",
     heading: "Connect",
     highlightedText: "with us",
     subtitle:

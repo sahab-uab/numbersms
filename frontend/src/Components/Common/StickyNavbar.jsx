@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const StickyNavbar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -34,7 +34,6 @@ const StickyNavbar = () => {
 
     window.addEventListener("scroll", handleScroll);
 
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -47,98 +46,34 @@ const StickyNavbar = () => {
       } ${isScrolled ? "bg-white" : "bg-transparent"}`}
     >
       <div
-        className={`container mx-auto flex items-center justify-between py-4 px-6 ${
+        className={`navbar-container  ${
           isScrolled ? "text-gray-800" : "text-white"
-        }`}
+        }  `}
       >
-        {/* Logo */}
-        <div>
-          <h2
-            className={`text-2xl font-bold ${
-              isScrolled ? "text-purple-600" : "text-white"
-            }`}
-          >
-            Sierra
-          </h2>
-        </div>
+        <div className="navbar">
+          <div className="brand">
+            {/* <img src="" alt="brand" /> */}
+            <h2>Number SMS</h2>
+          </div>
+          <ul className={`nav-links`}>
+            <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
+              <NavLink to="/">Home</NavLink>
+            </li>
+            <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
+              <NavLink to="/about-us">About Us</NavLink>
+            </li>
+            <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
+              <NavLink to="/contact">Contact Us</NavLink>
+            </li>
+            <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
+              <NavLink to="/terms-and-conditions">Terms & Conditions</NavLink>
+            </li>
 
-        {/* Navigation Links */}
-        <div className="hidden md:flex gap-5">
-          <Link
-            href="#solutions"
-            className={`transition ${
-              isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
-            }`}
-          >
-            Solutions
-          </Link>
-          <Link
-            to={"/about"}
-            className={`transition ${
-              isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
-            }`}
-          >
-            About
-          </Link>
-          <Link
-            to={"/services"}
-            className={`transition ${
-              isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
-            }`}
-          >
-            services
-          </Link>
-          <Link
-            to={"/contact"}
-            className={`transition ${
-              isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
-            }`}
-          >
-            Contact
-          </Link>
-        </div>
-
-        {/* Button */}
-        <div className="navbar-end flex gap-5">
-          {token ? (
-            <div>
-              {user?.role === "user" ? (
-                <Link
-                  to={"/user/dashboard"}
-                  className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <Link
-                  to={"/admin/dashboard"}
-                  className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
-                >
-                  Dashboard
-                </Link>
-              )}
-
-              {/* <button className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out">
-                Logout
-              </button> */}
-            </div>
-          ) : (
-            <>
-              <Link
-                to={"/login"}
-                className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
-              >
-                Log-in
-              </Link>
-
-              <Link
-                to={"/sign-up"}
-                className="btn bg-black text-white focus:ring-4 hover:text-black rounded-xl px-8 py-4 transition duration-300 ease-in-out"
-              >
-                Sign-up
-              </Link>
-            </>
-          )}
+            <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
+              <NavLink to="/faq">FAQ</NavLink>
+            </li>
+          </ul>
+          <Link to="/login">Get Started</Link>
         </div>
       </div>
     </div>

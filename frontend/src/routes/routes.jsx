@@ -27,6 +27,8 @@ import AdminAccountSettingsPage from "../pages/AdminPages/AdminAccountSettingsPa
 import AdminServicePage from "../pages/AdminPages/AdminServicePage";
 import AdminDiscountPage from "../pages/AdminPages/AdminDiscountPage";
 import UserShareCredirtPage from "../pages/UserPages/UserShareCredirtPage";
+import FAQ from "../pages/FAQ";
+import Terms from "../pages/Terms";
 
 export const route = createBrowserRouter([
   {
@@ -46,6 +48,22 @@ export const route = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading...</div>}>
             <ServicesPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/faq",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <FAQ />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/terms-and-conditions",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <Terms />
           </Suspense>
         ),
       },

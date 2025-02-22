@@ -81,3 +81,270 @@ th {
 tbody tr:hover {
   background-color: #f9f9f9;
 }
+
+
+
+/* navbar */
+
+/* @import url("https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"); */
+
+
+body {
+  font-family: "Rubik", serif;
+}
+
+/* navbar */
+.navbar {
+  max-width: 1150px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+/* nav links */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #fff;
+  bottom: 0;
+  left: 0%;
+  transition: all 500ms ease-in-out;
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+.nav-link:hover::before {
+  width: 100%;
+}
+/* stikcy link */
+.nav-link-2 {
+  position: relative;
+}
+
+.nav-link-2::before {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  background-color: #000;
+  bottom: 0;
+  left: 0%;
+  transition: all 500ms ease-in-out;
+}
+
+.nav-link-2:hover {
+  color: #000;
+}
+.nav-link-2:hover::before {
+  width: 100%;
+}
+
+/* faq header */
+
+.faq-header {
+  max-width: 1150px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  height: 370px;
+  color: #fff;
+}
+
+.faq-title,
+.terms-headline h4 {
+  font-size: 3.5rem;
+  color: #fff;
+  font-family: "Signika", serif;
+}
+
+/* faq menu container */
+
+.faq-menu-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+  margin-top: 5rem;
+}
+.faq-menu-left {
+  flex-grow: 2;
+  flex-basis: 0;
+  position: sticky;
+  height: max-content;
+  top: 10%;
+}
+
+.faq-menu-left ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 18px;
+}
+
+.faq-menu-right {
+  flex-grow: 8;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.general-questions,
+.terms {
+  border-bottom: 1px solid #dbdada;
+  padding-bottom: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.general-questions h4,
+.terms h4 {
+  font-size: 1.75rem;
+  font-family: "Signika", serif;
+}
+
+.general-questions p {
+  font-size: 18px;
+}
+
+.question {
+  border: 1px solid #d1d0d0;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.question-one {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 2rem;
+}
+
+.question-one span {
+  font-size: 30px;
+}
+
+/* responsive */
+
+@media screen and (max-width: 1024px) {
+  .navbar,
+  .faq-header,
+  .terms-headline,
+  .faq-menu-container {
+    max-width: 800px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .navbar {
+    flex-direction: column;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .faq-header,
+  .terms-headline {
+    max-width: 500px;
+    padding: 0 1rem;
+  }
+  .faq-title,
+  .terms-headline h4 {
+    font-size: 3rem;
+  }
+  .faq-menu-left,
+  .terms-menu-left {
+    display: none;
+  }
+  .faq-menu-right,
+  .terms-menu-right {
+    padding: 0 2rem;
+  }
+}
+/* terms */
+
+.terms-headline-container {
+  background: #dbdada;
+}
+.terms-headline {
+  max-width: 1150px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  height: 370px;
+
+  color: #000;
+}
+.terms-menu-container {
+  max-width: 1150px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  gap: 2rem;
+  align-items: stretch;
+  margin-top: 5rem;
+}
+
+.terms-menu-left {
+  flex-grow: 2;
+  flex-basis: 0;
+  position: sticky;
+  height: max-content;
+  top: 10%;
+}
+
+.terms-menu-left ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 18px;
+}
+.terms-menu-right {
+  flex-grow: 8;
+  flex-basis: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+
+/* background */
+.background {
+  background: url("../../background-image.jpg");
+  height: 450px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
