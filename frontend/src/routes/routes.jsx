@@ -84,7 +84,7 @@ export const route = createBrowserRouter([
         ),
       },
       {
-        path: "/sign-up",
+        path: "/register",
         element: (
           <PrivateRoute>
             <Suspense fallback={<div>Loading...</div>}>

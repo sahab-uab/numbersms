@@ -101,77 +101,89 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center py-10 bg-gray-100">
-      <div className="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl max-w-4xl w-full flex flex-col md:flex-row p-6 md:p-12">
-        {/* Left Section */}
-        <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
-          <h2 className="font-bold text-4xl ">Create Your Account</h2>
-          <p className="text-sm mt-4 ">
-            Join our platform by creating a new account.
+    <div className="min-h-screen">
+      <div className="background">
+        {/* Faq-header */}
+        <div className="faq-header">
+          {" "}
+          <h2 className="faq-title">Register as our new user</h2>
+          <p className="faq-description">
+            To take our Exisiting Number sms Services
           </p>
-
-          {/* Form */}
-          {message.text && (
-            <p
-              className={`text-center mb-4 ${
-                message.type === "error" ? "text-red-500" : "text-green-500"
-              }`}
-            >
-              {message.text}
-            </p>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6 mt-8">
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Full Name"
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-            />
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-            />
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-            />
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm Password"
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-            />
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 font-medium rounded-xl bg-black text-white hover:bg-[#206ab1] focus:outline-none"
-            >
-              {loading ? "Registering..." : "Register"}
-            </button>
-          </form>
         </div>
+      </div>
+      <div className="wrapper flex items-center justify-center my-10">
+        <div className="flex items-center justify-center py-20 ">
+          {/* Left Section */}
+          <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
+            <h2 className="font-bold text-4xl ">Create Your Account</h2>
+            <p className="text-sm mt-4 ">
+              Join our platform by creating a new account.
+            </p>
 
-        {/* Right Image Section */}
-        <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center">
-          <img
-            className="rounded-2xl max-h-[500px] md:max-h-[1600px] object-cover"
-            src="https://images.unsplash.com/photo-1552010099-5dc86fcfaa38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxmcmVzaHxlbnwwfDF8fHwxNzEyMTU4MDk0fDA&ixlib=rb-4.0.3&q=80&w=1080"
-            alt="registration form image"
-          />
+            {/* Form */}
+            {message.text && (
+              <p
+                className={`text-center mb-4 ${
+                  message.type === "error" ? "text-red-500" : "text-green-500"
+                }`}
+              >
+                {message.text}
+              </p>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Full Name"
+                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
+              />
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
+              />
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm Password"
+                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
+              />
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 font-medium rounded-xl bg-black text-white hover:bg-[#206ab1] focus:outline-none"
+              >
+                {loading ? "Registering..." : "Register"}
+              </button>
+            </form>
+          </div>
+
+          {/* Right Image Section */}
+          <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center">
+            <img
+              className="rounded-2xl max-h-[500px] md:max-h-[1600px] object-cover"
+              src="https://cdn.pixabay.com/photo/2020/01/07/23/01/sketch-4748895_960_720.jpg"
+              alt="registration form image"
+            />
+          </div>
         </div>
       </div>
 

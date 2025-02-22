@@ -1,47 +1,78 @@
-import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react"; // Assuming you're using this icon
+import { useState } from "react";
+import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+const teamMembers = [
+  {
+    name: "Luke Jacobs",
+    role: "WordPress Developer",
+    img: "https://randomuser.me/api/portraits/men/32.jpg",
+  },
+  {
+    name: "Claire Olson",
+    role: "Sales Manager",
+    img: "https://randomuser.me/api/portraits/women/44.jpg",
+  },
+  {
+    name: "Sara Grant",
+    role: "Marketing Manager",
+    img: "https://randomuser.me/api/portraits/women/48.jpg",
+  },
+  {
+    name: "Reece Bronson",
+    role: "Financial Manager",
+    img: "https://randomuser.me/api/portraits/men/45.jpg",
+  },
+];
 
 const TeamSection = () => {
+  const [selected, setSelected] = useState(null);
   return (
-    <section className="py-24 bg-white">
-      <div className="wrapper px-6">
-        <div className="flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-3xl p-6 md:p-12">
-          <div className="flex-1">
-            <img
-              src="https://images.pexels.com/photos/317356/pexels-photo-317356.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" // Replace with your image
-              alt="Team Image"
-              className="w-full h-auto rounded-2xl shadow-xl"
-            />
-          </div>
+    <div>
+      <h3 className="text-blue-600 font-semibold uppercase mb-2">
+        Team members
+      </h3>
+      <h2 className="text-3xl font-bold">
+        We are a <span className="text-blue-600">results-driven</span> team
+      </h2>
+      <p className="text-gray-500 mt-2 max-w-2xl mx-auto">
+        With a passion for innovation and a dedication to excellence, we bring
+        diverse expertise to every project we undertake.
+      </p>
 
-          {/* Right Side: Text */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1 }}
-            className="flex-1"
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-10">
+        {teamMembers.map((member, index) => (
+          <div
+            key={index}
+            className={`rounded-xl p-6 shadow-md text-center transition-all duration-300 cursor-pointer ${
+              selected === index
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 hover:bg-blue-600 hover:text-white"
+            }`}
+            onClick={() => setSelected(index)}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-orange-600 mb-4">
-              We’re a Team. We’re a Family.
-            </h2>
-            <p className="text-lg md:text-xl text-gray-700 mb-8">
-              Semaj Africa is an online education platform that delivers video
-              courses, programs, and resources for Individuals, Advertising &
-              Media Specialists, Online Marketing Professionals, Freelancers,
-              and anyone looking to pursue a career in digital marketing,
-              Accounting, Web Development, Programming, Multimedia, and CAD
-              Design.
+            <img
+              src={member.img}
+              alt={member.name}
+              className="rounded-lg mx-auto w-32 h-32 object-cover"
+            />
+            <h3 className="text-lg font-semibold mt-4">{member.name}</h3>
+            <p className="text-gray-500 group-hover:text-white">
+              {member.role}
             </p>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              className="bg-orange-500 text-white py-3 px-6 rounded-full text-lg hover:bg-orange-600 transition duration-300"
-            >
-              Say Hello
-            </motion.button>
-          </motion.div>
-        </div>
+            <div className="flex justify-center gap-3 mt-4">
+              <a href="#" className="bg-black text-white p-2 rounded-full">
+                <FaFacebookF className="w-4 h-4" />
+              </a>
+              <a href="#" className="bg-black text-white p-2 rounded-full">
+                <FaTwitter className="w-4 h-4" />
+              </a>
+              <a href="#" className="bg-black text-white p-2 rounded-full">
+                <FaLinkedinIn className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 };
 

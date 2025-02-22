@@ -61,31 +61,6 @@ const FAQ = () => {
   return (
     <div className="faq-container">
       <div className="background">
-        {/* navbar content */}
-        <div className="navbar-container ">
-          <div className="navbar">
-            <div className="brand">
-              {/* <img src="" alt="brand" /> */}
-              <h2>Number SMS</h2>
-            </div>
-            <ul className="nav-links">
-              <li className="nav-link">
-                <NavLink to="/">Home</NavLink>
-              </li>
-              <li className="nav-link">
-                <NavLink to="/terms-and-conditions">Terms & Conditions</NavLink>
-              </li>
-              <li className="nav-link">
-                <NavLink to="/about-us">About Us</NavLink>
-              </li>
-              <li className="nav-link">
-                <NavLink to="/faq">FAQ</NavLink>
-              </li>
-            </ul>
-            <Link to="">Get Started</Link>
-          </div>
-        </div>
-
         {/* Faq-header */}
         <div className="faq-header">
           {" "}

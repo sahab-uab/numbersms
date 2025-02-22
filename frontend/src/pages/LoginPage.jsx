@@ -142,71 +142,97 @@ const LoginPage = () => {
 
   return (
     <div>
-      <section className="bg-gray-100 min-h-screen flex justify-center items-center py-10">
-        <div className="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl max-w-4xl w-full flex flex-col md:flex-row p-6 md:p-12">
-          {/* Left Section */}
-          <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
-            <h2 className="font-bold text-4xl ">Login</h2>
-            <p className="text-sm mt-4 ">
-              If you are already a member, easily log in now.
+      <section className=" min-h-screen  justify-center items-center ">
+        <div className="background">
+          {/* Faq-header */}
+          <div className="faq-header">
+            {" "}
+            <h2 className="faq-title">Login To Your Accout</h2>
+            <p className="faq-description">
+              To take our Exisiting Number sms Services
             </p>
+          </div>
+        </div>
+        <div className="wrapper flex items-center justify-center my-10 ">
+          <div className="flex items-center justify-center py-20 ">
+            {/* Left Section */}
+            <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
+              <h2 className="font-bold text-4xl ">Login</h2>
+              <p className="text-sm mt-4 ">
+                If you are already a member, easily log in now.
+              </p>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-8">
-              <input
-                className="p-3 mt-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              <div className="relative">
+              {/* Form */}
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 mt-8"
+              >
                 <input
-                  className="p-3 rounded-xl border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="Password"
-                  value={formData.password}
+                  className="p-3 mt-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
                   onChange={handleChange}
                   required
                 />
+                <div className="relative">
+                  <input
+                    className="p-3 rounded-xl border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+
+                <button
+                  className="bg-black text-white py-3 rounded-xl hover:scale-105 duration-300 hover:bg-[#206ab1] font-medium"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? "Logging in..." : "Login"}
+                </button>
+              </form>
+
+              <div className="mt-6 text-center text-sm text-gray-500">
+                <p>OR</p>
+              </div>
+              <div className="mt-5 text-sm text-center">
+                <button
+                  onClick={openModal}
+                  className="text-[#002D74] hover:underline"
+                >
+                  Forgot password?
+                </button>
               </div>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-
-              <button
-                className="bg-black text-white py-3 rounded-xl hover:scale-105 duration-300 hover:bg-[#206ab1] font-medium"
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? "Logging in..." : "Login"}
-              </button>
-            </form>
-
-            <div className="mt-6 text-center text-sm text-gray-500">
-              <p>OR</p>
+              <div className="mt-3 text-sm text-center">
+                <p>
+                  Don't have an account?{" "}
+                  <button
+                    onClick={() => navigate("/register")}
+                    className="text-[#002D74] hover:underline font-semibold"
+                  >
+                    Register here
+                  </button>
+                </p>
+              </div>
             </div>
 
-            <div className="mt-5 text-sm text-center">
-              <button
-                onClick={openModal}
-                className="text-[#002D74] hover:underline"
-              >
-                Forgot password?
-              </button>
+            {/* Right Image Section */}
+            <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center">
+              <img
+                className="rounded-2xl max-h-[500px] md:max-h-[1600px] object-cover"
+                src="https://cdn.pixabay.com/photo/2020/01/07/23/01/sketch-4748895_960_720.jpg"
+                alt="login form image"
+              />
             </div>
-          </div>
-
-          {/* Right Image Section */}
-          <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center">
-            <img
-              className="rounded-2xl max-h-[500px] md:max-h-[1600px] object-cover"
-              src="https://images.unsplash.com/photo-1552010099-5dc86fcfaa38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwxfHxmcmVzaHxlbnwwfDF8fHwxNzEyMTU4MDk0fDA&ixlib=rb-4.0.3&q=80&w=1080"
-              alt="login form image"
-            />
           </div>
         </div>
       </section>

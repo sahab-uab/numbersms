@@ -19,7 +19,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="container mx-auto px-6 py-16 text-center md:py-32"
+        className=" px-6 py-16 text-center md:py-32 background"
       >
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
           Don’t want to give out your phone number?{" "}

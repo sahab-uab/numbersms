@@ -60,7 +60,7 @@ const StickyNavbar = () => {
               <NavLink to="/">Home</NavLink>
             </li>
             <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
-              <NavLink to="/about-us">About Us</NavLink>
+              <NavLink to="/about">About Us</NavLink>
             </li>
             <li className={`${isScrolled ? "nav-link-2" : "nav-link"}`}>
               <NavLink to="/contact">Contact Us</NavLink>
