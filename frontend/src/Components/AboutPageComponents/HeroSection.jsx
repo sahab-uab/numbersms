@@ -7,7 +7,7 @@ const HeroSection = () => {
       className="min-h-screen flex items-center justify-center relative overflow-hidden bg-cover bg-center"
       style={{
         backgroundImage:
-          "url('https://images.pexels.com/photos/317356/pexels-photo-317356.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')",
+          "url('https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/10/webapp-bg-drk.jpg')",
       }}
     >
       {/* Dark Overlay */}
@@ -38,17 +38,17 @@ const HeroSection = () => {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="text-4xl md:text-6xl font-extrabold mb-6 text-black text-transparent bg-clip-text bg-gradient-to-r"
         >
-          We Are Innovation
+          Empowering startups <br /> to grow their business
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-lg md:text-xl text-white max-w-2xl mx-auto"
+          className="text-lg md:text-xl text-[#b1b1ae] max-w-2xl mx-auto"
         >
-          Pushing boundaries and creating the future through technology and
-          creativity
+          We are dedicated to crafting innovative tech solutions that
+          revolutionize the way businesses operate.
         </motion.p>
       </motion.div>
     </section>

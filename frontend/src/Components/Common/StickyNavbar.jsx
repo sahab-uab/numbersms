@@ -73,7 +73,7 @@ const StickyNavbar = () => {
             Solutions
           </Link>
           <Link
-            href="#pricing"
+            to={"/about"}
             className={`transition ${
               isScrolled ? "hover:text-purple-600 text-gray-800" : "text-white"
             }`}

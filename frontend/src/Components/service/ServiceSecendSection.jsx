@@ -1,3 +1,5 @@
+import DynamicSection from "../Common/DynamicSection";
+
 const ServiceSecendSection = () => {
   const features = [
     {
@@ -25,35 +27,15 @@ const ServiceSecendSection = () => {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <span className="text-purple-600 text-sm font-bold uppercase">
-          Intuitive Dashboard
-        </span>
-        <h2 className="signika text-3xl font-extrabold text-gray-900 mt-4">
-          Maximize your affiliate marketing efforts
-        </h2>
-        <p className="text-[#4C4C47] text-[18px] rubik">
-          Monitor activities, track conversions, and optimize performance, all
-          from a user-friendly dashboard.
-        </p>
-
-        {features.map((featur, index) => (
-          <div key={index} className="w-full bg-[#F5F5FF] p-3 rounded-md">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col w-96">
-                <span className="rubik text-xl text-black font-semibold">
-                  {featur.title}
-                </span>
-                <span className="rubik text-sm">{featur.description}</span>
-              </div>
-              <div>
-                <button className="p-4 bg-white rounded-md shadow-md">
-                  <span className="text-blue-600 text-lg">→</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div>
+        <DynamicSection
+          features={features}
+          title={"Intuitive Dashboard"}
+          subtitle={"Maximize your affiliate marketing efforts"}
+          description={
+            "Monitor activities, track conversions, and optimize performance, all  from a user-friendly dashboard."
+          }
+        />
       </div>
     </div>
   );

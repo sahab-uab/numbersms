@@ -4,9 +4,8 @@ import { ChevronRight } from "lucide-react"; // Assuming you're using this icon
 const TeamSection = () => {
   return (
     <section className="py-24 bg-white">
-      <div className="container mx-auto px-6">
+      <div className="wrapper px-6">
         <div className="flex flex-col md:flex-row items-center gap-12 bg-gradient-to-r from-orange-100 to-yellow-100 rounded-3xl p-6 md:p-12">
-          {/* Left Side: Image */}
           <div className="flex-1">
             <img
               src="https://images.pexels.com/photos/317356/pexels-photo-317356.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" // Replace with your image
