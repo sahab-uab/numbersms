@@ -6,12 +6,6 @@ import { loginSuccess } from "../redux/authSlice";
 import { X, Mail, Lock, Key } from "lucide-react";
 import { toast } from "react-toastify";
 
-// Validation function for password
-const validatePassword = (password) => {
-  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d@$!%*?&]{8,}$/;
-  return regex.test(password);
-};
-
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,14 +43,6 @@ const LoginPage = () => {
 
     try {
       const { email, password } = formData;
-
-      if (!validatePassword(password)) {
-        setError(
-          "Password must be at least 8 characters long, include one uppercase letter, one number, and one special character."
-        );
-        setLoading(false);
-        return;
-      }
 
       const response = await axiosInstance.post("/login", { email, password });
       const { token, data, status, message } = response.data;
@@ -108,7 +94,7 @@ const LoginPage = () => {
       );
       setForgotPasswordEmail("");
       setModalOpen(false);
-      setVerificationModal(true);
+      setVerificationModal(true); // Open OTP verification modal
       toast.success("Check your email for password reset instructions.");
     } catch (err) {
       setForgotPasswordError(
@@ -118,7 +104,7 @@ const LoginPage = () => {
     }
   };
 
-  // Verification modal handling
+  // Verification modal handling for OTP submission
   const handleVerificationSubmit = async (e) => {
     e.preventDefault();
     if (!otp || !newPassword || !confirmPassword) {
@@ -263,6 +249,91 @@ const LoginPage = () => {
                 <p className="text-green-500 text-sm">
                   {forgotPasswordSuccess}
                 </p>
+              )}
+
+              <div className="flex justify-center items-center">
+                <button
+                  type="submit"
+                  className="py-2 w-full px-4 bg-blue-500 duration-700 text-white text-[14px] font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* OTP Verification Modal */}
+      {verificationModal && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-xl font-semibold text-gray-800">Enter OTP</h2>
+              <button
+                onClick={() => setVerificationModal(false)}
+                className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
+              >
+                <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
+              </button>
+            </div>
+            <form onSubmit={handleVerificationSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="otp"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  OTP:
+                </label>
+                <input
+                  type="text"
+                  id="otp"
+                  name="otp"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 duration-700"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  New Password:
+                </label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 duration-700"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-600"
+                >
+                  Confirm Password:
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 duration-700"
+                  required
+                />
+              </div>
+
+              {verificationError && (
+                <p className="text-red-500 text-sm">{verificationError}</p>
               )}
 
               <div className="flex justify-center items-center">
