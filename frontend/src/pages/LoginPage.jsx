@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../Api/axios";
 import { loginSuccess } from "../redux/authSlice";
-import { X } from "lucide-react";
+import { X, Mail, Lock, Key } from "lucide-react";
+import { toast } from "react-toastify";
+
+// Validation function for password
+const validatePassword = (password) => {
+  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+};
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -41,11 +48,17 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const response = await axiosInstance.post("/login", {
-        email: formData.email,
-        password: formData.password,
-      });
+      const { email, password } = formData;
 
+      if (!validatePassword(password)) {
+        setError(
+          "Password must be at least 8 characters long, include one uppercase letter, one number, and one special character."
+        );
+        setLoading(false);
+        return;
+      }
+
+      const response = await axiosInstance.post("/login", { email, password });
       const { token, data, status, message } = response.data;
 
       if (status === false) {
@@ -85,15 +98,10 @@ const LoginPage = () => {
     }
 
     try {
-      // Ensure correct headers if necessary
       const response = await axiosInstance.post(
-        "/forget-password", // Check if this endpoint is correct
+        "/forget-password",
         { email: forgotPasswordEmail },
-        {
-          headers: {
-            "Content-Type": "application/json", // Ensure correct content-type
-          },
-        }
+        { headers: { "Content-Type": "application/json" } }
       );
       setForgotPasswordSuccess(
         "Password reset instructions have been sent to your email."
@@ -101,15 +109,12 @@ const LoginPage = () => {
       setForgotPasswordEmail("");
       setModalOpen(false);
       setVerificationModal(true);
+      toast.success("Check your email for password reset instructions.");
     } catch (err) {
-      // Handle the error appropriately
-      if (err.response) {
-        setForgotPasswordError(
-          err.response.data.message || "An error occurred."
-        );
-      } else {
-        setForgotPasswordError("Error sending password reset instructions.");
-      }
+      setForgotPasswordError(
+        err.response?.data?.message ||
+          "Error sending password reset instructions."
+      );
     }
   };
 
@@ -135,105 +140,85 @@ const LoginPage = () => {
       setVerificationError("");
       setForgotPasswordSuccess("Password reset successful.");
       setVerificationModal(false);
+      toast.success("Your password has been reset successfully.");
     } catch (err) {
       setVerificationError("Error resetting password.");
     }
   };
 
   return (
-    <div>
-      <section className=" min-h-screen  justify-center items-center ">
-        <div className="background">
-          {/* Faq-header */}
-          <div className="faq-header">
-            {" "}
-            <h2 className="faq-title">Login To Your Accout</h2>
-            <p className="faq-description">
-              To take our Exisiting Number sms Services
-            </p>
-          </div>
+    <div className="background min-h-screen flex justify-center items-center">
+      <section className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
+        <div className="text-center mb-8 flex flex-col gap-5">
+          <h2 className="text-3xl font-bold text-gray-800 uppercase">Login</h2>
+          <p className="text-sm text-gray-500">
+            Welcome back! Please login to your account.
+          </p>
         </div>
-        <div className="wrapper flex items-center justify-center my-10 ">
-          <div className="flex items-center justify-center py-20 ">
-            {/* Left Section */}
-            <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
-              <h2 className="font-bold text-4xl ">Login</h2>
-              <p className="text-sm mt-4 ">
-                If you are already a member, easily log in now.
-              </p>
 
-              {/* Form */}
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-4 mt-8"
-              >
-                <input
-                  className="p-3 mt-4 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-                <div className="relative">
-                  <input
-                    className="p-3 rounded-xl border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                {error && <p className="text-red-500 text-sm">{error}</p>}
-
-                <button
-                  className="bg-black text-white py-3 rounded-xl hover:scale-105 duration-300 hover:bg-[#206ab1] font-medium"
-                  type="submit"
-                  disabled={loading}
-                >
-                  {loading ? "Logging in..." : "Login"}
-                </button>
-              </form>
-
-              <div className="mt-6 text-center text-sm text-gray-500">
-                <p>OR</p>
-              </div>
-              <div className="mt-5 text-sm text-center">
-                <button
-                  onClick={openModal}
-                  className="text-[#002D74] hover:underline"
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              <div className="mt-3 text-sm text-center">
-                <p>
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => navigate("/register")}
-                    className="text-[#002D74] hover:underline font-semibold"
-                  >
-                    Register here
-                  </button>
-                </p>
-              </div>
-            </div>
-
-            {/* Right Image Section */}
-            <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center">
-              <img
-                className="rounded-2xl max-h-[500px] md:max-h-[1600px] object-cover"
-                src="https://cdn.pixabay.com/photo/2020/01/07/23/01/sketch-4748895_960_720.jpg"
-                alt="login form image"
-              />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Email Input */}
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full py-3 pl-12 pr-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              required
+            />
           </div>
+
+          {/* Password Input */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full py-3 pl-12 pr-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              required
+            />
+          </div>
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
+          <button
+            type="submit"
+            className={`bg-[#824DEB] w-full hover:bg-white text-white hover:text-[#824DEB] px-8 py-3 rounded-lg font-medium inline-flex items-center justify-center space-x-2 transition`}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        <div className="mt-4 text-center text-sm text-gray-500">
+          <p>OR</p>
+        </div>
+
+        <div className="mt-4 text-center">
+          <button
+            onClick={openModal}
+            className="text-[#824DEB] hover:underline"
+          >
+            Forgot password?
+          </button>
+        </div>
+
+        <div className="mt-3 text-center text-sm text-gray-500">
+          <p>
+            Don't have an account?{" "}
+            <button
+              onClick={() => navigate("/register")}
+              className="text-[#824DEB] hover:underline font-semibold"
+            >
+              Register here
+            </button>
+          </p>
         </div>
       </section>
 
@@ -278,90 +263,6 @@ const LoginPage = () => {
                 <p className="text-green-500 text-sm">
                   {forgotPasswordSuccess}
                 </p>
-              )}
-
-              <div className="flex justify-center items-center">
-                <button
-                  type="submit"
-                  className="py-2 w-full px-4 bg-blue-500 duration-700 text-white text-[14px] font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Verification Modal */}
-      {verificationModal && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <div className="flex items-center justify-between mb-5">
-              <h2 className="text-xl font-semibold text-gray-800">
-                Reset Password
-              </h2>
-              <button
-                onClick={closeModal}
-                className="w-[30px] h-[30px] group flex items-center justify-center bg-gray-100 rounded-lg"
-              >
-                <X className="w-[15px] duration-700 group-hover:scale-[1.3]" />
-              </button>
-            </div>
-            <form onSubmit={handleVerificationSubmit} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="otp"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  OTP:
-                </label>
-                <input
-                  type="text"
-                  id="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="newPassword"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  New Password:
-                </label>
-                <input
-                  type="password"
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-600"
-                >
-                  Confirm Password:
-                </label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-
-              {verificationError && (
-                <p className="text-red-500 text-sm">{verificationError}</p>
               )}
 
               <div className="flex justify-center items-center">

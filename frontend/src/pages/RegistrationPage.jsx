@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../Api/axios";
 import { otpVerifySuccess, registerSuccess } from "../redux/authSlice";
+import { User, Mail, Lock, Key } from "lucide-react";
+import { toast } from "react-toastify";
 
 const RegistrationPage = () => {
   const dispatch = useDispatch();
@@ -101,116 +103,116 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="background">
-        {/* Faq-header */}
-        <div className="faq-header">
-          {" "}
-          <h2 className="faq-title">Register as our new user</h2>
-          <p className="faq-description">
-            To take our Exisiting Number sms Services
+    <div className="background min-h-screen flex justify-center items-center">
+      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
+        <h2 className="text-3xl font-bold text-center text-gray-800">
+          Create Your Account
+        </h2>
+        <p className="text-center text-sm text-gray-500 mt-4">
+          Join our platform by creating a new account.
+        </p>
+
+        {message.text && (
+          <p
+            className={`text-center mb-4 ${
+              message.type === "error" ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {message.text}
           </p>
-        </div>
-      </div>
-      <div className="wrapper flex items-center justify-center my-10">
-        <div className="flex items-center justify-center py-20 ">
-          {/* Left Section */}
-          <div className="md:w-1/2 w-full flex flex-col justify-center px-6 md:px-12">
-            <h2 className="font-bold text-4xl ">Create Your Account</h2>
-            <p className="text-sm mt-4 ">
-              Join our platform by creating a new account.
-            </p>
+        )}
 
-            {/* Form */}
-            {message.text && (
-              <p
-                className={`text-center mb-4 ${
-                  message.type === "error" ? "text-red-500" : "text-green-500"
-                }`}
-              >
-                {message.text}
-              </p>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6 mt-8">
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email"
-                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-              />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm Password"
-                className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D74] placeholder-gray-500"
-              />
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 font-medium rounded-xl bg-black text-white hover:bg-[#206ab1] focus:outline-none"
-              >
-                {loading ? "Registering..." : "Register"}
-              </button>
-            </form>
-          </div>
-
-          {/* Right Image Section */}
-          <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center">
-            <img
-              className="rounded-2xl max-h-[500px] md:max-h-[1600px] object-cover"
-              src="https://cdn.pixabay.com/photo/2020/01/07/23/01/sketch-4748895_960_720.jpg"
-              alt="registration form image"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* OTP Modal */}
-      {showOtpModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 shadow-lg max-w-md">
-            <h3 className="text-xl font-bold mb-4">OTP Verification</h3>
-            <p className="mb-4">Enter the OTP sent to your email.</p>
-
+        <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+          {/* Name Input */}
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
               type="text"
-              placeholder="Enter OTP"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              className="w-full px-4 py-2 rounded-xl border mb-4 focus:ring-2 focus:ring-[#002D74]"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Full Name"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-500"
             />
-
-            <button
-              onClick={handleOtpVerification}
-              className="px-4 py-2 bg-[#002D74] text-white rounded-md"
-            >
-              Verify OTP
-            </button>
           </div>
-        </div>
-      )}
+
+          {/* Email Input */}
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-500"
+            />
+          </div>
+
+          {/* Password Input */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-500"
+            />
+          </div>
+
+          {/* Confirm Password Input */}
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm Password"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 placeholder-gray-500"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className={`bg-[#824DEB] w-full hover:bg-white text-white hover:text-[#824DEB] px-8 py-3 rounded-lg font-medium inline-flex items-center justify-center space-x-2 transition`}
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
+        </form>
+
+        {/* OTP Modal */}
+        {showOtpModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg p-6 shadow-lg max-w-md w-full">
+              <h3 className="text-xl font-bold mb-4">OTP Verification</h3>
+              <p className="mb-4">Enter the OTP sent to your email.</p>
+
+              <div className="relative">
+                <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                <input
+                  type="text"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="w-full px-4 py-2 pl-10 rounded-xl border focus:ring-2 focus:ring-blue-600"
+                />
+              </div>
+
+              <button
+                onClick={handleOtpVerification}
+                className="w-full mt-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 focus:outline-none"
+              >
+                Verify OTP
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

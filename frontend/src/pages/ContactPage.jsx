@@ -7,8 +7,7 @@ import FormSection from "./../Components/Contract/FormSection";
 const ContactPage = () => {
   // Dynamic data for the CurvedBackground
   const backgroundData = {
-    bgImage:
-      "https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/10/webapp-bg-drk.jpg",
+    bgImage: "../../../background-image.jpg",
     heading: "Connect",
     highlightedText: "with us",
     subtitle:

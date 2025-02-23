@@ -1,6 +1,6 @@
 const FormSection = () => {
   return (
-    <div className="wrapper flex flex-col lg:flex-row items-center justify-center bg-[#F5F5FF] overflow-hidden">
+    <div className="wrapper flex flex-col lg:flex-row items-center justify-center bg-[#F5F5FF] overflow-hidden rounded-lg">
       {/* Left Section - Contact Form */}
       <div className=" rounded-lg shadow-md p-8 lg:w-1/2 w-full">
         <span className="text-purple-600 text-sm font-bold uppercase">
@@ -76,18 +76,18 @@ const FormSection = () => {
       {/* Right Section - Image with Text */}
       <div className="lg:w-1/2 w-96 h-[38rem] mt-8 lg:mt-0 relative">
         <img
-          src="https://cdn.pixabay.com/photo/2020/01/07/23/01/sketch-4748895_960_720.jpg"
+          src="../../../../close-up-person-working-call-center.jpg"
           alt="Person"
           className="rounded-lg object-cover w-full h-full"
         />
-        <div className="absolute bottom-4 left-4 bg-white bg-opacity-75 p-4 rounded-lg shadow-md">
+        {/* <div className="absolute bottom-4 left-4 bg-white bg-opacity-75 p-4 rounded-lg shadow-md">
           <p className="text-gray-700">
             This software simplifies the website building process, making it a
             breeze to manage our online presence.
           </p>
           <p className="mt-2 font-bold text-gray-900">Claire Olson</p>
           <p className="text-sm text-gray-600">Founder & CEO</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

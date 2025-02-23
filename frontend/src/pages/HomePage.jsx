@@ -179,7 +179,7 @@ const HomePage = () => {
       </div>
 
       {/* Review Section */}
-      <div className="bg-[#F5F5FF]">
+      {/* <div className="bg-[#F5F5FF]">
         <div className="wrapper">
           <h2>
             We love <span className="text-[#793AEA]">our users</span> and they
@@ -190,7 +190,7 @@ const HomePage = () => {
             and stories of those who have partnered with us.
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
