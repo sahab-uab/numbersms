@@ -1,8 +1,9 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-800 py-10 px-6 sticky bottom-0 -z-50 mt-20">
+    <footer className="bg-white text-gray-800 py-10 px-6    mt-20">
       {/* Top Section */}
       <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
         {/* Logo and Description */}
@@ -28,11 +29,13 @@ const Footer = () => {
         {/* Resources */}
         <div>
           <h3 className="text-lg font-semibold">Resources</h3>
-          <ul className="mt-4 space-y-2 text-sm">
-            <li>Support center</li>
-            <li>Documentation</li>
-            <li>Community</li>
-            <li>Hosting</li>
+          <ul className="mt-4 md:mt-0 flex flex-col">
+            <li className={"nav-link"}>
+              <NavLink to="/terms-and-conditions">Terms & Conditions</NavLink>
+            </li>
+            <li className={"nav-link"}>
+              <NavLink to="/faq">FAQ</NavLink>
+            </li>
           </ul>
         </div>
 
@@ -40,7 +43,7 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold">Follow us</h3>
           <ul className="mt-4 space-y-2 text-sm">
-            <li>Behance</li>
+            <a>Behance</a>
             <li>Dribbble</li>
             <li>Facebook</li>
             <li>Instagram</li>
@@ -53,14 +56,6 @@ const Footer = () => {
         <p className="text-gray-600 text-center md:text-left">
           © KeyDesign WordPress Theme. All Rights Reserved.
         </p>
-        <div className="mt-4 md:mt-0 flex space-x-4">
-          <a href="#" className="hover:underline">
-            Terms & Conditions
-          </a>
-          <a href="#" className="hover:underline">
-            Privacy Policy
-          </a>
-        </div>
       </div>
     </footer>
   );

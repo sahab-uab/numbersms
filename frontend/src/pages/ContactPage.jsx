@@ -17,7 +17,7 @@ const ContactPage = () => {
 
   return (
     <div>
-      <div className="mb-52 min-h-screen">
+      <div className="mb-10 lg:mb-52 lg:min-h-screen">
         <CurvedBackground {...backgroundData} />
       </div>
       <div>

@@ -2,12 +2,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, Globe2, Target, User } from "lucide-react";
 
 import { FaCreativeCommonsShare } from "react-icons/fa";
+import ReviewCard from "../Components/HomePageComponents/ReviewCard";
 
 const HomePage = () => {
-  const makeAAlart = () => {
-    alert("We are working on it! It will coming soon");
-  };
-
   const data = [
     {
       id: 1,
@@ -67,7 +64,7 @@ const HomePage = () => {
           </motion.div>
         </div>
 
-        <div className="absolute -bottom-44 h-[30rem]">
+        <div className="absolute -bottom-32  lg:-bottom-44 h-56 md:h-96 lg:h-[30rem]">
           <img
             src="../../../webapp-mockup-2.png"
             alt=""
@@ -76,7 +73,7 @@ const HomePage = () => {
         </div>
       </div>
       {/* 2nd section */}
-      <div className="wrapper  mt-80">
+      <div className="container mx-auto  mt-80 px-3">
         <div className="flex flex-col gap-2 text-center">
           <h2 className="text-4xl font-semibold">
             A powerful <span className="text-[#824DEB]">easy-to-use</span>{" "}
@@ -87,34 +84,34 @@ const HomePage = () => {
             expert software support, and tailored management assistance.
           </p>
         </div>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap items-center justify-center gap-5  my-14">
           {data.map((data) => (
-            <div key={data.id} className="flex gap-10 w-96">
-              <div className="  flex items-center justify-center">
+            <div key={data.id} className="w-96 flex flex-col gap-2">
+              <div className="flex">
                 <span className="text-4xl text-[#824DEB]">{data.icon}</span>
               </div>
 
-              <div className="mb-10 mt-20">
+              <div className="mb-10">
                 <h2 className="text-black text-2xl font-medium ">
                   {data.title}
                 </h2>
-                <p className="text-black font-light">{data.description}</p>
+                <p className="text-black font-light ">{data.description}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
       {/* 3rd section */}
-      <div className="background ">
+      <div className="background px-2 ">
         <div className="wrapper py-10">
           <div className="flex h-96 gap-10">
-            <div>
+            <div className="">
               <img
                 src="https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/09/webapp-2.png"
                 alt=""
               />
             </div>
-            <div>
+            <div className="">
               <img
                 src="https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/09/webapp-1.png"
                 alt=""
@@ -125,12 +122,12 @@ const HomePage = () => {
       </div>
       {/* 4th section */}
 
-      <div className="bg-[#0A0226] mt-96">
+      <div className="bg-[#0A0226] md:mt-40 lg:mt-96">
         <div className="wrapper flex flex-col items-center justify-center gap-10 py-10">
-          <h2 className="text-4xl font-semibold text-white">
+          <h2 className="text-4xl font-semibold text-white text-center">
             Our <span className="text-[#824DEB]">step-by-step</span> approach
           </h2>
-          <p className="text-white text-lg font-light text-center">
+          <p className="text-white text-base lg:text-lg font-light text-center">
             With concepts in hand, we meticulously design, <br /> refining every
             detail to align with your vision and objectives.
           </p>
@@ -179,18 +176,29 @@ const HomePage = () => {
       </div>
 
       {/* Review Section */}
-      {/* <div className="bg-[#F5F5FF]">
+      <div className="bg-[#F5F5FF] py-20">
         <div className="wrapper">
-          <h2>
-            We love <span className="text-[#793AEA]">our users</span> and they
-            love us
-          </h2>
-          <p>
-            The best way to showcase our commitment is through the experiences
-            and stories of those who have partnered with us.
-          </p>
+          <div className=" flex flex-col items-center justify-center gap-10">
+            <h2 className="text-4xl font-semibold text-center">
+              We love <span className="text-[#793AEA]">our users</span> and they
+              love us
+            </h2>
+            <p className="font-light text-center text-lg">
+              The best way to showcase our commitment is through the <br />{" "}
+              experiences and stories of those who have partnered with us.
+            </p>
+          </div>
+
+          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <ReviewCard />
+            <ReviewCard />
+            <ReviewCard />
+            <ReviewCard />
+            <ReviewCard />
+            <ReviewCard />
+          </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

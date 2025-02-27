@@ -17,6 +17,7 @@ const UserVerificationPage = () => {
 
   const [modal, setModal] = useState(false);
   const [newModal, setNewModal] = useState(false);
+  const [running, setRunning] = useState(false);
   const [reModal, setReModal] = useState(false);
 
   const [dataLoading, setDataLoading] = useState(false);
@@ -66,7 +67,6 @@ const UserVerificationPage = () => {
   };
 
   const createVerification = async (service) => {
-    console.log(service);
     try {
       setDataLoading(true);
       const formData = new FormData();
@@ -83,6 +83,7 @@ const UserVerificationPage = () => {
         setNewModal(false);
         toast.error(response.data.message);
         setDataLoading(false);
+        setRunning(false);
       } else {
         setVerifactionData(response.data);
         setDataLoading(false);
@@ -296,6 +297,7 @@ const UserVerificationPage = () => {
                             className="grid px-4 grid-cols-[50%_25%_25%] duration-500 hover:bg-gray-100 items-center py-3 border-b border-gray-200"
                           >
                             <button
+                              disabled={running}
                               onClick={() => createVerification(service)}
                               className="flex gap-2"
                             >

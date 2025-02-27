@@ -1,31 +1,29 @@
-import { Star } from "lucide-react";
-import { motion } from "framer-motion";
+import React from "react";
 
-const ReviewCard = ({ review }) => {
+const ReviewCard = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white shadow-lg rounded-2xl p-6 w-80 border border-gray-200"
-    >
-      <div className="flex items-center space-x-4">
-        <img
-          src={review.image || "https://via.placeholder.com/60"}
-          alt={review.name}
-          className="w-14 h-14 rounded-full border-2 border-gray-300"
-        />
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">{review.name}</h2>
-          <div className="flex items-center text-yellow-500">
-            {[...Array(review.rating)].map((_, index) => (
-              <Star key={index} size={18} fill="currentColor" stroke="none" />
-            ))}
-          </div>
+    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white p-6">
+      <p className="text-gray-600 text-base">
+        I just had to take a moment to express my gratitude for the outstanding
+        service they provided. Their complete assistance and efforts were truly
+        remarkable.
+      </p>
+      <div className="flex items-center mt-4">
+        <div className="flex-shrink-0">
+          <img
+            className="h-10 w-10 rounded-full"
+            src="https://images.pexels.com/photos/1121796/pexels-photo-1121796.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            alt="Frederic Hill"
+          />
+        </div>
+        <div className="ml-3">
+          <p className="text-sm font-semibold text-gray-900 leading-none">
+            Frederic Hill
+          </p>
+          <p className="text-sm text-gray-600">Founder & CEO</p>
         </div>
       </div>
-      <p className="mt-4 text-gray-600 text-sm">{review.comment}</p>
-    </motion.div>
+    </div>
   );
 };
 

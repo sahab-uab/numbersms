@@ -22,7 +22,7 @@ const Terms = () => {
             setActiveSection("termsone");
           }
           if (entry.target === termstwoRef.current) {
-            setActiveSection("termtwo");
+            setActiveSection("termstwo"); // Corrected from "termtwo" to "termstwo"
           }
           if (entry.target === termsthreeRef.current) {
             setActiveSection("termsthree");
@@ -84,10 +84,10 @@ const Terms = () => {
       });
     }
   };
+
   return (
     <div className="terms-container">
       {/* terms headline */}
-
       <div className="terms-headline-container background">
         <div className="terms-headline text-white">
           <h4>Terms and conditions</h4>
@@ -109,8 +109,8 @@ const Terms = () => {
             </li>
             <li
               onClick={() => handleScrollToSection("termstwo")}
-              className={` ${
-                activeSection === "termstwo" ? "text-blue-600 font-bold " : ""
+              className={`${
+                activeSection === "termstwo" ? "text-blue-600 font-bold" : ""
               } cursor-pointer`}
             >
               Property rights
@@ -151,23 +151,11 @@ const Terms = () => {
               the latest WordPress version, usage of demo content, and
               assistance for theme installation.
             </p>
-            <p>
-              Discover the basics of WordPress themes, including their
-              importance for creating a unique web presence, compatibility with
-              the latest WordPress version, usage of demo content, and
-              assistance for theme installation.
-            </p>
           </div>
 
           {/* terms-2  */}
           <div id="#" ref={termstwoRef} className="terms">
             <h4>Property rights</h4>
-            <p>
-              Discover the basics of WordPress themes, including their
-              importance for creating a unique web presence, compatibility with
-              the latest WordPress version, usage of demo content, and
-              assistance for theme installation.
-            </p>
             <p>
               Discover the basics of WordPress themes, including their
               importance for creating a unique web presence, compatibility with
@@ -185,12 +173,6 @@ const Terms = () => {
               the latest WordPress version, usage of demo content, and
               assistance for theme installation.
             </p>
-            <p>
-              Discover the basics of WordPress themes, including their
-              importance for creating a unique web presence, compatibility with
-              the latest WordPress version, usage of demo content, and
-              assistance for theme installation.
-            </p>
           </div>
           {/* terms-4 */}
           <div id="#" ref={termsfourRef} className="terms">
@@ -201,22 +183,10 @@ const Terms = () => {
               the latest WordPress version, usage of demo content, and
               assistance for theme installation.
             </p>
-            <p>
-              Discover the basics of WordPress themes, including their
-              importance for creating a unique web presence, compatibility with
-              the latest WordPress version, usage of demo content, and
-              assistance for theme installation.
-            </p>
           </div>
           {/* terms-5 */}
           <div id="#" ref={termsfiveRef} className="terms">
             <h4>Contact information</h4>
-            <p>
-              Discover the basics of WordPress themes, including their
-              importance for creating a unique web presence, compatibility with
-              the latest WordPress version, usage of demo content, and
-              assistance for theme installation.
-            </p>
             <p>
               Discover the basics of WordPress themes, including their
               importance for creating a unique web presence, compatibility with

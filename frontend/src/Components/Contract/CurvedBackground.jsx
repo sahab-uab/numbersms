@@ -9,7 +9,7 @@ const CurvedBackground = ({
 }) => {
   return (
     <div
-      className="relative h-[45rem] w-full flex flex-col items-center justify-center font-bold rounded-b-[28%] bg-cover bg-center z-10"
+      className="relative h-96 md:h-[45rem] w-full flex flex-col items-center justify-center font-bold  lg:rounded-b-[28%] bg-cover bg-center z-10"
       style={{
         backgroundImage: `url('${bgImage}')`,
       }}
@@ -30,26 +30,17 @@ const CurvedBackground = ({
         </h1>
 
         {/* Subtitle */}
-        <p className="rubik my-10 text-[18px] text-center leading-7 text-gray-200 w-1/2">
+        <p className="rubik my-10 text-[18px] text-center leading-7 text-gray-200 lg:w-1/2">
           {subtitle}
         </p>
       </div>
 
       {/* Form Component (Passed Dynamically) */}
-      <div className="absolute -bottom-1/2">{formComponent}</div>
+      <div className="absolute -bottom-1/2 hidden lg:block">
+        {formComponent}
+      </div>
     </div>
   );
 };
-
-// Set Default Props in case no data is passed
-// CurvedBackground.defaultProps = {
-//   bgImage:
-//     "https://sierra.keydesign.xyz/web-app/wp-content/uploads/sites/4/2023/10/webapp-bg-drk.jpg",
-//   heading: "Connect",
-//   highlightedText: "with us",
-//   subtitle:
-//     "Feel free to reach out to us using the options below, and our dedicated team will respond promptly.",
-//   formComponent: <div>Form Placeholder</div>, // Can be replaced dynamically
-// };
 
 export default CurvedBackground;

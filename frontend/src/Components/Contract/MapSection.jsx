@@ -1,8 +1,8 @@
 const MapSection = () => {
   return (
     <div className="bg-[#F5F5FF] py-20">
-      <div className="wrapper grid grid-cols-2 items-center  justify-start">
-        <div className="flex flex-col gap-5">
+      <div className="wrapper grid lg:grid-cols-2 items-center  justify-start gap-5">
+        <div className="flex flex-col gap-5 px-2">
           <div>
             <h1 className="text-4xl font-bold leading-normal">
               <span> Planning a visit?</span> <br />

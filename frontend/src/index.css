@@ -264,13 +264,6 @@ body {
 }
 
 @media screen and (max-width: 800px) {
-  .navbar {
-    flex-direction: column;
-  }
-  .nav-links {
-    flex-direction: column;
-    gap: 0.1rem;
-  }
   .faq-header,
   .terms-headline {
     max-width: 500px;
@@ -470,7 +463,7 @@ body {
 }
 
 .cta-bg {
-  background: url("./assets/background-image.jpg");
+  background: url("../../background-image.jpg");
   height: 400px;
   background-position: fixed;
   background-repeat: no-repeat;
@@ -505,13 +498,7 @@ body {
 }
 
 @media screen and (max-width: 800px) {
-  .navbar {
-    flex-direction: column;
-  }
-  .nav-links {
-    flex-direction: column;
-    gap: 0.1rem;
-  }
+
   .faq-header,
   .terms-headline {
     max-width: 500px;
