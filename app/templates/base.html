@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- required meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- seo meta taqs -->
+    <meta name="description" content="This is a sample webpage with SEO meta tags">
+    <meta name="keywords" content="HTML, SEO, meta tags, sample">
+    <meta name="author" content="Your Name">
+    <title>This is OTP verify platfrom</title>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <!-- icon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <!-- css file link -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body class="font-roboto">
+    {% block content %}{% endblock %}
+
+    <!-- js -->
+    <script src="https://js.stripe.com/v3"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    {% if request.path == '/' %}
+    <script src="{{url_for('static', filename='app.js')}}"></script>
+    {% endif %}
+    {% if request.path.startswith('/user/') or request.path.startswith('/admin/')%}
+    <script src="{{ url_for('static', filename='users.js') }}"></script>
+    {% endif %}
+    <script>
+        function sendJSONRequest({ method, url, data = null, onSuccess, onError }) {
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, url, true);
+
+            // Set JSON content type
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const jsonResponse = JSON.parse(xhr.responseText);
+                        onSuccess(jsonResponse);
+                    } catch {
+                        onError?.("Failed to parse JSON response.");
+                    }
+                } else {
+                    onError?.(`Error: ${xhr.status} - ${xhr.statusText}`);
+                }
+            };
+
+            xhr.onerror = () => onError?.("Network error");
+
+            // Convert data to JSON if present
+            xhr.send(data ? JSON.stringify(data) : null);
+        }
+    </script>
+    {% block page_script %}{% endblock %}
+</body>
+
+</html>

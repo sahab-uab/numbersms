@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* buttons */
+@layer components {
+  .btn {
+    @apply px-5 py-2 rounded-full text-base font-normal duration-300 ease-in-out;
+  }
+  .btn.primary {
+    @apply bg-primary text-white hover:bg-primary-900;
+  }
+
+  /* alert */
+  .alert {
+    @apply p-3 rounded-lg mb-3 text-base border border-solid;
+  }
+  .alert.error {
+    @apply bg-red-100 text-red-600 border-red-300;
+  }
+  .alert.success {
+    @apply bg-green-100 text-green-600 border-green-300;
+  }
+}
